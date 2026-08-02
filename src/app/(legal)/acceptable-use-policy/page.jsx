@@ -489,10 +489,10 @@ void main() {
               for additional guidance.
             </p>
             <div className={styles.ctaButtons}>
-              <button className={styles.ctaPrimary}>
+              <Link href="/contact" className={styles.ctaPrimary}>
                 Report Abuse
                 <span className="material-symbols-outlined">flag</span>
-              </button>
+              </Link>
               <Link href="/contact" className={styles.ctaSecondary}>
                 Contact Trust &amp; Safety
               </Link>

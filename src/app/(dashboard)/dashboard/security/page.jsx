@@ -1,14 +1,30 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './page.module.scss';
 
 // Імпорт компонентів
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
 
+const DEVICE_ICONS = {
+  mobile: 'smartphone',
+  tablet: 'tablet_mac',
+  desktop: 'desktop_windows',
+};
+
+const guessDevice = (userAgent = '') => {
+  const ua = userAgent.toLowerCase();
+  if (/iphone|android.*mobile/.test(ua)) return { icon: 'smartphone', label: 'Mobile device' };
+  if (/ipad|tablet/.test(ua)) return { icon: 'tablet_mac', label: 'Tablet' };
+  if (/macintosh|mac os/.test(ua)) return { icon: 'laptop_mac', label: 'Mac' };
+  if (/windows/.test(ua)) return { icon: 'desktop_windows', label: 'Windows PC' };
+  if (/linux/.test(ua)) return { icon: 'computer', label: 'Linux' };
+  return { icon: 'devices_other', label: 'Unknown device' };
+};
+
 export default function SecurityPage() {
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -17,6 +33,45 @@ export default function SecurityPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState('');
+
+  const [devices, setDevices] = useState([]);
+  const [isLoadingDevices, setIsLoadingDevices] = useState(true);
+  const [deviceMessage, setDeviceMessage] = useState('');
+
+  const loadDevices = () => {
+    if (!token) return;
+    setIsLoadingDevices(true);
+    fetch('/api/security/sessions', { headers: { Authorization: `Bearer ${token}` } })
+      .then((r) => r.json())
+      .then((data) => setDevices(data.sessions || []))
+      .catch(() => setDeviceMessage('Failed to load devices.'))
+      .finally(() => setIsLoadingDevices(false));
+  };
+
+  useEffect(() => {
+    loadDevices();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
+
+  const handleDeviceAction = async (session) => {
+    setDeviceMessage('');
+    try {
+      const response = await fetch('/api/security/sessions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ action: 'revoke', sessionId: session.id }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to sign out device.');
+      if (data.wasCurrent) {
+        logout();
+        return;
+      }
+      setDevices((prev) => prev.filter((d) => d.id !== session.id));
+    } catch (err) {
+      setDeviceMessage(err.message || 'Failed to sign out device.');
+    }
+  };
 
   // Password strength
   const getPasswordStrength = () => {
@@ -32,45 +87,6 @@ export default function SecurityPage() {
   const strength = getPasswordStrength();
   const strengthLabels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
   const strengthColors = ['', 'error', 'warning', 'tertiary', 'primary'];
-
-  const devices = [
-    {
-      id: 1,
-      name: 'MacBook Pro',
-      icon: 'laptop_mac',
-      os: 'macOS • Safari',
-      location: 'London, UK',
-      status: 'Active now',
-      isCurrent: true,
-    },
-    {
-      id: 2,
-      name: 'Windows Desktop',
-      icon: 'desktop_windows',
-      os: 'Windows 11 • Chrome',
-      location: 'London, UK',
-      status: 'Last active: 2h ago',
-      isCurrent: false,
-    },
-    {
-      id: 3,
-      name: 'iPhone 15 Pro',
-      icon: 'smartphone',
-      os: 'iOS 17 • App',
-      location: 'London, UK',
-      status: 'Last active: 5h ago',
-      isCurrent: false,
-    },
-    {
-      id: 4,
-      name: 'iPad Pro',
-      icon: 'tablet_mac',
-      os: 'iPadOS 17 • App',
-      location: 'Manchester, UK',
-      status: 'Last active: 2d ago',
-      isCurrent: false,
-    },
-  ];
 
   const handleUpdatePassword = async (e) => {
     e.preventDefault();
@@ -331,32 +347,50 @@ export default function SecurityPage() {
         <section className={styles.trustedDevices}>
           <div className={styles.devicesHeader}>
             <span className="material-symbols-outlined">important_devices</span>
-            <h3>Trusted Devices <span>(4)</span></h3>
+            <h3>Trusted Devices <span>({devices.length})</span></h3>
           </div>
 
-          <div className={styles.devicesGrid}>
-            {devices.map((device) => (
-              <div key={device.id} className={styles.deviceCard}>
-                <div className={styles.deviceHeader}>
-                  <div className={styles.deviceIcon}>
-                    <span className="material-symbols-outlined">{device.icon}</span>
+          {deviceMessage && (
+            <p style={{ color: '#f87171', marginBottom: '8px' }}>{deviceMessage}</p>
+          )}
+
+          {isLoadingDevices ? (
+            <p style={{ color: '#94a3b8' }}>Loading devices...</p>
+          ) : devices.length === 0 ? (
+            <p style={{ color: '#94a3b8' }}>No active sessions found.</p>
+          ) : (
+            <div className={styles.devicesGrid}>
+              {devices.map((device) => {
+                const info = guessDevice(device.userAgent);
+                return (
+                  <div key={device.id} className={styles.deviceCard}>
+                    <div className={styles.deviceHeader}>
+                      <div className={styles.deviceIcon}>
+                        <span className="material-symbols-outlined">{DEVICE_ICONS[info.icon] || info.icon}</span>
+                      </div>
+                      {device.isCurrent && (
+                        <span className={styles.deviceCurrent}>Current</span>
+                      )}
+                    </div>
+                    <h4>{info.label}</h4>
+                    <p className={styles.deviceInfo}>
+                      {device.userAgent}<br />
+                      {device.ip || 'Unknown location'}
+                    </p>
+                    <p className={styles.deviceStatus}>
+                      Last active {new Date(device.lastActiveAt).toLocaleString()}
+                    </p>
+                    <button
+                      className={device.isCurrent ? styles.deviceRevoke : styles.deviceRemove}
+                      onClick={() => handleDeviceAction(device)}
+                    >
+                      {device.isCurrent ? 'Sign Out' : 'Remove Device'}
+                    </button>
                   </div>
-                  {device.isCurrent && (
-                    <span className={styles.deviceCurrent}>Current</span>
-                  )}
-                </div>
-                <h4>{device.name}</h4>
-                <p className={styles.deviceInfo}>
-                  {device.os}<br />
-                  {device.location}
-                </p>
-                <p className={styles.deviceStatus}>{device.status}</p>
-                <button className={device.isCurrent ? styles.deviceRevoke : styles.deviceRemove}>
-                  {device.isCurrent ? 'Revoke' : 'Remove Device'}
-                </button>
-              </div>
-            ))}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </section>
       </div>
     </DashboardLayout>

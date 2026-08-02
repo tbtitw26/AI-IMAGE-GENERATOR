@@ -425,10 +425,10 @@ void main() {
                   value="/imagine a cinematic macro shot of a luxury watch, 85mm lens, shallow depth of field..."
                   readOnly
                 />
-                <button className={styles.generateBtn}>
+                <Link href="/register" className={styles.generateBtn}>
                   Generate
                   <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
+                </Link>
               </div>
 
               <div className={styles.trustSection}>
@@ -518,7 +518,7 @@ void main() {
               <div className={styles.headerActions}>
                 <span className="material-symbols-outlined">history</span>
                 <span className="material-symbols-outlined">file_download</span>
-                <button className={styles.exportBtn}>Export 8K</button>
+                <Link href="/register" className={styles.exportBtn}>Export 8K</Link>
               </div>
             </div>
 
@@ -628,10 +628,10 @@ void main() {
                   </div>
                 </div>
 
-                <button className={styles.generateCanvasBtn}>
+                <Link href="/register" className={styles.generateCanvasBtn}>
                   <span className="material-symbols-outlined">auto_awesome</span>
                   Generate
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -701,9 +701,9 @@ void main() {
                     </li>
                   ))}
                 </ul>
-                <button className={`${styles.planButton} ${plan.variant === 'vip' ? styles.planButtonVIP : ''}`}>
+                <Link href="/contact" className={`${styles.planButton} ${plan.variant === 'vip' ? styles.planButtonVIP : ''}`}>
                   {plan.button}
-                </button>
+                </Link>
               </div>
             ))}
           </div>

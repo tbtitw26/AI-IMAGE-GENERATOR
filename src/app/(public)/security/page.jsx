@@ -376,12 +376,12 @@ void main() {
               </p>
 
               <div className={styles.heroActions}>
-                <button className={styles.primaryBtn}>
+                <a href="#architecture" className={styles.primaryBtn}>
                   Explore Architecture
-                </button>
-                <button className={styles.secondaryBtn}>
+                </a>
+                <Link href="/contact" className={styles.secondaryBtn}>
                   View Compliance Reports
-                </button>
+                </Link>
               </div>
 
               <div className={styles.heroStats}>
@@ -415,7 +415,7 @@ void main() {
         </section>
 
         {/* CHAPTER 2: DATA PROTECTION */}
-        <section className={styles.dataProtection}>
+        <section id="architecture" className={styles.dataProtection}>
           <div className={styles.dataProtectionHeader}>
             <h2>Data Protection Architecture</h2>
             <p>

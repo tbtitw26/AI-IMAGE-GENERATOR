@@ -811,6 +811,8 @@
 }
 
 .billingBtn {
+  display: inline-block;
+  text-decoration: none;
   padding: 10px 24px;
   background: #b2c5ff;
   color: #001847;
@@ -827,6 +829,8 @@
 }
 
 .billingBtnSecondary {
+  display: inline-block;
+  text-decoration: none;
   padding: 10px 24px;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.1);

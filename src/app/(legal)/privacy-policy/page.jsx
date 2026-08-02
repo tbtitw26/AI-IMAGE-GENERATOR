@@ -448,7 +448,7 @@ void main() {
               <Link href="/cookie-policy" className={styles.ctaSecondary}>
                 Cookie Policy
               </Link>
-              <Link href="/support" className={styles.ctaSecondary}>
+              <Link href="/contact" className={styles.ctaSecondary}>
                 Support Center
               </Link>
             </div>

@@ -585,8 +585,8 @@ export default function SettingsPage() {
                   </div>
                 </div>
                 <div className={styles.billingActions}>
-                  <button className={styles.billingBtn}>Upgrade Plan</button>
-                  <button className={styles.billingBtnSecondary}>View Invoices</button>
+                  <Link href="/dashboard/top-up" className={styles.billingBtn}>Upgrade Plan</Link>
+                  <Link href="/dashboard/orders" className={styles.billingBtnSecondary}>View Invoices</Link>
                 </div>
               </div>
             </div>

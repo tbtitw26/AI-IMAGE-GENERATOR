@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { jsPDF } from 'jspdf';
+import Link from 'next/link';
 import styles from './page.module.scss';
 
 // Імпорт компонентів
@@ -15,6 +16,7 @@ export default function OrdersPage() {
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [rawTransactions, setRawTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [chartPeriod, setChartPeriod] = useState('30d');
 
   useEffect(() => {
     if (!token) return;
@@ -53,6 +55,82 @@ export default function OrdersPage() {
       ),
     },
   ];
+
+  const periodDays = { '30d': 30, '90d': 90, '365d': 365 }[chartPeriod];
+
+  // Реальна аналітика витрат/використання, порахована з фактичних транзакцій
+  // (замість статичної картинки-фону та захардкоджених чисел).
+  const usageAnalytics = useMemo(() => {
+    const now = new Date();
+    const periodStart = new Date(now);
+    periodStart.setDate(periodStart.getDate() - periodDays);
+    const prevPeriodStart = new Date(periodStart);
+    prevPeriodStart.setDate(prevPeriodStart.getDate() - periodDays);
+
+    const inPeriod = rawTransactions.filter((tx) => {
+      const d = new Date(tx.date);
+      return d >= periodStart && d <= now && tx.status === 'completed';
+    });
+    const inPrevPeriod = rawTransactions.filter((tx) => {
+      const d = new Date(tx.date);
+      return d >= prevPeriodStart && d < periodStart && tx.status === 'completed';
+    });
+
+    const generationsInPeriod = inPeriod.filter((tx) => tx.type === 'generation');
+    const generationsInPrevPeriod = inPrevPeriod.filter((tx) => tx.type === 'generation');
+    const topUpsInPeriod = inPeriod.filter((tx) => tx.type === 'top_up');
+
+    const monthlySpend = generationsInPeriod.reduce((sum, tx) => sum + Math.abs(Number(tx.amount)), 0);
+
+    const generationsChangePct =
+      generationsInPrevPeriod.length > 0
+        ? Math.round(
+            ((generationsInPeriod.length - generationsInPrevPeriod.length) / generationsInPrevPeriod.length) * 100
+          )
+        : generationsInPeriod.length > 0
+        ? 100
+        : 0;
+
+    // Групуємо витрати на генерації по днях і будуємо кумулятивну лінію витрат
+    // у вигляді реального SVG-шляху (замість статичного зображення).
+    const dayBuckets = new Map();
+    generationsInPeriod
+      .slice()
+      .sort((a, b) => new Date(a.date) - new Date(b.date))
+      .forEach((tx) => {
+        const dayKey = new Date(tx.date).toISOString().split('T')[0];
+        dayBuckets.set(dayKey, (dayBuckets.get(dayKey) || 0) + Math.abs(Number(tx.amount)));
+      });
+
+    let chartPath = '';
+    let chartAreaPath = '';
+    if (dayBuckets.size > 0) {
+      let cumulative = 0;
+      const points = Array.from(dayBuckets.values()).map((dayTotal) => {
+        cumulative += dayTotal;
+        return cumulative;
+      });
+      const max = Math.max(...points, 1);
+      const coords = points.map((value, index) => {
+        const x = points.length === 1 ? 100 : (index / (points.length - 1)) * 100;
+        const y = 100 - (value / max) * 90;
+        return { x, y };
+      });
+      chartPath = `M${coords.map((p) => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' L')}`;
+      chartAreaPath = `${chartPath} L100,100 L0,100 Z`;
+    }
+
+    return {
+      monthlySpend,
+      generationsCount: generationsInPeriod.length,
+      generationsChangePct,
+      topUpsCount: topUpsInPeriod.length,
+      topUpsTotal: topUpsInPeriod.reduce((sum, tx) => sum + Number(tx.amount), 0),
+      chartPath,
+      chartAreaPath,
+      hasData: dayBuckets.size > 0,
+    };
+  }, [rawTransactions, periodDays]);
 
   const statusColors = {
     paid: 'tertiary',
@@ -148,8 +226,8 @@ export default function OrdersPage() {
     doc.setTextColor(33, 37, 41);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(11);
-    doc.text('Account: Alexander Wright', 14, 50);
-    doc.text('Billing period: October 2024', 14, 58);
+    doc.text(`Account: ${user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : user?.email || ''}`, 14, 50);
+    doc.text(`Billing period: ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`, 14, 58);
 
     let y = 74;
     filteredOrders.forEach((order) => {
@@ -168,6 +246,29 @@ export default function OrdersPage() {
     );
 
     doc.save('aetherframe-statement.pdf');
+  };
+
+  const exportOrdersCsv = () => {
+    const header = ['Invoice #', 'Description', 'Date', 'Amount', 'Status'];
+    const rows = filteredOrders.map((order) => [
+      order.id,
+      order.description,
+      order.date,
+      order.amount.toFixed(2),
+      statusLabels[order.status],
+    ]);
+    const escapeCell = (cell) => `"${String(cell).replace(/"/g, '""')}"`;
+    const csv = [header, ...rows].map((row) => row.map(escapeCell).join(',')).join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `aetherframe-orders-${new Date().toISOString().split('T')[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   return (
@@ -199,10 +300,10 @@ export default function OrdersPage() {
                     <span className={styles.planVerified}>Verified</span>
                   </div>
                 </div>
-                <button className={styles.manageBtn}>
+                <Link href="/contact" className={styles.manageBtn}>
                   Manage
                   <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -217,11 +318,7 @@ export default function OrdersPage() {
                 <span className="material-symbols-outlined">download</span>
                 Download Statement
               </button>
-              <button className={styles.filterBtn}>
-                <span className="material-symbols-outlined">filter_list</span>
-                Filter
-              </button>
-              <button className={styles.exportBtn}>
+              <button className={styles.exportBtn} onClick={exportOrdersCsv}>
                 <span className="material-symbols-outlined">download</span>
                 Export CSV
               </button>
@@ -306,7 +403,7 @@ export default function OrdersPage() {
                             <span className="material-symbols-outlined">description</span>
                             <span>PDF</span>
                           </button>
-                          <button className={styles.downloadBtn}>
+                          <button className={styles.downloadBtn} onClick={() => createInvoicePdf(order)} title="Download PDF">
                             <span className="material-symbols-outlined">download</span>
                           </button>
                         </div>
@@ -316,9 +413,6 @@ export default function OrdersPage() {
                 )}
               </tbody>
             </table>
-            <div className={styles.tableFooter}>
-              <button className={styles.viewAllBtn}>View All Transactions</button>
-            </div>
           </div>
         </section>
 
@@ -330,39 +424,53 @@ export default function OrdersPage() {
             <div className={styles.spendChart}>
               <div className={styles.chartHeader}>
                 <div>
-                  <span className={styles.chartLabel}>Monthly Spend</span>
-                  <div className={styles.chartAmount}>$3,450.00</div>
+                  <span className={styles.chartLabel}>Generation Spend</span>
+                  <div className={styles.chartAmount}>{formatCurrency(usageAnalytics.monthlySpend)}</div>
                 </div>
-                <select className={styles.chartSelect}>
-                  <option>Last 30 Days</option>
-                  <option>This Quarter</option>
-                  <option>This Year</option>
+                <select
+                  className={styles.chartSelect}
+                  value={chartPeriod}
+                  onChange={(e) => setChartPeriod(e.target.value)}
+                >
+                  <option value="30d">Last 30 Days</option>
+                  <option value="90d">This Quarter</option>
+                  <option value="365d">This Year</option>
                 </select>
               </div>
               <div className={styles.chartPlaceholder}>
-                <div className={styles.chartBackground}></div>
+                {usageAnalytics.hasData ? (
+                  <svg className={styles.chartSvg} viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path className={styles.chartArea} d={usageAnalytics.chartAreaPath} />
+                    <path className={styles.chartLine} d={usageAnalytics.chartPath} vectorEffect="non-scaling-stroke" />
+                  </svg>
+                ) : (
+                  <div className={styles.chartEmpty}>No generation spend in this period yet.</div>
+                )}
               </div>
             </div>
 
             <div className={styles.analyticsStats}>
               <div className={styles.analyticsCard}>
                 <div className={styles.analyticsIconSecondary}>
-                  <span className="material-symbols-outlined">generating_tokens</span>
+                  <span className="material-symbols-outlined">auto_awesome</span>
                 </div>
-                <span className={styles.analyticsLabel}>Tokens Used</span>
-                <span className={styles.analyticsValue}>4.2M</span>
+                <span className={styles.analyticsLabel}>Images Generated</span>
+                <span className={styles.analyticsValue}>{usageAnalytics.generationsCount}</span>
                 <span className={styles.analyticsTrend}>
-                  <span className="material-symbols-outlined">trending_up</span>
-                  +12% this month
+                  <span className="material-symbols-outlined">
+                    {usageAnalytics.generationsChangePct >= 0 ? 'trending_up' : 'trending_down'}
+                  </span>
+                  {usageAnalytics.generationsChangePct >= 0 ? '+' : ''}
+                  {usageAnalytics.generationsChangePct}% vs previous period
                 </span>
               </div>
               <div className={styles.analyticsCard}>
                 <div className={styles.analyticsIconPrimary}>
-                  <span className="material-symbols-outlined">timer</span>
+                  <span className="material-symbols-outlined">account_balance_wallet</span>
                 </div>
-                <span className={styles.analyticsLabel}>GPU Hours</span>
-                <span className={styles.analyticsValue}>184h</span>
-                <span className={styles.analyticsSubtext}>Within plan limits</span>
+                <span className={styles.analyticsLabel}>Top Ups</span>
+                <span className={styles.analyticsValue}>{usageAnalytics.topUpsCount}</span>
+                <span className={styles.analyticsSubtext}>{formatCurrency(usageAnalytics.topUpsTotal)} added this period</span>
               </div>
             </div>
           </div>

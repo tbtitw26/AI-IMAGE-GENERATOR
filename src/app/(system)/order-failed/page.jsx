@@ -201,7 +201,7 @@ void main() {
         <div className={styles.navContainer}>
           <span className={styles.logo}>AetherFrame AI</span>
           <div className={styles.navRight}>
-            <Link href="/support" className={styles.supportLink}>Support</Link>
+            <Link href="/contact" className={styles.supportLink}>Support</Link>
             <Link href="/dashboard/wallet" className={styles.walletLink}>
               Go to Wallet
             </Link>
@@ -279,17 +279,17 @@ void main() {
             <h2>You're only one step away from creating again.</h2>
             <p>Update your payment method to unlock your high-performance AI workspace instantly.</p>
             <div className={styles.ctaButtons}>
-              <button className={styles.ctaPrimary}>
+              <Link href="/dashboard/top-up" className={styles.ctaPrimary}>
                 <span className="material-symbols-outlined">refresh</span>
                 Try Again
-              </button>
+              </Link>
               <Link href="/dashboard/wallet" className={styles.ctaSecondary}>
                 <span className="material-symbols-outlined">wallet</span>
                 Go to Wallet
               </Link>
             </div>
             <div className={styles.ctaFooter}>
-              <Link href="/support" className={styles.ctaSupport}>
+              <Link href="/contact" className={styles.ctaSupport}>
                 Contact Support
               </Link>
               <div className={styles.ctaDivider}></div>

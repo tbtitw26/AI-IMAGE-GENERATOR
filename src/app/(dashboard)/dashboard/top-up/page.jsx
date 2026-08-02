@@ -268,10 +268,10 @@ export default function TopUpPage() {
               </div>
             </div>
 
-            <button className={styles.addCardBtn}>
+            <Link href="/contact" className={styles.addCardBtn}>
               <span className="material-symbols-outlined">add_card</span>
               Add New Payment Method
-            </button>
+            </Link>
 
             <div className={styles.billingDetails}>
               <h4>Billing Details</h4>
@@ -440,9 +440,9 @@ export default function TopUpPage() {
                     </li>
                   ))}
                 </ul>
-                <button className={pkg.popular ? styles.packageBtnPopular : styles.packageBtn}>
+                <Link href="/contact" className={pkg.popular ? styles.packageBtnPopular : styles.packageBtn}>
                   {pkg.popular ? 'Contact Sales' : 'Select Package'}
-                </button>
+                </Link>
               </div>
             ))}
           </div>

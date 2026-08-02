@@ -769,6 +769,10 @@
 }
 
 .exportBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: rgba(178, 197, 255, 0.2);
   color: #b2c5ff;
   border: none;
@@ -1136,6 +1140,10 @@
 }
 
 .generateCanvasBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   margin-top: auto;
   width: 100%;
   background: #b2c5ff;
@@ -1416,6 +1424,10 @@
 }
 
 .planButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   width: 100%;
   padding: 12px;
   border-radius: 8px;

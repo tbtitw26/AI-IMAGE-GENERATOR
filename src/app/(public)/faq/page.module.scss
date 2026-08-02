@@ -605,6 +605,10 @@
 }
 
 .helpPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: #b2c5ff;
   color: #001847;
   border: none;
@@ -630,6 +634,10 @@
 }
 
 .helpSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: transparent;
   border: 1px solid #8d909f;
   color: #e4e1e9;
@@ -801,6 +809,10 @@
 }
 
 .ctaPrimary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: #b2c5ff;
   color: #001847;
   border: none;
@@ -819,6 +831,10 @@
 }
 
 .ctaSecondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: transparent;
   border: 1px solid #8d909f;
   color: #e4e1e9;

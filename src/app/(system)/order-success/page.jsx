@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { jsPDF } from 'jspdf';
 import styles from './page.module.scss';
 import Footer from '@/components/common/Footer';
 
@@ -169,6 +170,38 @@ void main() {
     { label: 'License Type', value: 'Enterprise' },
   ];
 
+  const downloadInvoicePdf = () => {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFillColor(17, 24, 39);
+    doc.rect(0, 0, pageWidth, 36, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.text('AetherFrame AI', 14, 18);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Invoice', 14, 28);
+
+    doc.setTextColor(33, 37, 41);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    let y = 54;
+    orderDetails.forEach((detail) => {
+      doc.setFont('helvetica', detail.highlight ? 'bold' : 'normal');
+      doc.text(detail.label, 14, y);
+      doc.text(String(detail.value), pageWidth - 24, y, { align: 'right' });
+      y += 10;
+    });
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('Thank you for choosing AetherFrame AI.', 14, y + 12);
+
+    doc.save('aetherframe-invoice.pdf');
+  };
+
   return (
     <div className={styles.orderSuccess}>
       {/* Background Shader */}
@@ -181,8 +214,8 @@ void main() {
           <span className={styles.logo}>AetherFrame AI</span>
           <nav className={styles.nav}>
             <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
-            <Link href="/gallery" className={styles.navLink}>Gallery</Link>
-            <Link href="/models" className={styles.navLink}>Models</Link>
+            <Link href="/dashboard/gallery" className={styles.navLink}>Gallery</Link>
+            <Link href="/dashboard/generate" className={styles.navLink}>Models</Link>
             <Link href="/dashboard/wallet" className={`${styles.navLink} ${styles.navLinkActive}`}>
               Billing
             </Link>
@@ -254,7 +287,7 @@ void main() {
             </div>
 
             <div className={styles.summaryActions}>
-              <button className={styles.downloadBtn}>
+              <button className={styles.downloadBtn} onClick={downloadInvoicePdf}>
                 <span className="material-symbols-outlined">download</span>
                 Download PDF Invoice
               </button>

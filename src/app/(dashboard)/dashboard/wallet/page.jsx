@@ -33,10 +33,48 @@ export default function WalletPage() {
 
   const balanceValue = user?.balance?.[selectedCurrency] ?? 0;
 
+  // Будуємо реальний спарклайн для кожної валюти на основі фактичної історії
+  // транзакцій (замість статичної/фейкової лінії).
+  const buildSparkline = (currency) => {
+    const currencyTx = transactions
+      .filter((tx) => tx.currency === currency && tx.status === 'completed')
+      .slice()
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    if (currencyTx.length === 0) {
+      return { path: 'M0,25 L100,25', trend: 'neutral' };
+    }
+
+    // Відновлюємо відносну траєкторію балансу: рухаємось назад від поточного
+    // балансу, віднімаючи кожну транзакцію, щоб отримати баланс "до" неї.
+    const currentBalance = user?.balance?.[currency] ?? 0;
+    let running = currentBalance;
+    const points = [running];
+    for (let i = currencyTx.length - 1; i >= 0; i -= 1) {
+      running -= Number(currencyTx[i].amount);
+      points.unshift(running);
+    }
+
+    const min = Math.min(...points);
+    const max = Math.max(...points);
+    const range = max - min || 1;
+
+    const coords = points.map((value, index) => {
+      const x = (index / (points.length - 1)) * 100;
+      const y = 28 - ((value - min) / range) * 26;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    });
+
+    const path = `M${coords.join(' L')}`;
+    const trend = points[points.length - 1] >= points[0] ? 'up' : 'down';
+
+    return { path, trend };
+  };
+
   const balances = [
-    { currency: 'USD', amount: (user?.balance?.USD ?? 0).toFixed(2), icon: 'payments' },
-    { currency: 'EUR', amount: (user?.balance?.EUR ?? 0).toFixed(2), icon: 'euro' },
-    { currency: 'GBP', amount: (user?.balance?.GBP ?? 0).toFixed(2), icon: 'currency_pound' },
+    { currency: 'USD', amount: (user?.balance?.USD ?? 0).toFixed(2), icon: 'payments', ...buildSparkline('USD') },
+    { currency: 'EUR', amount: (user?.balance?.EUR ?? 0).toFixed(2), icon: 'euro', ...buildSparkline('EUR') },
+    { currency: 'GBP', amount: (user?.balance?.GBP ?? 0).toFixed(2), icon: 'currency_pound', ...buildSparkline('GBP') },
   ];
 
   const vipServices = [
@@ -164,11 +202,16 @@ export default function WalletPage() {
               </div>
               <div className={styles.balanceCardSmallChart}>
                 <svg viewBox="0 0 100 30" preserveAspectRatio="none">
-                  {balance.trend === 'up' ? (
-                    <path className={styles.sparklineUp} d="M0,25 Q10,20 20,25 T40,15 T60,20 T80,5 T100,10" />
-                  ) : (
-                    <path className={styles.sparklineNeutral} d="M0,25 L100,25" />
-                  )}
+                  <path
+                    className={
+                      balance.trend === 'up'
+                        ? styles.sparklineUp
+                        : balance.trend === 'down'
+                        ? styles.sparklineDown
+                        : styles.sparklineNeutral
+                    }
+                    d={balance.path}
+                  />
                 </svg>
               </div>
             </div>
@@ -179,9 +222,9 @@ export default function WalletPage() {
         <section className={styles.transactions}>
           <div className={styles.transactionsHeader}>
             <h2>Recent Transactions</h2>
-            <button className={styles.viewAllBtn}>
+            <Link href="/dashboard/orders" className={styles.viewAllBtn}>
               View All <span className="material-symbols-outlined">chevron_right</span>
-            </button>
+            </Link>
           </div>
 
           <div className={styles.transactionsList}>
@@ -237,9 +280,9 @@ export default function WalletPage() {
                       <div className={styles.vipPrice}>
                         {service.price} <span>{service.period}</span>
                       </div>
-                      <button className={service.popular ? styles.vipBtnPopular : styles.vipBtn}>
+                      <Link href="/contact" className={service.popular ? styles.vipBtnPopular : styles.vipBtn}>
                         {service.popular ? 'Upgrade to Private' : 'Select Tier'}
-                      </button>
+                      </Link>
                     </div>
                   </>
                 )}
@@ -250,7 +293,7 @@ export default function WalletPage() {
                     <div className={styles.vipPrice}>
                       {service.price} <span>{service.period}</span>
                     </div>
-                    <button className={styles.vipBtn}>Select Tier</button>
+                    <Link href="/contact" className={styles.vipBtn}>Select Tier</Link>
                   </>
                 )}
               </div>

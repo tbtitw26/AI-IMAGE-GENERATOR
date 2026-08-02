@@ -1086,6 +1086,7 @@
 }
 
 .packageBtn {
+  display: block;
   width: 100%;
   padding: 12px;
   border-radius: 8px;
@@ -1094,6 +1095,8 @@
   color: #e4e1e9;
   font-size: 14px;
   font-weight: 500;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -1164,6 +1167,7 @@
 }
 
 .packageBtnPopular {
+  display: block;
   width: 100%;
   padding: 14px;
   border-radius: 8px;
@@ -1172,6 +1176,8 @@
   border: none;
   font-size: 14px;
   font-weight: 700;
+  text-align: center;
+  text-decoration: none;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 15px rgba(208, 188, 255, 0.4);

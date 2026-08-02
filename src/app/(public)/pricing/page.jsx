@@ -434,10 +434,10 @@ void main() {
                       <span className={styles.walletLabel}>Last added</span>
                       <span className={styles.walletDate}>May 14, 2024</span>
                     </div>
-                    <button className={styles.walletAddBtn}>
+                    <Link href="/register" className={styles.walletAddBtn}>
                       <span className="material-symbols-outlined">add</span>
                       Add Funds
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -480,11 +480,12 @@ void main() {
                     </li>
                   ))}
                 </ul>
-                <button
+                <Link
+                  href={plan.buttonText === 'Contact Sales' ? '/contact' : '/register'}
                   className={`${styles.planBtn} ${plan.highlighted ? styles.planBtnPrimary : ''}`}
                 >
                   {plan.buttonText}
-                </button>
+                </Link>
               </div>
             ))}
           </div>
@@ -577,7 +578,7 @@ void main() {
                     <span className="material-symbols-outlined">bolt</span>
                     24-hour Turnaround
                   </div>
-                  <button className={styles.featuredBtn}>Book Session</button>
+                  <Link href="/contact" className={styles.featuredBtn}>Book Session</Link>
                 </div>
               </div>
             </div>

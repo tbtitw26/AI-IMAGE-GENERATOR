@@ -1067,6 +1067,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  text-decoration: none;
 }
 
 .modifierClose {
@@ -1100,6 +1101,9 @@
 }
 
 .generateBtnFull {
+  display: block;
+  text-align: center;
+  text-decoration: none;
   width: 100%;
   background: linear-gradient(to right, #b2c5ff, #8b5cf6);
   color: white;
@@ -1246,7 +1250,12 @@
   display: flex;
   gap: 12px;
 
-  button {
+  button,
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
     padding: 12px;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(8px);
@@ -1947,6 +1956,7 @@
   border-radius: 16px;
   font-weight: 700;
   font-size: 18px;
+  text-decoration: none;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2072,7 +2082,12 @@
     margin-bottom: 32px;
   }
 
-  button {
+  button,
+  a {
+    display: block;
+    box-sizing: border-box;
+    text-align: center;
+    text-decoration: none;
     width: 100%;
     padding: 16px;
     border-radius: 12px;

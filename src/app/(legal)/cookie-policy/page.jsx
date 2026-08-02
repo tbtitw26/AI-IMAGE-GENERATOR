@@ -191,6 +191,18 @@ void main() {
     return () => observer.disconnect();
   }, []);
 
+  // Load any previously saved cookie preferences
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem('cookiePreferences');
+      if (saved) {
+        setPreferences((prev) => ({ ...prev, ...JSON.parse(saved) }));
+      }
+    } catch {
+      // ignore malformed/unavailable storage
+    }
+  }, []);
+
   const handlePreferenceChange = (key) => {
     if (key === 'necessary') return; // Necessary cookies are always enabled
     setPreferences((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -214,6 +226,18 @@ void main() {
       functional: false,
       marketing: false,
     });
+  };
+
+  const [saveStatus, setSaveStatus] = useState('');
+
+  const handleSavePreferences = () => {
+    try {
+      window.localStorage.setItem('cookiePreferences', JSON.stringify(preferences));
+      setSaveStatus('Preferences saved.');
+    } catch {
+      setSaveStatus('Could not save preferences on this device.');
+    }
+    window.setTimeout(() => setSaveStatus(''), 3000);
   };
 
   const quickLinks = [
@@ -532,10 +556,11 @@ void main() {
               <button className={styles.acceptBtn} onClick={handleAcceptAll}>
                 Accept All
               </button>
-              <button className={styles.saveBtn}>
+              <button className={styles.saveBtn} onClick={handleSavePreferences}>
                 Save Preferences
               </button>
             </div>
+            {saveStatus && <p style={{ color: '#b2c5ff', marginTop: '12px', fontSize: '14px' }}>{saveStatus}</p>}
           </div>
         </section>
 

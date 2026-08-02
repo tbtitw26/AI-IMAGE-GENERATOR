@@ -546,14 +546,14 @@ void main() {
                   or discuss enterprise deployments.
                 </p>
                 <div className={styles.helpButtons}>
-                  <button className={styles.helpPrimary}>
+                  <Link href="/contact" className={styles.helpPrimary}>
                     <span className="material-symbols-outlined">support_agent</span>
                     Live Support
-                  </button>
-                  <button className={styles.helpSecondary}>
+                  </Link>
+                  <Link href="/contact" className={styles.helpSecondary}>
                     <span className="material-symbols-outlined">mail</span>
                     Business Inquiries
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -596,8 +596,8 @@ void main() {
           <div className={styles.ctaContent}>
             <h2>Your creativity should never wait.</h2>
             <div className={styles.ctaButtons}>
-              <button className={styles.ctaSecondary}>Contact Support</button>
-              <button className={styles.ctaPrimary}>Start Creating</button>
+              <Link href="/contact" className={styles.ctaSecondary}>Contact Support</Link>
+              <Link href="/register" className={styles.ctaPrimary}>Start Creating</Link>
             </div>
           </div>
         </section>

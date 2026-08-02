@@ -60,39 +60,37 @@ export default function DashboardPage() {
     <DashboardLayout>
       <div className={styles.dashboard}>
         <section className={styles.hero}>
-          <div className={styles.heroGrid}>
-            <div className={styles.heroContent}>
-              <h2>
-                Good to see you back, <br />
-                <span className={styles.gradientText}>{userName}</span>
-              </h2>
-              <p>
-                Your workspace is ready. Here’s a quick summary of active projects, wallet credits,
-                and recent activity so you can continue creating without interruption.
-              </p>
-              <div className={styles.heroActions}>
-                <Link href="/dashboard/generate" className={styles.primaryBtn}>
-                  <span className="material-symbols-outlined">auto_awesome</span>
-                  Quick Generate
-                </Link>
-                <Link href="/dashboard/projects" className={styles.secondaryBtn}>
-                  <span className="material-symbols-outlined">folder_special</span>
-                  My Projects
-                </Link>
-              </div>
+          <div className={styles.heroContent}>
+            <h2>
+              Good to see you back, <br />
+              <span className={styles.gradientText}>{userName}</span>
+            </h2>
+            <p>
+              Your workspace is ready. Here’s a quick summary of active projects, wallet credits,
+              and recent activity so you can continue creating without interruption.
+            </p>
+            <div className={styles.heroActions}>
+              <Link href="/dashboard/generate" className={styles.primaryBtn}>
+                <span className="material-symbols-outlined">auto_awesome</span>
+                Quick Generate
+              </Link>
+              <Link href="/dashboard/projects" className={styles.secondaryBtn}>
+                <span className="material-symbols-outlined">folder_special</span>
+                My Projects
+              </Link>
             </div>
+          </div>
 
-            <div className={styles.heroImage}>
-              <div className={styles.heroImageWrapper}>
-                <img
-                  src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                  alt="Active dashboard preview"
-                />
-                <div className={styles.heroImageOverlay}></div>
-                <div className={styles.heroImageFooter}>
-                  <span className={styles.modelBadge}>Aether-V5 Model</span>
-                  <h3>Project Pulse</h3>
-                </div>
+          <div className={styles.heroImage}>
+            <div className={styles.heroImageWrapper}>
+              <img
+                src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
+                alt="Active dashboard preview"
+              />
+              <div className={styles.heroImageOverlay}></div>
+              <div className={styles.heroImageFooter}>
+                <span className={styles.modelBadge}>Aether-V5 Model</span>
+                <h3>Project Pulse</h3>
               </div>
             </div>
           </div>

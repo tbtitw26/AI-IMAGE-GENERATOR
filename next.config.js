@@ -8,6 +8,9 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    serverComponentsExternalPackages: ['pdfkit'],
+  },
 };
 
 module.exports = nextConfig;

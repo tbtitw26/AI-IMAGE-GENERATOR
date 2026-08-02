@@ -12,6 +12,9 @@ export default function HomePage() {
   const [promptText, setPromptText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
+  const [aspectRatio, setAspectRatio] = useState('16:9');
+  const [modifiers, setModifiers] = useState(['35mm Lens', 'Cinematic Lighting']);
+  const [walletCurrency, setWalletCurrency] = useState('USD');
   const heroRef = useRef(null);
   const canvasRef = useRef(null);
   const threeContainerRef = useRef(null);
@@ -536,10 +539,10 @@ export default function HomePage() {
                   <span className={styles.cursor}></span>
                 </span>
               </div>
-              <button ref={btnRef} className={styles.generateBtn} id="generate-btn">
+              <Link href="/register" ref={btnRef} className={styles.generateBtn} id="generate-btn">
                 <span>Generate</span>
                 <span className="material-symbols-outlined">arrow_forward</span>
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -623,15 +626,24 @@ export default function HomePage() {
                 <div className={styles.formGroup}>
                   <label>Aspect Ratio</label>
                   <div className={styles.aspectGrid}>
-                    <button className={styles.aspectBtn}>
+                    <button
+                      className={`${styles.aspectBtn} ${aspectRatio === '1:1' ? styles.active : ''}`}
+                      onClick={() => setAspectRatio('1:1')}
+                    >
                       <div className={styles.aspectBox1x1}></div>
                       <span>1:1</span>
                     </button>
-                    <button className={`${styles.aspectBtn} ${styles.active}`}>
+                    <button
+                      className={`${styles.aspectBtn} ${aspectRatio === '16:9' ? styles.active : ''}`}
+                      onClick={() => setAspectRatio('16:9')}
+                    >
                       <div className={styles.aspectBox16x9}></div>
                       <span>16:9</span>
                     </button>
-                    <button className={styles.aspectBtn}>
+                    <button
+                      className={`${styles.aspectBtn} ${aspectRatio === '9:16' ? styles.active : ''}`}
+                      onClick={() => setAspectRatio('9:16')}
+                    >
                       <div className={styles.aspectBox9x16}></div>
                       <span>9:16</span>
                     </button>
@@ -641,20 +653,25 @@ export default function HomePage() {
                 <div className={styles.formGroup}>
                   <label>Active Modifiers</label>
                   <div className={styles.modifiers}>
-                    <span className={styles.modifier}>
-                      35mm Lens <button className={styles.modifierClose}>✕</button>
-                    </span>
-                    <span className={styles.modifier}>
-                      Cinematic Lighting <button className={styles.modifierClose}>✕</button>
-                    </span>
-                    <span className={`${styles.modifier} ${styles.addModifier}`}>
+                    {modifiers.map((mod) => (
+                      <span key={mod} className={styles.modifier}>
+                        {mod}{' '}
+                        <button
+                          className={styles.modifierClose}
+                          onClick={() => setModifiers((prev) => prev.filter((m) => m !== mod))}
+                        >
+                          ✕
+                        </button>
+                      </span>
+                    ))}
+                    <Link href="/register" className={`${styles.modifier} ${styles.addModifier}`}>
                       <span className="material-symbols-outlined">add</span> Add
-                    </span>
+                    </Link>
                   </div>
                 </div>
               </div>
               <div className={styles.sidebarFooter}>
-                <button className={styles.generateBtnFull}>Generate (15 credits)</button>
+                <Link href="/register" className={styles.generateBtnFull}>Generate (15 credits)</Link>
               </div>
             </div>
 
@@ -683,9 +700,9 @@ export default function HomePage() {
                       <div className={styles.stepsInfo}>Steps: 40 | Sampler: DPM++ 2M Karras | CFG: 7.5</div>
                     </div>
                     <div className={styles.outputActions}>
-                      <button><span className="material-symbols-outlined">download</span></button>
-                      <button><span className="material-symbols-outlined">hd</span></button>
-                      <button><span className="material-symbols-outlined">tune</span></button>
+                      <Link href="/register"><span className="material-symbols-outlined">download</span></Link>
+                      <Link href="/register"><span className="material-symbols-outlined">hd</span></Link>
+                      <Link href="/register"><span className="material-symbols-outlined">tune</span></Link>
                     </div>
                   </div>
                 </div>
@@ -847,13 +864,28 @@ export default function HomePage() {
                   $12,450<span className={styles.balanceCents}>.00</span>
                 </div>
                 <div className={styles.currencyButtons}>
-                  <button className={styles.activeCurrency}>USD</button>
-                  <button>EUR</button>
-                  <button>GBP</button>
+                  <button
+                    className={walletCurrency === 'USD' ? styles.activeCurrency : ''}
+                    onClick={() => setWalletCurrency('USD')}
+                  >
+                    USD
+                  </button>
+                  <button
+                    className={walletCurrency === 'EUR' ? styles.activeCurrency : ''}
+                    onClick={() => setWalletCurrency('EUR')}
+                  >
+                    EUR
+                  </button>
+                  <button
+                    className={walletCurrency === 'GBP' ? styles.activeCurrency : ''}
+                    onClick={() => setWalletCurrency('GBP')}
+                  >
+                    GBP
+                  </button>
                 </div>
-                <button className={styles.addFundsBtn}>
+                <Link href="/register" className={styles.addFundsBtn}>
                   <span className="material-symbols-outlined">add</span> Add Production Funds
-                </button>
+                </Link>
               </div>
               
               <div className={styles.invoicePreview}>
@@ -876,7 +908,7 @@ export default function HomePage() {
                   <span>$499</span>
                 </div>
                 <p>Full suite of ultra-high resolution assets optimized for print and billboard campaigns.</p>
-                <button>Book Service</button>
+                <Link href="/contact">Book Service</Link>
               </div>
               <div className={styles.pricingCard}>
                 <div>
@@ -884,7 +916,7 @@ export default function HomePage() {
                   <span>$299</span>
                 </div>
                 <p>Studio-grade lighting simulations for high-end jewelry, watches, and apparel.</p>
-                <button>Book Service</button>
+                <Link href="/contact">Book Service</Link>
               </div>
               <div className={styles.pricingCard}>
                 <div>
@@ -892,7 +924,7 @@ export default function HomePage() {
                   <span>$799</span>
                 </div>
                 <p>Comprehensive visual language generation including custom textures, palettes, and structural forms.</p>
-                <button>Book Service</button>
+                <Link href="/contact">Book Service</Link>
               </div>
               <div className={`${styles.pricingCard} ${styles.featured}`}>
                 <span className={styles.directorBadge}>Director's Tier</span>
@@ -901,7 +933,7 @@ export default function HomePage() {
                   <span>$999</span>
                 </div>
                 <p>1-on-1 session with our elite prompt engineers to realize your most ambitious cinematic concepts in real-time.</p>
-                <button>Request Session</button>
+                <Link href="/contact">Request Session</Link>
               </div>
             </div>
           </div>

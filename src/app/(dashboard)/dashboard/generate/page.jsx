@@ -230,16 +230,11 @@ export default function GeneratePage() {
                 {isGenerating ? 'Generating...' : `Generate Now (${imageCount} Credits)`}
               </button>
 
-              <div className={styles.apiPlaceholder}>
-                <div className={styles.apiHeader}>
-                  <span className="material-symbols-outlined">api</span>
-                  <div>
-                    <h4>AI API</h4>
-                    <p>Without OPENAI_API_KEY, generations use a free test provider (Pollinations.ai, no cost). Add the key in .env.local to switch to OpenAI gpt-image-1.</p>
-                  </div>
+              {generationError && (
+                <div className={styles.apiPlaceholder}>
+                  <div className={styles.apiStatus}>Error: {generationError}</div>
                 </div>
-                {generationError && <div className={styles.apiStatus}>Error: {generationError}</div>}
-              </div>
+              )}
             </div>
           </div>
 

@@ -142,7 +142,11 @@ void main() {
     { icon: 'mail', label: 'Contact', href: '/contact' },
   ];
 
-  const searchTags = ['AI Generator', 'Pricing', 'Gallery'];
+  const searchTags = [
+    { label: 'AI Generator', href: '/dashboard/generate' },
+    { label: 'Pricing', href: '/pricing' },
+    { label: 'Gallery', href: '/dashboard/gallery' },
+  ];
 
   return (
     <div className={styles.notFound}>
@@ -196,7 +200,9 @@ void main() {
                 <div className={styles.searchTags}>
                   <span className={styles.tagsLabel}>Try:</span>
                   {searchTags.map((tag) => (
-                    <button key={tag} className={styles.tagBtn}>{tag}</button>
+                    <Link key={tag.label} href={tag.href} className={styles.tagBtn}>
+                      {tag.label}
+                    </Link>
                   ))}
                 </div>
               </div>

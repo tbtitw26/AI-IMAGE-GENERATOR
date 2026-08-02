@@ -180,6 +180,10 @@
 }
 
 .sendBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: rgba(178, 197, 255, 0.2);
   color: #b2c5ff;
   border: none;
@@ -771,6 +775,10 @@
 }
 
 .toolBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   background: rgba(42, 41, 47, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 4px;

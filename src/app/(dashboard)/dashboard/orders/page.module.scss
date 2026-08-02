@@ -574,17 +574,36 @@
   left: 0;
   right: 0;
   height: 192px;
-  opacity: 0.4;
-  mix-blend-mode: screen;
   pointer-events: none;
 }
 
-.chartBackground {
+.chartSvg {
   width: 100%;
   height: 100%;
-  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDe7wHBEZboBFSK-d8SHQ3EKclHijf9nKQJJniA_H0NZgjyWnUpLbTrH8x33ss3gQV8ACG_oC4KqD7y9P8IN3H5sWyNlV5jGcAt8iRDl3TzMB2BDODgrvrV0vOPhghleICMw41kwrDPGwFvIfDxCB3CAJ97f7gkHntgNAaduICxEqc0BZXaMjGgyrIIsx8OAtD8MkBKF-4NhiYHiFnMgElu4dB0_SwVJEcPmamfhEqlmEEUAZiF3XKYH7dVv74AIKR6mqAOsxTyFXg');
-  background-size: cover;
-  background-position: center;
+}
+
+.chartArea {
+  fill: rgba(178, 197, 255, 0.15);
+  stroke: none;
+}
+
+.chartLine {
+  fill: none;
+  stroke: #b2c5ff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(178, 197, 255, 0.5));
+}
+
+.chartEmpty {
+  position: absolute;
+  bottom: 24px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #8d909f;
+  font-size: 13px;
 }
 
 .analyticsStats {

@@ -364,9 +364,9 @@ void main() {
                       <span className={styles.cursor}></span>
                     </span>
                   </div>
-                  <button className={styles.sendBtn}>
+                  <Link href="/register" className={styles.sendBtn}>
                     <span className="material-symbols-outlined">send</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
 
@@ -526,8 +526,8 @@ void main() {
                 <div className={styles.uiPanel}>
                   <div className={styles.uiLabel}>Output Tools</div>
                   <div className={styles.toolGrid}>
-                    <button className={styles.toolBtn}>Upscale 8K</button>
-                    <button className={`${styles.toolBtn} ${styles.toolPrimary}`}>Export</button>
+                    <Link href="/register" className={styles.toolBtn}>Upscale 8K</Link>
+                    <Link href="/register" className={`${styles.toolBtn} ${styles.toolPrimary}`}>Export</Link>
                   </div>
                 </div>
               </div>

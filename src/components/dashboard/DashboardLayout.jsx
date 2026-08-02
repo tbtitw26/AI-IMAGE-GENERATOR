@@ -48,10 +48,10 @@ export default function DashboardLayout({ children }) {
           </div>
         </div>
 
-        <button className={styles.newProjectBtn}>
+        <Link href="/dashboard/generate" className={styles.newProjectBtn}>
           <span className="material-symbols-outlined">add</span>
           New Project
-        </button>
+        </Link>
 
         <div className={styles.sideNavMain}>
           {navItems.map((item) => (
