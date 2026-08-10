@@ -3,6 +3,7 @@ import { ObjectId } from 'mongodb';
 import { connectToDatabase } from '../../../lib/mongodb';
 import { getUserFromToken } from '../../../lib/auth';
 import { COLLECTIONS } from '../../../config/constants';
+import { getPlanInfo, PREMIUM_MODELS } from '../../../lib/plan';
 
 // Скільки коштує одне згенероване зображення (у USD, списується з user.balance.USD).
 // Безкоштовний тестовий провайдер (Pollinations) коштує $0.
@@ -83,7 +84,16 @@ export async function POST(req) {
     return jsonResponse({ message: 'Prompt is required.' }, 400);
   }
 
-  const count = Math.min(Math.max(Number(imageCount) || 1, 1), 10);
+  const { plan, label: planLabel, limits: planLimits } = getPlanInfo(user);
+
+  if (PREMIUM_MODELS.includes(model) && !planLimits.premiumModels) {
+    return jsonResponse(
+      { message: `The "${model}" model requires the Studio plan or higher. Your current plan is ${planLabel}.` },
+      403
+    );
+  }
+
+  const count = Math.min(Math.max(Number(imageCount) || 1, 1), planLimits.maxImagesPerGeneration);
   const usingOpenAI = Boolean(process.env.OPENAI_API_KEY);
   const totalCost = usingOpenAI ? Number((COST_PER_IMAGE_USD * count).toFixed(2)) : 0;
 
@@ -148,6 +158,8 @@ export async function POST(req) {
       provider: usingOpenAI ? 'openai' : 'pollinations',
       imageCount: images.length,
       cost: totalCost,
+      plan,
+      commercialLicense: planLimits.commercialLicense,
       createdAt: new Date(),
     };
     const { insertedId } = await db.collection(COLLECTIONS.GENERATIONS).insertOne(generationDoc);
@@ -202,6 +214,9 @@ export async function POST(req) {
         balance: currentBalance - totalCost,
         provider: usingOpenAI ? 'openai' : 'pollinations',
         projectId: project ? project._id.toString() : null,
+        plan,
+        commercialLicense: planLimits.commercialLicense,
+        imageCount: count,
       },
       200
     );

@@ -287,7 +287,7 @@ void main() {
       price: '$29',
       period: '/ deposit min',
       description: 'Perfect for individual artists exploring high-fidelity generation.',
-      features: ['Standard generation speed', 'Access to base Aether models', 'Commercial usage rights'],
+      features: ['Up to 4 images per generation', 'Access to base Aether models', 'Commercial usage rights'],
       buttonText: 'Select Creator',
       highlighted: false,
     },
@@ -297,10 +297,10 @@ void main() {
       period: '/ deposit min',
       description: 'Built for professional workflows requiring speed and precision.',
       features: [
-        'Priority generation queue',
-        'Access to Aether Cinematic v4',
-        'Private generations',
-        'Advanced upscaling tools',
+        'Up to 8 images per generation',
+        'Access to Aether Cinematic v4 model',
+        'Advanced 2x upscaling',
+        'Commercial usage rights',
       ],
       buttonText: 'Select Studio',
       highlighted: true,
@@ -504,7 +504,11 @@ void main() {
 
           <div className={styles.servicesGrid}>
             {services.map((service, index) => (
-              <div key={index} className={styles.serviceCard}>
+              <Link
+                key={index}
+                href={`/contact?service=${encodeURIComponent(service.title)}`}
+                className={styles.serviceCard}
+              >
                 <div className={styles.serviceImage}>
                   <img src={service.image} alt={service.title} />
                   <div className={styles.servicePrice}>{service.price}</div>
@@ -525,7 +529,7 @@ void main() {
                     <span className="material-symbols-outlined">arrow_forward</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
 
             {/* Featured Service */}

@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { randomUUID } from 'crypto';
 import { connectToDatabase } from '../../../../lib/mongodb';
 import { COLLECTIONS } from '../../../../config/constants';
+import { getPlanInfo } from '../../../../lib/plan';
 
 const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || (process.env.NODE_ENV !== 'production' ? 'development-secret' : '');
 
@@ -89,6 +90,7 @@ export async function POST(req) {
         EUR: 0,
         GBP: 0,
       },
+      ...getPlanInfo(user),
     };
 
     return new Response(JSON.stringify({ token, user: safeUser }), {

@@ -1,6 +1,7 @@
 import { getUserFromToken } from '../../../../lib/auth';
 import { connectToDatabase } from '../../../../lib/mongodb';
 import { COLLECTIONS } from '../../../../config/constants';
+import { getPlanInfo } from '../../../../lib/plan';
 
 function jsonResponse(body, status) {
   return new Response(JSON.stringify(body), {
@@ -30,6 +31,7 @@ function toSafeUser(user, imageCount) {
     emailVerified: Boolean(user.emailVerified),
     createdAt: user.createdAt || null,
     stats: { generations: imageCount },
+    ...getPlanInfo(user),
   };
 }
 

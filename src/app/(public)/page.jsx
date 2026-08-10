@@ -8,12 +8,32 @@ import styles from './page.module.scss';
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 
+// Ті самі моделі, іконки та кольорові варіанти, що й на реальній сторінці
+// /dashboard/generate — щоб маркетингові макети виглядали ідентично продукту.
+const STUDIO_MODELS = [
+  { name: 'Aether Ultra', icon: 'diamond', description: 'Premium quality, balanced for everything', variant: 'ultra' },
+  { name: 'Cinema 4K', icon: 'movie', description: 'Cinematic color & depth of field', variant: 'cinema' },
+  { name: 'Product Studio', icon: 'photo_camera', description: 'Clean studio lighting for products', variant: 'studio' },
+  { name: 'Character Gen', icon: 'person', description: 'Consistent character design', variant: 'character' },
+];
+
+const STUDIO_ASPECT_RATIOS = ['16:9', '1:1', '9:16', '4:3', '3:4'];
+
+function getAspectDims(ratio) {
+  const [w, h] = ratio.split(':').map(Number);
+  const maxDim = 20;
+  return w >= h
+    ? { width: maxDim, height: Math.max(6, Math.round((h / w) * maxDim)) }
+    : { width: Math.max(6, Math.round((w / h) * maxDim)), height: maxDim };
+}
+
 export default function HomePage() {
   const [promptText, setPromptText] = useState('');
   const [isTyping, setIsTyping] = useState(true);
   const [currentPromptIndex, setCurrentPromptIndex] = useState(0);
   const [aspectRatio, setAspectRatio] = useState('16:9');
-  const [modifiers, setModifiers] = useState(['35mm Lens', 'Cinematic Lighting']);
+  const [mockModel, setMockModel] = useState('Aether Ultra');
+  const [mockImageCount, setMockImageCount] = useState(4);
   const [walletCurrency, setWalletCurrency] = useState('USD');
   const heroRef = useRef(null);
   const canvasRef = useRef(null);
@@ -429,18 +449,6 @@ export default function HomePage() {
         {/* WebGL Background */}
         <canvas ref={canvasRef} className={styles.bgCanvas} />
 
-        {/* Announcement Bar */}
-        <div className={styles.announcement}>
-          <span className={styles.pulseDot}></span>
-          <span>AetherEngine v4.2 is now live.</span>
-          <Link href="/changelog" className={styles.announcementLink}>
-            Read the changelog <span className="material-symbols-outlined">arrow_forward</span>
-          </Link>
-          <span className={styles.uptime}>
-            <span className={styles.uptimeDot}></span> 99.99% Uptime
-          </span>
-        </div>
-
         {/* Hero Section */}
         <section ref={heroRef} className={styles.hero} id="hero-section">
           {/* 3D Lens Container */}
@@ -591,113 +599,147 @@ export default function HomePage() {
           </div>
           
           <div className={styles.studioPanel}>
-            {/* Sidebar */}
-            <div className={styles.studioSidebar}>
-              <div className={styles.sidebarHeader}>
-                <h3>Generation Settings</h3>
+            {/* Control Panel (mirrors /dashboard/generate exactly) */}
+            <div className={styles.controlPanel}>
+              <div className={styles.promptSection}>
+                <div className={styles.promptHeader}>
+                  <label>
+                    <span className={styles.sectionIcon}>
+                      <span className="material-symbols-outlined">edit_note</span>
+                    </span>
+                    Master Prompt
+                  </label>
+                  <div className={styles.promptActions}>
+                    <button className={styles.actionBtn} type="button">
+                      <span className="material-symbols-outlined">auto_fix_high</span>
+                      Enhance
+                    </button>
+                    <button className={styles.actionBtn} type="button">
+                      <span className="material-symbols-outlined">shuffle</span>
+                      Random
+                    </button>
+                    <button className={styles.actionBtn} type="button" disabled>
+                      <span className="material-symbols-outlined">history</span>
+                      History
+                    </button>
+                  </div>
+                </div>
+                <div className={styles.promptInputWrap}>
+                  <textarea
+                    className={styles.promptInput}
+                    rows="4"
+                    readOnly
+                    value="A cinematic wide shot of a sleek futuristic sports car driving through a neon-lit cyberpunk city in the rain, ultra-realistic 8k resolution, cinematic lighting, reflections on wet asphalt."
+                  />
+                  <span className={styles.charCount}>168</span>
+                </div>
               </div>
-              <div className={styles.sidebarContent}>
-                <div className={styles.formGroup}>
-                  <label>Model</label>
-                  <select className={styles.select}>
-                    <option>AetherEngine v4.2 Ultra</option>
-                    <option>AetherEngine v4.2 Cinema</option>
-                    <option>AetherEngine v3.0 Base</option>
-                  </select>
-                </div>
-                
-                <div className={styles.sliderGroup}>
-                  <div>
-                    <div className={styles.sliderHeader}>
-                      <span>Style Weight</span>
-                      <span>0.85</span>
-                    </div>
-                    <input type="range" defaultValue="85" className={styles.rangeSlider} />
-                  </div>
-                  <div>
-                    <div className={styles.sliderHeader}>
-                      <span>Structural Integrity</span>
-                      <span>0.92</span>
-                    </div>
-                    <input type="range" defaultValue="92" className={styles.rangeSlider} />
-                  </div>
-                </div>
 
-                <div className={styles.formGroup}>
+              <div className={styles.negativeSection}>
+                <label>
+                  <span className={styles.sectionIcon}>
+                    <span className="material-symbols-outlined">block</span>
+                  </span>
+                  Negative Prompt
+                </label>
+                <textarea
+                  className={styles.negativeInput}
+                  rows="2"
+                  readOnly
+                  value="blurry, low quality, distorted, watermark, text, signature"
+                />
+              </div>
+
+              <div className={styles.modelSection}>
+                <label>
+                  <span className={styles.sectionIcon}>
+                    <span className="material-symbols-outlined">auto_awesome_mosaic</span>
+                  </span>
+                  Model Engine
+                </label>
+                <div className={styles.mockModelGrid}>
+                  {STUDIO_MODELS.map((model) => (
+                    <button
+                      key={model.name}
+                      className={`${styles.mockModelBtn} ${mockModel === model.name ? styles.active : ''}`}
+                      data-variant={model.variant}
+                      onClick={() => setMockModel(model.name)}
+                    >
+                      <span className={styles.mockModelIcon}>
+                        <span className="material-symbols-outlined">{model.icon}</span>
+                      </span>
+                      <span className={styles.mockModelText}>
+                        <span className={styles.mockModelName}>{model.name}</span>
+                        <span className={styles.mockModelDesc}>{model.description}</span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className={styles.modelSection}>
+                <label>
+                  <span className={styles.sectionIcon}>
+                    <span className="material-symbols-outlined">folder_open</span>
+                  </span>
+                  Save to Project (optional)
+                </label>
+                <select className={styles.projectSelect} disabled defaultValue="">
+                  <option value="">No project — gallery only</option>
+                </select>
+              </div>
+
+              <div className={styles.settingsRow}>
+                <div className={styles.settingGroup}>
                   <label>Aspect Ratio</label>
                   <div className={styles.aspectGrid}>
-                    <button
-                      className={`${styles.aspectBtn} ${aspectRatio === '1:1' ? styles.active : ''}`}
-                      onClick={() => setAspectRatio('1:1')}
-                    >
-                      <div className={styles.aspectBox1x1}></div>
-                      <span>1:1</span>
-                    </button>
-                    <button
-                      className={`${styles.aspectBtn} ${aspectRatio === '16:9' ? styles.active : ''}`}
-                      onClick={() => setAspectRatio('16:9')}
-                    >
-                      <div className={styles.aspectBox16x9}></div>
-                      <span>16:9</span>
-                    </button>
-                    <button
-                      className={`${styles.aspectBtn} ${aspectRatio === '9:16' ? styles.active : ''}`}
-                      onClick={() => setAspectRatio('9:16')}
-                    >
-                      <div className={styles.aspectBox9x16}></div>
-                      <span>9:16</span>
-                    </button>
-                  </div>
-                </div>
-
-                <div className={styles.formGroup}>
-                  <label>Active Modifiers</label>
-                  <div className={styles.modifiers}>
-                    {modifiers.map((mod) => (
-                      <span key={mod} className={styles.modifier}>
-                        {mod}{' '}
-                        <button
-                          className={styles.modifierClose}
-                          onClick={() => setModifiers((prev) => prev.filter((m) => m !== mod))}
-                        >
-                          ✕
-                        </button>
-                      </span>
+                    {STUDIO_ASPECT_RATIOS.map((ratio) => (
+                      <button
+                        key={ratio}
+                        className={`${styles.aspectBtn} ${aspectRatio === ratio ? styles.active : ''}`}
+                        onClick={() => setAspectRatio(ratio)}
+                      >
+                        <span className={styles.aspectShape} style={getAspectDims(ratio)} />
+                        <span>{ratio}</span>
+                      </button>
                     ))}
-                    <Link href="/register" className={`${styles.modifier} ${styles.addModifier}`}>
-                      <span className="material-symbols-outlined">add</span> Add
-                    </Link>
+                  </div>
+                </div>
+                <div className={styles.settingGroup}>
+                  <label>Image Count</label>
+                  <div className={styles.mockCountBtns}>
+                    {[1, 2, 4, 8].map((n) => (
+                      <button
+                        key={n}
+                        className={`${styles.mockCountBtn} ${mockImageCount === n ? styles.active : ''}`}
+                        onClick={() => setMockImageCount(n)}
+                      >
+                        {n}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
-              <div className={styles.sidebarFooter}>
-                <Link href="/register" className={styles.generateBtnFull}>Generate (15 credits)</Link>
-              </div>
+
+              <Link href="/register" className={styles.generateBtnFull}>
+                <span className={styles.generateBtnShine} />
+                <span className="material-symbols-outlined">bolt</span>
+                Generate Now ({mockImageCount} Credits)
+              </Link>
             </div>
 
-            {/* Main Area */}
+            {/* Preview */}
             <div className={styles.studioMain}>
-              <div className={styles.promptArea}>
-                <div>
-                  <label>Prompt</label>
-                  <textarea className={styles.promptInput} rows="3" defaultValue="A cinematic wide shot of a sleek futuristic sports car driving through a neon-lit cyberpunk city in the rain, ultra-realistic 8k resolution, cinematic lighting, reflections on wet asphalt, hyper-detailed, deep charcoal and electric blue color palette." />
-                </div>
-                <div>
-                  <label>Negative Prompt</label>
-                  <textarea className={styles.negativePrompt} rows="1" defaultValue="blurry, low quality, distorted, watermark, text, signature" />
-                </div>
-              </div>
-
               <div className={styles.outputViewport}>
                 <div className={styles.outputImage}>
-                  <img 
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6cNrW7r0D1KyzmPdKYJngTw8ziiYYjoOlsOI7QD_KkDC999N8iFzPwp9DEHB-7AtkuH3Pz7ymBYQaCJ2vu2hqtihhFw7MCmjY6-GokrCpmv3kTtShtRdyPE56oL9MQ3WIhRllMJVsuUCf-Pjb8csOwlP7JEsxxrNbxYn-rTqrj3dZU8yKKnY3Ng9zalvnt7SKpvRSE0va4RCYfcRXl6rx-fOkh4Wk3UgavEm8VygibtS5imYDryrEw" 
-                    alt="Generated Output" 
+                  <img
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ6cNrW7r0D1KyzmPdKYJngTw8ziiYYjoOlsOI7QD_KkDC999N8iFzPwp9DEHB-7AtkuH3Pz7ymBYQaCJ2vu2hqtihhFw7MCmjY6-GokrCpmv3kTtShtRdyPE56oL9MQ3WIhRllMJVsuUCf-Pjb8csOwlP7JEsxxrNbxYn-rTqrj3dZU8yKKnY3Ng9zalvnt7SKpvRSE0va4RCYfcRXl6rx-fOkh4Wk3UgavEm8VygibtS5imYDryrEw"
+                    alt="Generated Output"
                   />
                   <div className={styles.outputOverlay}>
                     <div>
                       <div className={styles.seedInfo}>Seed: 84920104</div>
-                      <div className={styles.stepsInfo}>Steps: 40 | Sampler: DPM++ 2M Karras | CFG: 7.5</div>
+                      <div className={styles.stepsInfo}>Model: {mockModel} | Ratio: {aspectRatio}</div>
                     </div>
                     <div className={styles.outputActions}>
                       <Link href="/register"><span className="material-symbols-outlined">download</span></Link>
@@ -894,9 +936,9 @@ export default function HomePage() {
                   <span>AUG 2024</span>
                 </div>
                 <div className={styles.invoiceList}>
-                  <div><span>Cinematic Campaign</span><span>$499.00</span></div>
-                  <div><span>VIP Session</span><span>$999.00</span></div>
-                  <div><span>Product Suite</span><span>$299.00</span></div>
+                  <div><span>Fashion Editorial Collection</span><span>$499.00</span></div>
+                  <div><span>Global Advertising Campaign</span><span>$899.00</span></div>
+                  <div><span>Luxury Product Campaign</span><span>$299.00</span></div>
                 </div>
               </div>
             </div>
@@ -904,15 +946,15 @@ export default function HomePage() {
             <div className={styles.pricingCards}>
               <div className={styles.pricingCard}>
                 <div>
-                  <h3>Cinematic Campaign</h3>
+                  <h3>Fashion Editorial Collection</h3>
                   <span>$499</span>
                 </div>
-                <p>Full suite of ultra-high resolution assets optimized for print and billboard campaigns.</p>
+                <p>Full suite of ultra-high resolution editorial assets suitable for magazines and fashion brands.</p>
                 <Link href="/contact">Book Service</Link>
               </div>
               <div className={styles.pricingCard}>
                 <div>
-                  <h3>Luxury Product Suite</h3>
+                  <h3>Luxury Product Campaign</h3>
                   <span>$299</span>
                 </div>
                 <p>Studio-grade lighting simulations for high-end jewelry, watches, and apparel.</p>
@@ -920,8 +962,8 @@ export default function HomePage() {
               </div>
               <div className={styles.pricingCard}>
                 <div>
-                  <h3>Brand Identity System</h3>
-                  <span>$799</span>
+                  <h3>Brand Identity Visual System</h3>
+                  <span>$699</span>
                 </div>
                 <p>Comprehensive visual language generation including custom textures, palettes, and structural forms.</p>
                 <Link href="/contact">Book Service</Link>
@@ -929,10 +971,10 @@ export default function HomePage() {
               <div className={`${styles.pricingCard} ${styles.featured}`}>
                 <span className={styles.directorBadge}>Director's Tier</span>
                 <div>
-                  <h3>VIP Creative Session</h3>
-                  <span>$999</span>
+                  <h3>Global Advertising Campaign</h3>
+                  <span>$899</span>
                 </div>
-                <p>1-on-1 session with our elite prompt engineers to realize your most ambitious cinematic concepts in real-time.</p>
+                <p>Billboard-ready, print-perfect assets for large-scale marketing campaigns, led by our elite prompt engineers.</p>
                 <Link href="/contact">Request Session</Link>
               </div>
             </div>

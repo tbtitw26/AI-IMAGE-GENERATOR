@@ -90,23 +90,69 @@ export default function ProfilePage() {
     fileInputRef.current?.click();
   };
 
-  const handlePhotoSelection = (event) => {
+  // Photo changes save immediately (no need to hit "Save Changes" first),
+  // so the new picture shows up everywhere — including the dashboard top bar —
+  // right away instead of only living in local state until the form is submitted.
+  const savePhoto = async (photo) => {
+    setProfile((prev) => ({ ...prev, photo }));
+    setSavedProfile((prev) => ({ ...prev, photo }));
+    setSaveMessage('');
+    setIsSaving(true);
+    try {
+      const response = await fetch('/api/profile', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ photo }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to update photo.');
+      await refreshUser();
+      setSaveMessage('Profile photo updated.');
+    } catch (err) {
+      setSaveMessage(err.message || 'Failed to update photo.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Downscale + compress the picked file client-side before it becomes a data
+  // URL, so a phone-camera photo doesn't turn into a multi-megabyte payload.
+  const readAndResizeImage = (file, maxSize = 512, quality = 0.85) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = () => reject(new Error('Could not read the selected file.'));
+      reader.onload = () => {
+        const img = document.createElement('img');
+        img.onerror = () => reject(new Error('Could not read the selected image.'));
+        img.onload = () => {
+          const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.width * scale);
+          canvas.height = Math.round(img.height * scale);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+        img.src = typeof reader.result === 'string' ? reader.result : '';
+      };
+      reader.readAsDataURL(file);
+    });
+
+  const handlePhotoSelection = async (event) => {
     const file = event.target.files?.[0];
+    event.target.value = '';
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const photo = typeof reader.result === 'string' ? reader.result : '';
-      setProfile((prev) => ({ ...prev, photo }));
-      setSaveMessage('');
-    };
-    reader.readAsDataURL(file);
-    event.target.value = '';
+    try {
+      const photo = await readAndResizeImage(file);
+      await savePhoto(photo);
+    } catch (err) {
+      setSaveMessage(err.message || 'Failed to update photo.');
+    }
   };
 
   const handleRemovePhoto = () => {
-    setProfile((prev) => ({ ...prev, photo: defaultProfile.photo }));
-    setSaveMessage('');
+    savePhoto(defaultProfile.photo);
   };
 
   const quickStats = [

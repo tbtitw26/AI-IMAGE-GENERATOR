@@ -229,7 +229,7 @@ export default function SettingsPage() {
           <div className={styles.statusCard}>
             <div className={styles.statusHeader}>
               <span>Account Status</span>
-              <span className={styles.statusBadge}>Professional Plan</span>
+              <span className={styles.statusBadge}>{user?.label || 'Free'} Plan</span>
             </div>
             <div className={styles.statusList}>
               <div>
@@ -568,22 +568,27 @@ export default function SettingsPage() {
               <div className={styles.billingCard}>
                 <div className={styles.billingHeader}>
                   <span>Current Plan</span>
-                  <span className={styles.billingPlan}>Professional</span>
+                  <span className={styles.billingPlan}>{user?.label || 'Free'}</span>
                 </div>
                 <div className={styles.billingDetails}>
                   <div>
-                    <span>Next Billing Date</span>
-                    <span>November 24, 2024</span>
+                    <span>Lifetime Top-Ups</span>
+                    <span>${(user?.lifetimeTopUpUSD ?? 0).toFixed(2)} USD</span>
                   </div>
                   <div>
-                    <span>Amount</span>
-                    <span>$79.00 USD</span>
+                    <span>Wallet Balance</span>
+                    <span>${(user?.balance?.USD ?? 0).toFixed(2)} USD</span>
                   </div>
                   <div>
                     <span>Status</span>
                     <span className={styles.billingStatus}>Active</span>
                   </div>
                 </div>
+                {user?.nextPlanLabel && (
+                  <p style={{ fontSize: 13, color: '#94a3b8', margin: '0 0 12px' }}>
+                    Add ${user.amountToNextPlan.toFixed(2)} more in lifetime top-ups to unlock the {user.nextPlanLabel} plan.
+                  </p>
+                )}
                 <div className={styles.billingActions}>
                   <Link href="/dashboard/top-up" className={styles.billingBtn}>Upgrade Plan</Link>
                   <Link href="/dashboard/orders" className={styles.billingBtnSecondary}>View Invoices</Link>

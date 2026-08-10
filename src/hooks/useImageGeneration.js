@@ -56,7 +56,14 @@ export function useImageGeneration() {
         }
       }
 
-      return { success: true, images: data.images, cost: data.cost, balance: data.balance };
+      return {
+        success: true,
+        images: data.images,
+        cost: data.cost,
+        balance: data.balance,
+        commercialLicense: data.commercialLicense,
+        plan: data.plan,
+      };
     } catch (err) {
       const message = err?.message || 'Network error while generating images.';
       setError(message);

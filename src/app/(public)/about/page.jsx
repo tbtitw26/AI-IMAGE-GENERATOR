@@ -262,7 +262,7 @@ void main() {
             </div>
             <div className={styles.heroVisual}>
               <img
-                src="https://lh3.googleusercontent.com/aida/AP1WRLvWYckkFHoyqy3E7tG1EXsob8QC1yGniaUl5RKVS8inaaGY4u18GNElC4eyaWEst7KBTZ2QXgTtnu6q_ygznQUtXTDrijATE4mvDo8uh_ebWJZUkx9JSl860Xt92noJYqj58v1Q2hngZMIwRwi7NVRSK4yhjOxkAN12hymzQKHdTVA58FJdRmnIXpOGe1Vzlo4XRoXmLZrlzqV_kBGrcb_GPcDg1XVft3DDn5CGU3GqN1HXbRhvxGwT5OI"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnpyo0BL-mxp77QHohVR8MGefG9EDBthuMjxCNHGxUDkyIg--dC7AKGJ456H4-F0fNViea1zlbLC4QMuv9v-iE5rUUERbbq51a_Rnx7n__lUC--x3734bsykYKAbVzmWZj_2Yn46YfdyTjBsqYM5vNRfgBty2a-AK1eW_ZM0-s27OYezfT6kKzkUO577V7pJsvOJIoPLHN2xoEwUaCoqoKoxQZwdo7YJlhhaTe2UNt6imJmnLEFh2MdJEl11FCul_6KEnRYxlqLW4"
                 alt="Cinematic layered artwork composition"
               />
             </div>
@@ -347,7 +347,7 @@ void main() {
         <section className={`${styles.cta} ${styles.revealOnScroll}`}>
           <div className={styles.ctaBackground}>
             <img
-              src="https://lh3.googleusercontent.com/aida/AP1WRLtMOEU94AvOCTSY-jS2nEdJEAFNUHlCEaRKZsXArv_LgXW2_zjif61uQ4aCV9ZDjrk5Ggr1ZJS3VO2KvkRBOegBlDkGY1qMf5zpOmKxMLTqDK1ilaJ3A9yMbrF3p-vdNoo4d_JP-7r_oYN3IbIh-tV_Xx4Zgjc1wx_kSQ9RVXjrU4jlXdhJ61sEuNaPwEI-Z_58GXfzQBBjWBcc_VzzOzkGSrS5LdtYPCc7zoU8LbS8N3o5URzgKQ-Huw"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqZfKX0aP8kPE_MtGXRQPec5vbcVhQqDVqeJoFPwkhcRvyZwf18Zc_k-z7aUFaxPeZV6ZaWUiX5l5okR6NtAKLwYkZuOkWfna__HvBivBSXRFai9mgVeh7vw-O9EPHzTXj22ILtTI0JnqRRayfWPKbqjLi6o2rP5A0Jy9L1RthcW7gIjZLnJYFJXBkOXgkrJUSGWxedRa-5TFIiCg4tuuhDOL8wdB7YTqTsRVFaVWoHcxrA4TjbqwkBQ"
               alt="Abstract energetic cinematic background"
             />
           </div>

@@ -2,18 +2,46 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import styles from './page.module.scss';
 
 // Імпорт компонентів
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 
+// Ті самі моделі, іконки та кольорові варіанти, що й на реальній сторінці
+// /dashboard/generate — щоб маркетингові макети виглядали ідентично продукту.
+const STUDIO_MODELS = [
+  { name: 'Aether Ultra', icon: 'diamond', description: 'Premium quality, balanced for everything', variant: 'ultra' },
+  { name: 'Cinema 4K', icon: 'movie', description: 'Cinematic color & depth of field', variant: 'cinema' },
+  { name: 'Product Studio', icon: 'photo_camera', description: 'Clean studio lighting for products', variant: 'studio' },
+  { name: 'Character Gen', icon: 'person', description: 'Consistent character design', variant: 'character' },
+];
+
+const STUDIO_ASPECT_RATIOS = ['16:9', '1:1', '9:16', '4:3', '3:4'];
+
+function getAspectDims(ratio) {
+  const [w, h] = ratio.split(':').map(Number);
+  const maxDim = 20;
+  return w >= h
+    ? { width: maxDim, height: Math.max(6, Math.round((h / w) * maxDim)) }
+    : { width: Math.max(6, Math.round((w / h) * maxDim)), height: maxDim };
+}
+
 export default function HowItWorksPage() {
   const [typingText, setTypingText] = useState('');
+  const [mockModel, setMockModel] = useState('Aether Ultra');
+  const [mockImageCount, setMockImageCount] = useState(4);
+  const [mockAspectRatio, setMockAspectRatio] = useState('16:9');
   const canvasRef = useRef(null);
   const threeContainerRef = useRef(null);
   const typingElementRef = useRef(null);
+  const processScrollRef = useRef(null);
+
+  const scrollProcess = (direction) => {
+    const el = processScrollRef.current;
+    if (!el) return;
+    el.scrollBy({ left: direction * 340, behavior: 'smooth' });
+  };
 
   const textToType = "A hyper-realistic 8k render of a glowing glass terrarium containing a miniature futuristic city, cinematic lighting, deep space background --ar 16:9";
 
@@ -280,40 +308,40 @@ void main() {
       title: 'Prompt Analysis',
       description:
         'The prompt is interpreted into visual concepts, objects, relationships and creative intent.',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuCa98qMZnJCXOq9Nkg5Kbdl6trl_bSOwfXR_jnDZ4vBm_iZnoueifse_EzAkHGs7NZjkBT1wSs6Si0ElXZmGGDGfU42gQI8_yoXHkgAjE97YeS4K6KGdeb-4TpQOA7P9cMHZCqQFK5eNPRYHrUFiIN55ozYDU3v2TUKcwD-PT_sX2gpPLwMQF2UZbSGO7YXCKR2LXFSIBuWYruDRkTqMKFOQR_sacFQsJKnF0CWzBDdfv_-K0aQJSiQssyeHsvCy1e6tSqMUp1RfJw',
+      icon: 'psychology',
+      variant: 'ultra',
     },
     {
       number: '02',
       title: 'Composition Planning',
       description:
         'The AI plans camera position, framing, perspective and overall scene balance.',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuD99XkFA5zW_hfAOOBM1jbctLGzKh5UXu_rxrRTfTWu50xmCECao7-VUsbp7CjqwYBy_zFcnPb2BmWeTJjhvKawGTHpZcSaxVDF15ck1Hcho2GL6S2rwmfY4nApk6fnVt64cwmYj6PQS9FWaoE_GmTjHQBEezlnCxiTwVx-i37gitTnv2f60D0rNQgEPzYzzfnLRhTdD-TlNvpg1GBN6fewMGIxzvISSIw0Csa2f5SM_Qt5BLFrV6rJw1B4z_1JuRe0Mr6kEXFmIH8',
+      icon: 'grid_view',
+      variant: 'cinema',
     },
     {
       number: '03',
       title: 'Visual Synthesis',
       description:
         'Millions of learned visual patterns are combined into a completely new original composition.',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuAlCnMw6B0zwfsu0cT6ja_QymmvmzR12IwVZrZaP3VRFL3VxadubqiXaNBY6e6IrCINhLWiUFhS9kTwa_4MBNLIOz96p_HN2ZO0DIWXYS1jvl5oKwBKcrGxQL0-FhJQqk-W4nuWfP9sE5Wb-u5shkBj-6Z0dpQrkcZtrzIBUkOiv2di632wld2LioXEidk5b_YFs7ag_EpIGSi3xg98wJ2V2KzSsHNFPh-237gjXBzvEJX1e-L7-tW4wwZgQjbfZ-Hi8TwDwNPnHmE',
+      icon: 'auto_awesome',
+      variant: 'studio',
     },
     {
       number: '04',
       title: 'Detail Enhancement',
       description:
         'Textures, reflections, materials, lighting and small imperfections are refined for realism.',
-      image:
-        'https://lh3.googleusercontent.com/aida-public/AB6AXuBEK-Al0DJFA28HLTU8fLPBDEhVTOh258oQ1DqZpFHCKTgAPEJxBQs_VXpgHdLNQn3V_FEq0hQcovocr5IbMKhlktzH31bjxGUfYkwpcUkeomZE_C5KbHUYVVANoqIqWlYiQeflyhH6ZhN52rK17-JPzzGEWbUpizdUmXNSHRBNB0yybW3DUuAm2KQmxlYF_5Eg2mtu0xPK5SOzZ8yp8nuVtNjhcVi11_t0n9eDMbk0PFRnAQasgT44AJbiApUBVsWp54rTfpL7NqU',
+      icon: 'texture',
+      variant: 'character',
     },
     {
       number: '05',
       title: 'Final Output',
       description:
         'The finished image is optimized for commercial use and exported in high resolution.',
-      image:
-        'https://lh3.googleusercontent.com/aida/AP1WRLtv6iv9NyyFGyHzvYyn8HiChysg1ehIJHDU41LmPbqOHsljwL5qgcG0TKc-eknt3AMkVtIRdZZAzHSsygmv1xXe80aNxPn0NYJoaVOEtLo69UInPDskF7Jtq7Q_IOSSt7W-dJ1XTIjbK9rIq2dBACuf2Fal2XtRAI2NTsJLPJQpsAwdtiJwzf7BvjVjTo-K-S_tB62PTmbYNXECvyRoycjhhMHGHX8k1Ombu1M5Ujq7KbkIDZTmLvTFaDY',
+      icon: 'download_done',
+      variant: 'ultra',
       isFinal: true,
     },
   ];
@@ -445,21 +473,46 @@ void main() {
             <h2>The Generation Process</h2>
           </div>
 
-          <div className={styles.processSteps}>
-            {steps.map((step, index) => (
-              <div key={index} className={`${styles.processStep} ${step.isFinal ? styles.finalStep : ''}`}>
-                <div className={styles.stepImage}>
-                  <img src={step.image} alt={step.title} />
-                  {step.isFinal && (
-                    <div className={styles.finalBadge}>Final Output</div>
-                  )}
+          <div className={styles.processCarousel}>
+            <button
+              className={`${styles.processArrow} ${styles.processArrowLeft}`}
+              onClick={() => scrollProcess(-1)}
+              aria-label="Scroll left"
+              type="button"
+            >
+              <span className="material-symbols-outlined">chevron_left</span>
+            </button>
+
+            <div className={styles.processSteps} ref={processScrollRef}>
+              {steps.map((step, index) => (
+                <div key={index} className={`${styles.processStep} ${step.isFinal ? styles.finalStep : ''}`}>
+                  <div className={styles.stepVisual} data-variant={step.variant} style={{ animationDelay: `${index * 0.15}s` }}>
+                    <span className={styles.stepVisualGrid} />
+                    <span className={styles.stepVisualGlow} />
+                    <span className={styles.stepVisualIcon}>
+                      <span className="material-symbols-outlined">{step.icon}</span>
+                    </span>
+                    <span className={styles.stepVisualNumber}>{step.number}</span>
+                    {step.isFinal && <div className={styles.finalBadge}>Final Output</div>}
+                  </div>
+                  <div>
+                    <h3>{step.number}. {step.title}</h3>
+                    <p>{step.description}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3>{step.number}. {step.title}</h3>
-                  <p>{step.description}</p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            <div className={styles.processFade} />
+
+            <button
+              className={`${styles.processArrow} ${styles.processArrowRight}`}
+              onClick={() => scrollProcess(1)}
+              aria-label="Scroll right"
+              type="button"
+            >
+              <span className="material-symbols-outlined">chevron_right</span>
+            </button>
           </div>
         </section>
 
@@ -474,60 +527,149 @@ void main() {
             </p>
           </div>
 
-          <div className={styles.studioInterface}>
-            <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuAybpdSztHlfv8mfh2xzYwAfVG67IrkGSl7ZF5BPGK7Svkz8_drxh0LrH9oE4oubKrJkCWfXPlyztxLKsBimoNllidqrqHmQ_E7FjAH08IJpj0F_RKbQSwRncyIOlFEKqeCPwPSVfbV5MV70FHkBhblmWHUcYMIN5t4i0AlsWWKQ-Woi5JoAuksOveZqtY9pETQvb8Sp5vp0T7nYZyqDEiGgc9fCO6xhB_u53tuavInShCSpik-1ybEFo_Q7zPGddBKokjCbxeqAQk"
-              alt="Studio Interface Preview"
-            />
-            <div className={styles.interfaceOverlay}></div>
+          <div className={styles.studioPanel}>
+            {/* Control Panel — mirrors /dashboard/generate exactly */}
+            <div className={styles.controlPanel}>
+              <div className={styles.promptSection}>
+                <div className={styles.promptHeader}>
+                  <label>
+                    <span className={styles.sectionIcon}>
+                      <span className="material-symbols-outlined">edit_note</span>
+                    </span>
+                    Master Prompt
+                  </label>
+                  <div className={styles.promptActions}>
+                    <button className={styles.actionBtn} type="button">
+                      <span className="material-symbols-outlined">auto_fix_high</span>
+                      Enhance
+                    </button>
+                    <button className={styles.actionBtn} type="button">
+                      <span className="material-symbols-outlined">shuffle</span>
+                      Random
+                    </button>
+                    <button className={styles.actionBtn} type="button" disabled>
+                      <span className="material-symbols-outlined">history</span>
+                      History
+                    </button>
+                  </div>
+                </div>
+                <div className={styles.promptInputWrap}>
+                  <textarea
+                    className={styles.promptInput}
+                    rows="4"
+                    readOnly
+                    value="A cinematic close-up of a designer sketching a concept car, dramatic studio lighting, ultra-detailed, 8k resolution."
+                  />
+                  <span className={styles.charCount}>115</span>
+                </div>
+              </div>
 
-            {/* Faux UI Overlay */}
-            <div className={styles.interfaceUI}>
-              <div className={styles.interfaceLeft}>
-                <div className={styles.uiPanel}>
-                  <div className={styles.uiLabel}>Prompt</div>
-                  <div className={styles.uiPrompt}>A cinematic close-up of...</div>
+              <div className={styles.negativeSection}>
+                <label>
+                  <span className={styles.sectionIcon}>
+                    <span className="material-symbols-outlined">block</span>
+                  </span>
+                  Negative Prompt
+                </label>
+                <textarea className={styles.negativeInput} rows="2" readOnly value="blurry, low quality, distorted, watermark, text" />
+              </div>
+
+              <div className={styles.modelSection}>
+                <label>
+                  <span className={styles.sectionIcon}>
+                    <span className="material-symbols-outlined">auto_awesome_mosaic</span>
+                  </span>
+                  Model Engine
+                </label>
+                <div className={styles.mockModelGrid}>
+                  {STUDIO_MODELS.map((model) => (
+                    <button
+                      key={model.name}
+                      className={`${styles.mockModelBtn} ${mockModel === model.name ? styles.active : ''}`}
+                      data-variant={model.variant}
+                      onClick={() => setMockModel(model.name)}
+                    >
+                      <span className={styles.mockModelIcon}>
+                        <span className="material-symbols-outlined">{model.icon}</span>
+                      </span>
+                      <span className={styles.mockModelText}>
+                        <span className={styles.mockModelName}>{model.name}</span>
+                        <span className={styles.mockModelDesc}>{model.description}</span>
+                      </span>
+                    </button>
+                  ))}
                 </div>
-                <div className={styles.uiPanel}>
-                  <div className={styles.uiLabel}>Negatives</div>
-                  <div className={styles.uiNegatives}>blur, low quality, artifacts...</div>
+              </div>
+
+              <div className={styles.modelSection}>
+                <label>
+                  <span className={styles.sectionIcon}>
+                    <span className="material-symbols-outlined">folder_open</span>
+                  </span>
+                  Save to Project (optional)
+                </label>
+                <select className={styles.projectSelect} disabled defaultValue="">
+                  <option value="">No project — gallery only</option>
+                </select>
+              </div>
+
+              <div className={styles.settingsRow}>
+                <div className={styles.settingGroup}>
+                  <label>Aspect Ratio</label>
+                  <div className={styles.aspectGrid}>
+                    {STUDIO_ASPECT_RATIOS.map((ratio) => (
+                      <button
+                        key={ratio}
+                        className={`${styles.aspectBtn} ${mockAspectRatio === ratio ? styles.active : ''}`}
+                        onClick={() => setMockAspectRatio(ratio)}
+                      >
+                        <span className={styles.aspectShape} style={getAspectDims(ratio)} />
+                        <span>{ratio}</span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
-                <div className={styles.uiPanel}>
-                  <div className={styles.uiLabel}>Model Selection</div>
-                  <div className={styles.uiModel}>
-                    <span>Aether V4 Pro</span>
-                    <span className="material-symbols-outlined">expand_more</span>
+                <div className={styles.settingGroup}>
+                  <label>Image Count</label>
+                  <div className={styles.mockCountBtns}>
+                    {[1, 2, 4, 8].map((n) => (
+                      <button
+                        key={n}
+                        className={`${styles.mockCountBtn} ${mockImageCount === n ? styles.active : ''}`}
+                        onClick={() => setMockImageCount(n)}
+                      >
+                        {n}
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              <div className={styles.interfaceCenter}>
-                <div className={styles.reticle}></div>
-              </div>
+              <Link href="/register" className={styles.generateBtnFull}>
+                <span className={styles.generateBtnShine} />
+                <span className="material-symbols-outlined">bolt</span>
+                Generate Now ({mockImageCount} Credits)
+              </Link>
+            </div>
 
-              <div className={styles.interfaceRight}>
-                <div className={styles.uiPanel}>
-                  <div className={styles.uiLabel}>Camera &amp; Optics</div>
-                  <div className={styles.controlRow}>
-                    <span>Focal Length</span>
-                    <span>50mm</span>
-                  </div>
-                  <div className={styles.slider}>
-                    <div className={`${styles.sliderFill} ${styles.sliderPrimary}`} style={{ width: '50%' }}></div>
-                  </div>
-                  <div className={styles.controlRow}>
-                    <span>Aperture</span>
-                    <span>f/1.8</span>
-                  </div>
-                  <div className={styles.slider}>
-                    <div className={`${styles.sliderFill} ${styles.sliderTertiary}`} style={{ width: '25%' }}></div>
-                  </div>
-                </div>
-                <div className={styles.uiPanel}>
-                  <div className={styles.uiLabel}>Output Tools</div>
-                  <div className={styles.toolGrid}>
-                    <Link href="/register" className={styles.toolBtn}>Upscale 8K</Link>
-                    <Link href="/register" className={`${styles.toolBtn} ${styles.toolPrimary}`}>Export</Link>
+            {/* Preview */}
+            <div className={styles.studioMain}>
+              <div className={styles.outputViewport}>
+                <div className={styles.outputImage}>
+                  <img
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAybpdSztHlfv8mfh2xzYwAfVG67IrkGSl7ZF5BPGK7Svkz8_drxh0LrH9oE4oubKrJkCWfXPlyztxLKsBimoNllidqrqHmQ_E7FjAH08IJpj0F_RKbQSwRncyIOlFEKqeCPwPSVfbV5MV70FHkBhblmWHUcYMIN5t4i0AlsWWKQ-Woi5JoAuksOveZqtY9pETQvb8Sp5vp0T7nYZyqDEiGgc9fCO6xhB_u53tuavInShCSpik-1ybEFo_Q7zPGddBKokjCbxeqAQk"
+                    alt="Studio output preview"
+                  />
+                  <div className={styles.outputOverlay}>
+                    <div>
+                      <div className={styles.seedInfo}>Seed: 47201855</div>
+                      <div className={styles.stepsInfo}>Model: {mockModel} | Ratio: {mockAspectRatio}</div>
+                    </div>
+                    <div className={styles.outputActions}>
+                      <Link href="/register"><span className="material-symbols-outlined">download</span></Link>
+                      <Link href="/register"><span className="material-symbols-outlined">hd</span></Link>
+                      <Link href="/register"><span className="material-symbols-outlined">tune</span></Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -560,7 +702,7 @@ void main() {
         <section className={styles.cta}>
           <div className={styles.ctaBackground}>
             <img
-              src="https://lh3.googleusercontent.com/aida/AP1WRLscjiiO0VRfGalpnBnnOzFyJFSMC6rMldW-QhO2k4O9sfujuoRbLWOoIWnv1MrQB92BIE3-MyER4AY7cJYd5BLvqg_K-RiAA_pluqJMW4tknCJbtZSsg_Zz-YOemutnfk-Jy7iADfEn0-zvnhOyNM-VktpqWrcCngJx3xtWAUyadW4LfNa3ubGuNNjqchhNPBfGXoG0v4m6z9Byv8rUvL1Jni_bNRkAVv38rPRLmsgXfWwNuqLcPCfAhA"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBHvOhiCgd-wBnxdrdQY81_gPg0z0vbkdIKQsGxUZ4-ZXCHmsi-aXpIyxcu2Gb-FSupOs4_oaUYoxwSadb5r-qXz4YzopKjMp4tGUHIHHkLEm6a8b5O1D2pV8OpP3fXQ5PxCjqbSUdHIELsekBroMLdJDkIExeAOasdIZLNI6uu3thBPvSIoOjKrQKq1SBBUGsr2xtHUJZlyYdJDEQsSIpatsbXQLQRzhAH-m1v4CgESfP4OpBa72aUKhYgr0Hju1L3hse-DDxSLnw"
               alt="Digital artworks cloud"
             />
             <div className={styles.ctaOverlay}></div>

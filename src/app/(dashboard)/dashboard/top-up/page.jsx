@@ -7,8 +7,10 @@ import styles from './page.module.scss';
 
 // Імпорт компонентів
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import { useAuth } from '@/hooks/useAuth';
 
 export default function TopUpPage() {
+  const { token, user, refreshUser } = useAuth();
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
   const [selectedCurrency, setSelectedCurrency] = useState('USD');
@@ -50,7 +52,6 @@ export default function TopUpPage() {
     setIsProcessing(true);
 
     try {
-      const token = window.localStorage.getItem('token');
       if (!token) {
         throw new Error('Please sign in again before topping up.');
       }
@@ -75,6 +76,7 @@ export default function TopUpPage() {
       }
 
       setSuccessMessage(data.message || 'Top-up completed successfully. Your wallet balance has been updated.');
+      await refreshUser(token);
     } catch (err) {
       setError(err.message || 'Unable to complete top-up.');
     } finally {
@@ -165,18 +167,20 @@ export default function TopUpPage() {
               <span className="material-symbols-outlined">account_balance_wallet</span>
             </div>
             <div className={styles.balanceAmount}>
-              $12,450.00 <span className={styles.balanceCurrency}>USD</span>
+              ${(user?.balance?.[selectedCurrency] ?? 0).toFixed(2)} <span className={styles.balanceCurrency}>{selectedCurrency}</span>
             </div>
             <div className={styles.summaryDetails}>
               <div>
                 <span className={styles.detailDotSecondary}></span>
                 <span>Plan</span>
-                <span className={styles.detailValueSecondary}>Professional</span>
+                <span className={styles.detailValueSecondary}>{user?.label || 'Free'}</span>
               </div>
               <div>
                 <span className={styles.detailDotTertiary}></span>
                 <span>License</span>
-                <span className={styles.detailValueTertiary}>Commercial</span>
+                <span className={styles.detailValueTertiary}>
+                  {user?.limits?.commercialLicense ? 'Commercial' : 'Personal Use'}
+                </span>
               </div>
               <div>
                 <span className={styles.detailDotEmerald}></span>

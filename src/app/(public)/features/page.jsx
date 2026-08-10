@@ -9,9 +9,31 @@ import styles from './page.module.scss';
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 
+// Ті самі моделі, іконки та кольорові варіанти, що й на реальній сторінці
+// /dashboard/generate — щоб маркетингові макети виглядали ідентично продукту.
+const STUDIO_MODELS = [
+  { name: 'Aether Ultra', icon: 'diamond', variant: 'ultra' },
+  { name: 'Cinema 4K', icon: 'movie', variant: 'cinema' },
+  { name: 'Product Studio', icon: 'photo_camera', variant: 'studio' },
+  { name: 'Character Gen', icon: 'person', variant: 'character' },
+];
+
+const STUDIO_ASPECT_RATIOS = ['16:9', '1:1', '9:16', '4:3', '3:4'];
+
+function getAspectDims(ratio) {
+  const [w, h] = ratio.split(':').map(Number);
+  const maxDim = 18;
+  return w >= h
+    ? { width: maxDim, height: Math.max(5, Math.round((h / w) * maxDim)) }
+    : { width: Math.max(5, Math.round((w / h) * maxDim)), height: maxDim };
+}
+
 export default function FeaturesPage() {
   const canvasRef = useRef(null);
   const threeContainerRef = useRef(null);
+  const [mockModel, setMockModel] = useState('Aether Ultra');
+  const [mockAspectRatio, setMockAspectRatio] = useState('16:9');
+  const [mockImageCount, setMockImageCount] = useState(4);
 
   // WebGL Background Shader
   useEffect(() => {
@@ -251,13 +273,13 @@ void main() {
 
   const floatingImages = [
     {
-      src: 'https://lh3.googleusercontent.com/aida/AP1WRLsorMKOBB1a9sNgxAR4W9Mr7rnzGiUqUZC5Ib7ec6ksD9bFDOPEaDeKybHKb6czVP4QWPA8isE7WB_OSqhL72K917IoD7L1iwBk6Wk6-Y7znD6abhP-h7LCx4U0wlIlXpZevty0w9LNK9DNTWO3bKh80ZlKWJxYyf_yPhB6rmCu1IpZKyNp_NakGIbQRYWFl3q2xAphhAjAuhpcbWEcf_p007jU8uYJb-yUeTpcUDKz5dJTPhe5QuK2U-c',
+      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBs0LPQKrtWAIPN9_UNrs2gzS66AGYPS0Nc2Pm0cRUKlLnvlPIoET71J_Ftf1s4BDXFn7yU3kpMRbxpT8-Y7kKvUDWKEiQluXqkNIcaQAaSwEkWGJ5WcXxk_eQuKwM555qCueX741qIxGJQrs6BX0zOoX34Odkht2wnuPDiNXfGgOz_3sl1qTaiEobcYkYisPA1dQBwQhU-XfSH3LtO00Z7kohouWbyOOHU2Xo-3-H2IstYI2g4CvmYFg',
       alt: 'Fashion',
       className: styles.img1,
       animation: styles.animateFloat,
     },
     {
-      src: 'https://lh3.googleusercontent.com/aida/AP1WRLulhoTGM4aYSgW2y4N8z8NNHtF5bQKPLoYreN8exO0tGmy4ME4R07N2Ny7v89GwjIB9Cqh9rjvoK7OhdUpefZDda4F4fmOyqcinI6-2AsdDWJgMGbjgnt8_OxJZux0gELHmLY0U74mFvvcscK-cKLQi57a8Sm_gcARl7J3Mc3ngd0tvsRJighiIxGcc3SQEaJTRW9IN5jIE_No3HUDggS8P_q-OMWCAzE9y6hyr06DpXAcbIFF_JqcPK5k',
+      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuOadBGN1vPQiW3DRRu1JwDJe7A-1mVI5br9NnKgAeKFYnWVLkXxzwLkcOOj0j85tuMOEpjqhz5LJ2eFN8N1HV68D2NquM5VacdrMsazDTqMJCWUBPZo8tEytjC5-uLLibho2IA6NDKA-RxzgBX-vp5MUA3lTW06D6T-FqsFaY8ygKjXWkIUe6U6FC_xH2PDOuQehPwh3W6IWm5eYRfDlmQsldgtBnrGhqZIAW47ctep2WquGSHEWcsA',
       alt: 'Watch Perfume',
       className: styles.img2,
       animation: styles.animateFloatDelayed,
@@ -281,13 +303,13 @@ void main() {
       animation: styles.animateFloatSlow,
     },
     {
-      src: 'https://lh3.googleusercontent.com/aida/AP1WRLtsdsYXrQCXDyo_YHtq-79fGzQHxQtr9IzPve4JEF2-p7ecDHLh_Lf-W5xy5STC8hxmckjpSqostXoL0nygsKfGmYBUmbSDdnOBhOljyrCBglm_UrmCWsj0o_UdcIV0mAIuTHpU9Ny72Kn4hAihjAz71eTRldhAKtidRntw-lCl5vGxdzThx_KgLiC2BgE0IjwpkLqC12SyvlOJKn8dPHBfimLQpJZTj9u3RzKLhojVN6-hD61yGKbm4oM',
+      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDDkI7zR3yHMGKFU_9a5FUQ31qkuRwGKa3zhabkSchzO0blyrUtsswvxTg6oxRJ8xStXmo4M9fUU1YT3LOds2ePKfc6LWSik1k5sjcsP3H-kG3jxRF28vhh8Ib6-gdlc4WnBpvGik2xPHlRUmT63n5TC2NVJKP2pgnMNT6bInnrdd0qn-LYfTpW1wZ-80Nwa0ZW2R57PYBuPZei7PyicFgk_69Uin6pvR6e4UdY_qk4ysLM6R47p4swUA',
       alt: 'Anime',
       className: styles.img6,
       animation: styles.animateFloatDelayed,
     },
     {
-      src: 'https://lh3.googleusercontent.com/aida/AP1WRLubgKtR7CzxX4EY8j5DSqRLBXtPO5PC3h75t5hd2wJlN8-s0Iqwq_i5pwykjZLG2DkaWz3aOBpXy5GjoBxDCHWQ2q98XFhzMokxFPcqxpzY-31jQSRrup1AyayucavfvS4bQDSfXn39XxN-v2YyUwFbB-hS43e8il6tMYILslecr5XdgHYixeC1ONFfoYqp15MNeJT95C1DYZgDAkpR8YTmVHRYsMjz4I09B_kcQMQYcCFMk5HgVQtBaqs',
+      src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC7MxJEOwJWOFK15iYS5pw84XJWw10CNwPZwar8YPwtdXFFpBePPteOSqbuxVu79PLPhGWI9DeN2RPBtMREU0mDoZ5Kn2UdLVR45awXOmovpHnpjDDlHlnq4oiJOwNSWikVClaLYRRLDYBnYAYqHYkZEbnhHHISPeiV3Kxwm9duhTe7ri-Zg0o2kcljhAhYh2wCpR5f-B0Ayx2v-Cs3WDBeyTohLiFOgn7qgPgDZ0Qjnk84BcuNyq68LA',
       alt: 'Landscape',
       className: styles.img7,
       animation: styles.animateFloat,
@@ -305,7 +327,7 @@ void main() {
     {
       title: 'Identity Sync',
       description: 'Lock facial geometry and style logic across thousands of generations.',
-      image: 'https://lh3.googleusercontent.com/aida/AP1WRLsorMKOBB1a9sNgxAR4W9Mr7rnzGiUqUZC5Ib7ec6ksD9bFDOPEaDeKybHKb6czVP4QWPA8isE7WB_OSqhL72K917IoD7L1iwBk6Wk6-Y7znD6abhP-h7LCx4U0wlIlXpZevty0w9LNK9DNTWO3bKh80ZlKWJxYyf_yPhB6rmCu1IpZKyNp_NakGIbQRYWFl3q2xAphhAjAuhpcbWEcf_p007jU8uYJb-yUeTpcUDKz5dJTPhe5QuK2U-c',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBs0LPQKrtWAIPN9_UNrs2gzS66AGYPS0Nc2Pm0cRUKlLnvlPIoET71J_Ftf1s4BDXFn7yU3kpMRbxpT8-Y7kKvUDWKEiQluXqkNIcaQAaSwEkWGJ5WcXxk_eQuKwM555qCueX741qIxGJQrs6BX0zOoX34Odkht2wnuPDiNXfGgOz_3sl1qTaiEobcYkYisPA1dQBwQhU-XfSH3LtO00Z7kohouWbyOOHU2Xo-3-H2IstYI2g4CvmYFg',
       color: 'tertiary',
       position: 'bottomRight',
     },
@@ -331,7 +353,7 @@ void main() {
       icon: 'styler',
       iconColor: 'primary',
       steps: ['Concept', 'Generation', 'Retouch'],
-      image: 'https://lh3.googleusercontent.com/aida/AP1WRLsorMKOBB1a9sNgxAR4W9Mr7rnzGiUqUZC5Ib7ec6ksD9bFDOPEaDeKybHKb6czVP4QWPA8isE7WB_OSqhL72K917IoD7L1iwBk6Wk6-Y7znD6abhP-h7LCx4U0wlIlXpZevty0w9LNK9DNTWO3bKh80ZlKWJxYyf_yPhB6rmCu1IpZKyNp_NakGIbQRYWFl3q2xAphhAjAuhpcbWEcf_p007jU8uYJb-yUeTpcUDKz5dJTPhe5QuK2U-c',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBs0LPQKrtWAIPN9_UNrs2gzS66AGYPS0Nc2Pm0cRUKlLnvlPIoET71J_Ftf1s4BDXFn7yU3kpMRbxpT8-Y7kKvUDWKEiQluXqkNIcaQAaSwEkWGJ5WcXxk_eQuKwM555qCueX741qIxGJQrs6BX0zOoX34Odkht2wnuPDiNXfGgOz_3sl1qTaiEobcYkYisPA1dQBwQhU-XfSH3LtO00Z7kohouWbyOOHU2Xo-3-H2IstYI2g4CvmYFg',
       description: 'Magazine-ready garments and styling.',
     },
     {
@@ -339,7 +361,7 @@ void main() {
       icon: 'camera_macro',
       iconColor: 'tertiary',
       steps: ['Upload Base', 'Context Build', 'Render'],
-      image: 'https://lh3.googleusercontent.com/aida/AP1WRLulhoTGM4aYSgW2y4N8z8NNHtF5bQKPLoYreN8exO0tGmy4ME4R07N2Ny7v89GwjIB9Cqh9rjvoK7OhdUpefZDda4F4fmOyqcinI6-2AsdDWJgMGbjgnt8_OxJZux0gELHmLY0U74mFvvcscK-cKLQi57a8Sm_gcARl7J3Mc3ngd0tvsRJighiIxGcc3SQEaJTRW9IN5jIE_No3HUDggS8P_q-OMWCAzE9y6hyr06DpXAcbIFF_JqcPK5k',
+      image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCuOadBGN1vPQiW3DRRu1JwDJe7A-1mVI5br9NnKgAeKFYnWVLkXxzwLkcOOj0j85tuMOEpjqhz5LJ2eFN8N1HV68D2NquM5VacdrMsazDTqMJCWUBPZo8tEytjC5-uLLibho2IA6NDKA-RxzgBX-vp5MUA3lTW06D6T-FqsFaY8ygKjXWkIUe6U6FC_xH2PDOuQehPwh3W6IWm5eYRfDlmQsldgtBnrGhqZIAW47ctep2WquGSHEWcsA',
       description: 'Flawless material reflection and studio lighting.',
     },
     {
@@ -563,7 +585,7 @@ void main() {
 
                 <div className={styles.canvasImage}>
                   <img
-                    src="https://lh3.googleusercontent.com/aida/AP1WRLsorMKOBB1a9sNgxAR4W9Mr7rnzGiUqUZC5Ib7ec6ksD9bFDOPEaDeKybHKb6czVP4QWPA8isE7WB_OSqhL72K917IoD7L1iwBk6Wk6-Y7znD6abhP-h7LCx4U0wlIlXpZevty0w9LNK9DNTWO3bKh80ZlKWJxYyf_yPhB6rmCu1IpZKyNp_NakGIbQRYWFl3q2xAphhAjAuhpcbWEcf_p007jU8uYJb-yUeTpcUDKz5dJTPhe5QuK2U-c"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBs0LPQKrtWAIPN9_UNrs2gzS66AGYPS0Nc2Pm0cRUKlLnvlPIoET71J_Ftf1s4BDXFn7yU3kpMRbxpT8-Y7kKvUDWKEiQluXqkNIcaQAaSwEkWGJ5WcXxk_eQuKwM555qCueX741qIxGJQrs6BX0zOoX34Odkht2wnuPDiNXfGgOz_3sl1qTaiEobcYkYisPA1dQBwQhU-XfSH3LtO00Z7kohouWbyOOHU2Xo-3-H2IstYI2g4CvmYFg"
                     alt="Editor Canvas"
                   />
                   <div className={styles.canvasInfo}>
@@ -580,57 +602,57 @@ void main() {
                     <h4>Model Engine</h4>
                     <span className="material-symbols-outlined">info</span>
                   </div>
-                  <div className={styles.modelSelect}>
-                    <div className={styles.modelDot}></div>
-                    <span>AetherV5 Photoreal</span>
-                    <span className="material-symbols-outlined">expand_more</span>
+                  <div className={styles.mockModelGrid}>
+                    {STUDIO_MODELS.map((model) => (
+                      <button
+                        key={model.name}
+                        className={`${styles.mockModelBtn} ${mockModel === model.name ? styles.active : ''}`}
+                        data-variant={model.variant}
+                        onClick={() => setMockModel(model.name)}
+                      >
+                        <span className={styles.mockModelIcon}>
+                          <span className="material-symbols-outlined">{model.icon}</span>
+                        </span>
+                        {model.name}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
                 <div className={styles.propSection}>
-                  <h4>Camera &amp; Lighting</h4>
-                  <div className={styles.sliderGroup}>
-                    <div className={styles.sliderRow}>
-                      <span>Focal Length</span>
-                      <span>85mm</span>
-                    </div>
-                    <div className={styles.sliderTrack}>
-                      <div className={`${styles.sliderFill} ${styles.sliderTertiary}`} style={{ width: '60%' }}></div>
-                    </div>
-                    <div className={styles.sliderRow}>
-                      <span>Depth of Field (f-stop)</span>
-                      <span>f/1.4</span>
-                    </div>
-                    <div className={styles.sliderTrack}>
-                      <div className={`${styles.sliderFill} ${styles.sliderTertiary}`} style={{ width: '15%' }}></div>
-                    </div>
-                    <div className={styles.sliderRow}>
-                      <span>Lighting Drama</span>
-                      <span>High</span>
-                    </div>
-                    <div className={styles.sliderTrack}>
-                      <div className={`${styles.sliderFill} ${styles.sliderPrimary}`} style={{ width: '85%' }}></div>
-                    </div>
+                  <h4>Aspect Ratio</h4>
+                  <div className={styles.aspectGrid}>
+                    {STUDIO_ASPECT_RATIOS.map((ratio) => (
+                      <button
+                        key={ratio}
+                        className={`${styles.aspectBtn} ${mockAspectRatio === ratio ? styles.active : ''}`}
+                        onClick={() => setMockAspectRatio(ratio)}
+                      >
+                        <span className={styles.aspectShape} style={getAspectDims(ratio)} />
+                        <span>{ratio}</span>
+                      </button>
+                    ))}
                   </div>
                 </div>
 
                 <div className={styles.propSection}>
-                  <h4>Style Weights</h4>
-                  <div className={styles.weightList}>
-                    <div className={styles.weightItem}>
-                      <span>Cinematic</span>
-                      <span className={styles.weightValue}>1.2</span>
-                    </div>
-                    <div className={styles.weightItem}>
-                      <span>Avant-Garde</span>
-                      <span className={styles.weightValueSecondary}>0.85</span>
-                    </div>
+                  <h4>Image Count</h4>
+                  <div className={styles.mockCountBtns}>
+                    {[1, 2, 4, 8].map((n) => (
+                      <button
+                        key={n}
+                        className={`${styles.mockCountBtn} ${mockImageCount === n ? styles.active : ''}`}
+                        onClick={() => setMockImageCount(n)}
+                      >
+                        {n}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
                 <Link href="/register" className={styles.generateCanvasBtn}>
                   <span className="material-symbols-outlined">auto_awesome</span>
-                  Generate
+                  Generate ({mockImageCount * 5} credits)
                 </Link>
               </div>
             </div>

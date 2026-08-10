@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from 'react';
-import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -38,7 +37,7 @@ export default function DashboardLayout({ children }) {
     <div className={styles.dashboardLayout}>
       {/* Side Navigation */}
       <nav className={styles.sideNav}>
-        <div className={styles.sideNavBrand}>
+        <Link href="/" className={styles.sideNavBrand}>
           <div className={styles.brandIcon}>
             <span className="material-symbols-outlined">temp_preferences_custom</span>
           </div>
@@ -46,7 +45,7 @@ export default function DashboardLayout({ children }) {
             <h1>AetherFrame</h1>
             <p>Creative Workspace</p>
           </div>
-        </div>
+        </Link>
 
         <Link href="/dashboard/generate" className={styles.newProjectBtn}>
           <span className="material-symbols-outlined">add</span>
@@ -82,7 +81,6 @@ export default function DashboardLayout({ children }) {
 
       {/* Main Content */}
       <main className={styles.mainContent}>
-        <Header />
         {/* Top App Bar */}
         <header className={styles.topBar}>
           <div className={styles.topBarLeft}>
@@ -92,6 +90,9 @@ export default function DashboardLayout({ children }) {
             >
               <span className="material-symbols-outlined">menu</span>
             </button>
+            <Link href="/" className={styles.homeBtn} title="Back to homepage">
+              <span className="material-symbols-outlined">home</span>
+            </Link>
             <div className={styles.searchWrapper}>
               <span className="material-symbols-outlined">search</span>
               <input
@@ -117,7 +118,16 @@ export default function DashboardLayout({ children }) {
                 onClick={() => setIsProfileMenuOpen((v) => !v)}
                 style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, color: 'inherit' }}
               >
-                <div className={styles.avatarImage}></div>
+                {user?.photo ? (
+                  <div
+                    className={styles.avatarImage}
+                    style={{ backgroundImage: `url(${user.photo})` }}
+                  ></div>
+                ) : (
+                  <div className={styles.avatarInitials}>
+                    {(user?.firstName?.[0] || user?.email?.[0] || '?').toUpperCase()}
+                  </div>
+                )}
                 <span style={{ fontSize: 14 }}>{user?.firstName || user?.email || ''}</span>
               </button>
               {isProfileMenuOpen && (

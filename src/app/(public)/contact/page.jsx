@@ -1,14 +1,16 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import styles from './page.module.scss';
 
 // Імпорт компонентів
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 
-export default function ContactPage() {
+function ContactPageContent() {
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -19,6 +21,17 @@ export default function ContactPage() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+
+  useEffect(() => {
+    const service = searchParams.get('service');
+    if (service) {
+      setFormData((prev) => ({
+        ...prev,
+        projectType: 'Creative Campaign',
+        message: `Hi, I'm interested in the "${service}" service from your pricing page. Please share more details on availability and next steps.`,
+      }));
+    }
+  }, [searchParams]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -200,5 +213,13 @@ export default function ContactPage() {
 
       <Footer />
     </>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={null}>
+      <ContactPageContent />
+    </Suspense>
   );
 }

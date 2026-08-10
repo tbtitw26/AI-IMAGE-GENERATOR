@@ -79,21 +79,21 @@ export default function WalletPage() {
 
   const vipServices = [
     {
-      name: 'Priority Render',
+      name: 'Priority Rendering',
       price: '299',
       period: 'USD/mo',
       description: 'Skip the queue for 30 days. Perfect for tight deadlines.',
       popular: false,
     },
     {
-      name: 'Private Director',
+      name: 'Private AI Director',
       price: '999',
       period: 'USD/mo',
       description: 'Dedicated AI tuning, private models, and 1-on-1 strategy sessions.',
       popular: true,
     },
     {
-      name: 'Campaign Pack',
+      name: 'Enterprise Campaign',
       price: '599',
       period: 'USD/mo',
       description: 'Bulk generation credits with specialized agency-grade presets.',

@@ -63,17 +63,12 @@ const Header = () => {
     { label: 'Contact', href: '/contact' },
   ];
 
-  const userNavItems = [
-    { label: 'Dashboard', href: '/dashboard' },
-    { label: 'Generate', href: '/dashboard/generate' },
-    { label: 'Projects', href: '/dashboard/projects' },
-    { label: 'Orders', href: '/dashboard/orders' },
-    { label: 'Wallet', href: '/dashboard/wallet' },
-  ];
-
-  const navItems = isAuthenticated ? userNavItems : guestNavItems;
-  const secondaryHref = isAuthenticated ? '/dashboard' : '/login';
-  const secondaryLabel = isAuthenticated ? 'Dashboard' : 'Log In';
+  // Signed-in users keep every public page reachable in the nav; getting into
+  // the workspace itself is handled by the single "Open Studio" CTA below,
+  // so we don't duplicate that with a separate "Dashboard" nav link.
+  const navItems = guestNavItems;
+  const secondaryHref = '/login';
+  const secondaryLabel = 'Log In';
   const ctaHref = isAuthenticated ? '/dashboard/generate' : '/register';
   const ctaLabel = isAuthenticated ? 'Open Studio' : 'Start Creating';
 
@@ -86,7 +81,8 @@ const Header = () => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency,
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
     }).format(amount);
   };
 
@@ -135,9 +131,6 @@ const Header = () => {
                 <span className="material-symbols-outlined">account_balance_wallet</span>
                 <span>{formatBalance(userBalance)}</span>
               </div>
-              <Link href={secondaryHref} className={styles.loginBtn}>
-                {secondaryLabel}
-              </Link>
               <Link href={ctaHref} className={styles.ctaBtn}>
                 {ctaLabel}
               </Link>
@@ -185,8 +178,8 @@ const Header = () => {
                   <span className="material-symbols-outlined">account_balance_wallet</span>
                   <span>{formatBalance(userBalance)}</span>
                 </div>
-                <Link href={secondaryHref} className={styles.mobileLogin}>
-                  {secondaryLabel}
+                <Link href={ctaHref} className={styles.mobileCta}>
+                  {ctaLabel}
                 </Link>
                 <button type="button" className={styles.mobileLogout} onClick={handleLogout}>
                   Log Out
