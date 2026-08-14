@@ -8,11 +8,17 @@ import styles from './page.module.scss';
 // Імпорт компонентів
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
+import { useCurrency } from '@/context/CurrencyContext';
+import { priceInCurrency } from '@/config/currency';
 
 export default function PricingPage() {
   const canvasRef = useRef(null);
   const threeContainerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  const { currency } = useCurrency();
+  // Всі базові ціни нижче задані в EUR (базова валюта) і конвертуються
+  // у вибрану користувачем валюту.
+  const priceIn = (eurAmount, options) => priceInCurrency(eurAmount, currency, options);
 
   // Intersection Observer for scroll animations
   useEffect(() => {
@@ -284,7 +290,7 @@ void main() {
   const plans = [
     {
       name: 'Creator',
-      price: '$29',
+      price: priceIn(29),
       period: '/ deposit min',
       description: 'Perfect for individual artists exploring high-fidelity generation.',
       features: ['Up to 4 images per generation', 'Access to base Aether models', 'Commercial usage rights'],
@@ -293,7 +299,7 @@ void main() {
     },
     {
       name: 'Studio',
-      price: '$79',
+      price: priceIn(79),
       period: '/ deposit min',
       description: 'Built for professional workflows requiring speed and precision.',
       features: [
@@ -308,7 +314,7 @@ void main() {
     },
     {
       name: 'Professional',
-      price: '$199',
+      price: priceIn(199),
       period: '/ deposit min',
       description: 'For studios and agencies with demanding production needs.',
       features: [
@@ -340,7 +346,7 @@ void main() {
   const services = [
     {
       title: 'Luxury Product Campaign',
-      price: '299 USD',
+      price: priceIn(299),
       description: 'Professional AI-generated campaign visuals for premium consumer products.',
       features: ['20 commercial images', 'Studio lighting & retouch', 'Campaign PDF'],
       delivery: '2 Business Days',
@@ -349,7 +355,7 @@ void main() {
     },
     {
       title: 'Fashion Editorial Collection',
-      price: '499 USD',
+      price: priceIn(499),
       description: 'Luxury editorial image collection suitable for magazines and fashion brands.',
       features: ['50 editorial images', 'Creative direction', 'Editorial PDF'],
       delivery: '3 Business Days',
@@ -358,7 +364,7 @@ void main() {
     },
     {
       title: 'Brand Identity Visual System',
-      price: '699 USD',
+      price: priceIn(699),
       description: 'Complete AI-powered visual identity package for brand refreshes.',
       features: ['Brand moodboards', 'Marketing assets', 'Guideline PDF'],
       delivery: '5 Business Days',
@@ -367,7 +373,7 @@ void main() {
     },
     {
       title: 'Global Advertising Campaign',
-      price: '899 USD',
+      price: priceIn(899),
       description: 'Professional visual assets for large-scale marketing campaigns.',
       features: ['Billboard graphics', 'Print-ready artwork', 'Presentation PDF'],
       delivery: '5 Business Days',
@@ -435,8 +441,8 @@ void main() {
                     <div>
                       <span className={styles.walletLabel}>dexericai Balance</span>
                       <div className={styles.walletBalance}>
-                        <span>742.80</span>
-                        <span>USD</span>
+                        <span>{priceIn(742.80, { decimals: 2 }).replace(/^[^\d]+/, '')}</span>
+                        <span>{currency}</span>
                       </div>
                     </div>
                     <div className={styles.walletIcon}>
@@ -562,7 +568,7 @@ void main() {
                     <span className={styles.featuredBadge}>Featured Service</span>
                     <h3>VIP Creative Director Session</h3>
                   </div>
-                  <div className={styles.featuredPrice}>999 USD</div>
+                  <div className={styles.featuredPrice}>{priceIn(999)}</div>
                 </div>
                 <p className={styles.featuredDescription}>
                   Work directly with a dedicated AI Creative Director for fully customized visuals.

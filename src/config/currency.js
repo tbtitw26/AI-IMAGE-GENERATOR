@@ -31,17 +31,30 @@ export const EXCHANGE_RATES = {
   GBP: 0.92, // 1 EUR = 0.92 GBP (adjust to current rate)
 };
 
-// Price conversion helper
-export const convertPrice = (priceInEur, toCurrency = 'EUR') => {
+// Price conversion helper. `decimals` controls rounding precision so small
+// amounts (e.g. cost per megapixel, $0.004) don't get rounded away to 0.
+export const convertPrice = (priceInEur, toCurrency = 'EUR', decimals = 2) => {
   const rate = EXCHANGE_RATES[toCurrency] || 1.0;
-  return Math.round((priceInEur * rate) * 100) / 100;
+  const factor = 10 ** decimals;
+  return Math.round(priceInEur * rate * factor) / factor;
 };
 
-// Format price with currency
-export const formatPrice = (amount, currency = 'EUR') => {
+// Format price with currency (adds thousands separators + 2 decimal places)
+export const formatPrice = (amount, currency = 'EUR', options = {}) => {
   const currencyInfo = CURRENCIES[currency];
   if (!currencyInfo) return `${amount}`;
-  return `${currencyInfo.symbol}${amount}`;
+  const { decimals = 2 } = options;
+  const formattedAmount = Number(amount).toLocaleString('en-US', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  });
+  return `${currencyInfo.symbol}${formattedAmount}`;
+};
+
+// Convert + format a EUR-denominated price in one call
+export const priceInCurrency = (priceInEur, currency = 'EUR', options = {}) => {
+  const { decimals = 2 } = options;
+  return formatPrice(convertPrice(priceInEur, currency, decimals), currency, options);
 };
 
 // Get all currency codes

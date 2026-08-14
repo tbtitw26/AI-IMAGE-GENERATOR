@@ -8,12 +8,15 @@ import styles from './page.module.scss';
 // Імпорт компонентів
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrency } from '@/context/CurrencyContext';
 
 export default function TopUpPage() {
   const { token, user, refreshUser } = useAuth();
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  // Синхронізуємо стартову валюту поповнення з глобальною валютою сайту (EUR за замовчуванням).
+  const { currency: globalCurrency } = useCurrency();
+  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency);
   const [selectedCard, setSelectedCard] = useState('visa');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');

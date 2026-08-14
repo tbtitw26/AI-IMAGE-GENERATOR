@@ -7,6 +7,8 @@ import styles from './page.module.scss';
 // Імпорт компонентів
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
+import { useCurrency } from '@/context/CurrencyContext';
+import { CURRENCIES, priceInCurrency, getCurrencyCodes } from '@/config/currency';
 
 // Ті самі моделі, іконки та кольорові варіанти, що й на реальній сторінці
 // /dashboard/generate — щоб маркетингові макети виглядали ідентично продукту.
@@ -34,7 +36,18 @@ export default function HomePage() {
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [mockModel, setMockModel] = useState('Aether Ultra');
   const [mockImageCount, setMockImageCount] = useState(4);
-  const [walletCurrency, setWalletCurrency] = useState('USD');
+  const { currency: walletCurrency, setCurrency: setWalletCurrency } = useCurrency();
+  // Всі базові ціни на сторінці зберігаються в EUR (базова валюта) і конвертуються
+  // у вибрану валюту через priceIn() нижче.
+  const priceIn = (eurAmount, options) => priceInCurrency(eurAmount, walletCurrency, options);
+  // Розбиває відформатовану ціну на цілу частину (з символом валюти) і копійки,
+  // щоб зберегти дизайн з "великою" сумою та "малими" копійками, як було раніше.
+  const splitPrice = (eurAmount) => {
+    const formatted = priceIn(eurAmount);
+    const lastDot = formatted.lastIndexOf('.');
+    if (lastDot === -1) return { whole: formatted, cents: '' };
+    return { whole: formatted.slice(0, lastDot), cents: formatted.slice(lastDot) };
+  };
   const heroRef = useRef(null);
   const canvasRef = useRef(null);
   const threeContainerRef = useRef(null);
@@ -800,9 +813,9 @@ export default function HomePage() {
                 </tr>
                 <tr>
                   <td>Cost per Megapixel</td>
-                  <td>$0.004</td>
-                  <td>$0.003</td>
-                  <td>$0.001</td>
+                  <td>{priceIn(0.004, { decimals: 4 })}</td>
+                  <td>{priceIn(0.003, { decimals: 4 })}</td>
+                  <td>{priceIn(0.001, { decimals: 4 })}</td>
                 </tr>
                 <tr>
                   <td>ControlNet Support</td>
@@ -872,16 +885,16 @@ export default function HomePage() {
               
               <div className={styles.socialProofStats}>
                 <div>
-                  <div className={styles.statLarge}>3.2M</div>
-                  <div>Commercial Assets Delivered</div>
+                  <div className={styles.statLarge}>Full</div>
+                  <div>Commercial Usage Rights</div>
                 </div>
                 <div>
-                  <div className={styles.statLarge}>870+</div>
-                  <div>Global Agency Projects</div>
+                  <div className={styles.statLarge}>End-to-End</div>
+                  <div>Production Workflow</div>
                 </div>
                 <div>
-                  <div className={styles.statLarge}>Zero</div>
-                  <div>Copyright Infringements</div>
+                  <div className={styles.statLarge}>100%</div>
+                  <div>Original AI-Generated Assets</div>
                 </div>
               </div>
             </div>
@@ -903,27 +916,18 @@ export default function HomePage() {
                   <span className="material-symbols-outlined">account_balance</span>
                 </div>
                 <div className={styles.balanceAmount}>
-                  $12,450<span className={styles.balanceCents}>.00</span>
+                  {splitPrice(12450).whole}<span className={styles.balanceCents}>{splitPrice(12450).cents}</span>
                 </div>
                 <div className={styles.currencyButtons}>
-                  <button
-                    className={walletCurrency === 'USD' ? styles.activeCurrency : ''}
-                    onClick={() => setWalletCurrency('USD')}
-                  >
-                    USD
-                  </button>
-                  <button
-                    className={walletCurrency === 'EUR' ? styles.activeCurrency : ''}
-                    onClick={() => setWalletCurrency('EUR')}
-                  >
-                    EUR
-                  </button>
-                  <button
-                    className={walletCurrency === 'GBP' ? styles.activeCurrency : ''}
-                    onClick={() => setWalletCurrency('GBP')}
-                  >
-                    GBP
-                  </button>
+                  {getCurrencyCodes().map((code) => (
+                    <button
+                      key={code}
+                      className={walletCurrency === code ? styles.activeCurrency : ''}
+                      onClick={() => setWalletCurrency(code)}
+                    >
+                      {code}
+                    </button>
+                  ))}
                 </div>
                 <Link href="/register" className={styles.addFundsBtn}>
                   <span className="material-symbols-outlined">add</span> Add Production Funds
@@ -936,9 +940,9 @@ export default function HomePage() {
                   <span>AUG 2024</span>
                 </div>
                 <div className={styles.invoiceList}>
-                  <div><span>Fashion Editorial Collection</span><span>$499.00</span></div>
-                  <div><span>Global Advertising Campaign</span><span>$899.00</span></div>
-                  <div><span>Luxury Product Campaign</span><span>$299.00</span></div>
+                  <div><span>Fashion Editorial Collection</span><span>{priceIn(499)}</span></div>
+                  <div><span>Global Advertising Campaign</span><span>{priceIn(899)}</span></div>
+                  <div><span>Luxury Product Campaign</span><span>{priceIn(299)}</span></div>
                 </div>
               </div>
             </div>
@@ -947,7 +951,7 @@ export default function HomePage() {
               <div className={styles.pricingCard}>
                 <div>
                   <h3>Creator</h3>
-                  <span>$29</span>
+                  <span>{priceIn(29)}</span>
                   <small>/ deposit min</small>
                 </div>
                 <p>Perfect for individual artists exploring high-fidelity generation.</p>
@@ -961,7 +965,7 @@ export default function HomePage() {
               <div className={styles.pricingCard}>
                 <div>
                   <h3>Studio</h3>
-                  <span>$79</span>
+                  <span>{priceIn(79)}</span>
                   <small>/ deposit min</small>
                 </div>
                 <p>Built for professional workflows requiring speed and precision.</p>
@@ -975,7 +979,7 @@ export default function HomePage() {
               <div className={styles.pricingCard}>
                 <div>
                   <h3>Professional</h3>
-                  <span>$199</span>
+                  <span>{priceIn(199)}</span>
                   <small>/ deposit min</small>
                 </div>
                 <p>For studios and agencies with demanding production needs.</p>
@@ -1007,7 +1011,7 @@ export default function HomePage() {
         {/* Final CTA */}
         <section className={styles.finalCta}>
           <div className={styles.finalCtaContent}>
-            <div className={styles.finalCtaBadge}>VIP Tier from 999 USD</div>
+            <div className={styles.finalCtaBadge}>VIP Tier from {priceIn(999)}</div>
             <h2>Enter the new era of<br/>visual intelligence.</h2>
             <p>Exclusive access for high-end creative studios.</p>
             <Link href="/register" className={styles.finalCtaBtn}>

@@ -7,6 +7,7 @@ import styles from './page.module.scss';
 // Імпорт компонентів
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrency } from '@/context/CurrencyContext';
 
 const TX_ICONS = {
   top_up: 'add_circle',
@@ -15,7 +16,9 @@ const TX_ICONS = {
 
 export default function WalletPage() {
   const { user, token, refreshUser } = useAuth();
-  const [selectedCurrency, setSelectedCurrency] = useState('USD');
+  // Синхронізуємо стартову валюту гаманця з глобальною валютою сайту (EUR за замовчуванням).
+  const { currency: globalCurrency } = useCurrency();
+  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency);
   const [showStatements, setShowStatements] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
