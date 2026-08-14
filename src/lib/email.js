@@ -5,7 +5,7 @@ const smtpPort = process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587;
 const smtpSecure = process.env.SMTP_SECURE === 'true';
 const smtpUser = process.env.SMTP_USER;
 const smtpPass = process.env.SMTP_PASS;
-const fromEmail = process.env.EMAIL_FROM || 'no-reply@aetherframe.ai';
+const fromEmail = process.env.EMAIL_FROM || 'no-reply@dexeric.ai';
 
 let transporter;
 
@@ -39,10 +39,10 @@ export async function sendEmail({ to, subject, html, attachments }) {
 
 export function buildVerificationEmail({ name, verificationUrl }) {
   return {
-    subject: 'Confirm your AetherFrame account',
+    subject: 'Confirm your dexericai account',
     html: `
       <div style="font-family: sans-serif; line-height: 1.5; color: #111;">
-        <h1>Welcome to AetherFrame</h1>
+        <h1>Welcome to dexericai</h1>
         <p>Hi ${name || 'there'},</p>
         <p>Thanks for registering. Please confirm your email address by clicking the button below:</p>
         <p><a href="${verificationUrl}" style="background:#0b72ff;color:white;padding:12px 18px;border-radius:8px;text-decoration:none;">Confirm Email</a></p>
@@ -54,7 +54,7 @@ export function buildVerificationEmail({ name, verificationUrl }) {
 
 export function buildPasswordResetEmail({ name, resetUrl }) {
   return {
-    subject: 'Reset your AetherFrame password',
+    subject: 'Reset your dexericai password',
     html: `
       <div style="font-family: sans-serif; line-height: 1.5; color: #111;">
         <h1>Password reset request</h1>
@@ -69,7 +69,7 @@ export function buildPasswordResetEmail({ name, resetUrl }) {
 
 export function buildInvoiceEmail({ name, invoiceNumber }) {
   return {
-    subject: `Your AetherFrame invoice ${invoiceNumber}`,
+    subject: `Your dexericai invoice ${invoiceNumber}`,
     html: `
       <div style="font-family: sans-serif; line-height: 1.5; color: #111;">
         <h1>Payment confirmed</h1>

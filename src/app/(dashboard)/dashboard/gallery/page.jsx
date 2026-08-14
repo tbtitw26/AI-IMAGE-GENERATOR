@@ -155,7 +155,7 @@ export default function GalleryPage() {
                             </div>
                             <div className={styles.actionButtons}>
                               <button className={styles.variantBtn} onClick={() => setSelectedImage(image)}>Preview</button>
-                              <a className={styles.downloadBtn} href={image.src} download={`aetherframe-${image.id}.png`}>Download</a>
+                              <a className={styles.downloadBtn} href={image.src} download={`dexericai-${image.id}.png`}>Download</a>
                               <button className={styles.downloadBtn} style={{ background: 'transparent', color: '#f87171' }} onClick={() => deleteImage(image)}>Delete</button>
                             </div>
                           </div>

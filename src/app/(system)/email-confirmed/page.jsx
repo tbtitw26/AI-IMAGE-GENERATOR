@@ -194,7 +194,7 @@ void main() {
 
                 <h1 className={styles.successTitle}>Email Verified.</h1>
                 <p className={styles.successDescription}>
-                  Your AetherFrame AI account is fully activated. You now have unrestricted access to
+                  Your dexericai account is fully activated. You now have unrestricted access to
                   our suite of cinematic creation tools.
                 </p>
 

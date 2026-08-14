@@ -292,7 +292,7 @@ void main() {
               </div>
               <h1 className={styles.heroTitle}>Acceptable Use Policy</h1>
               <p className={styles.heroDescription}>
-                This policy explains how AetherFrame AI should be used responsibly to ensure a safe,
+                This policy explains how dexericai should be used responsibly to ensure a safe,
                 secure and professional creative environment for every customer.
               </p>
               <div className={styles.heroMeta}>
@@ -363,7 +363,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  This Acceptable Use Policy outlines the guidelines and rules for using AetherFrame
+                  This Acceptable Use Policy outlines the guidelines and rules for using dexericai
                   AI's services. We are committed to fostering a safe, respectful, and legally
                   compliant environment for all users.
                 </p>
@@ -378,7 +378,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  Users are encouraged to utilize AetherFrame AI for creative, professional, and
+                  Users are encouraged to utilize dexericai for creative, professional, and
                   commercial endeavors that comply with this policy and applicable laws.
                 </p>
               </div>
@@ -407,7 +407,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  Users must respect intellectual property rights. Do not use AetherFrame AI to
+                  Users must respect intellectual property rights. Do not use dexericai to
                   generate content that infringes upon copyrights, trademarks, or other proprietary
                   rights of third parties.
                 </p>
@@ -483,7 +483,7 @@ void main() {
         <section className={styles.cta}>
           <div className={styles.ctaContainer}>
             <span className="material-symbols-outlined">health_and_safety</span>
-            <h2>Help Keep AetherFrame AI Safe</h2>
+            <h2>Help Keep dexericai Safe</h2>
             <p>
               Report violations, appeal moderation decisions or contact our Trust &amp; Safety team
               for additional guidance.

@@ -19,32 +19,62 @@ export default function FAQPage() {
     {
       question: '1. How do I generate my first AI image?',
       answer:
-        "Navigate to the 'Studio' section from your dashboard. In the prompter bar at the bottom, enter a detailed description of your desired image. Select your preferred model (e.g., DALL-E 3) and aspect ratio, then hit 'Generate'. Our high-performance cluster will render your image in seconds, utilizing cinematic lighting algorithms by default.",
+        "Navigate to the 'Studio' section from your dashboard. In the prompter bar at the bottom, enter a detailed description of your desired image. Select your preferred model (e.g., Aether Ultra) and aspect ratio, then hit 'Generate'. Our high-performance cluster will render your image in seconds, utilizing cinematic lighting algorithms by default.",
     },
     {
       question: '2. Can I use generated images commercially?',
       answer:
-        'Yes. All images generated under our Pro and Enterprise tiers come with full commercial usage rights globally. You may use them in marketing materials, products for sale, and digital media without attribution. Standard tier users retain personal usage rights only.',
+        'Yes. All images generated under our Creator, Studio, and Professional tiers come with full commercial usage rights globally. You may use them in marketing materials, products for sale, and digital media without attribution. Images are yours to use as you see fit.',
     },
     {
       question: '3. Who owns the copyright?',
       answer:
-        'The current legal landscape regarding AI-generated art copyright is evolving. While AetherFrame AI does not claim copyright over the images you create, we provide a broad license for you to use them. Please consult local intellectual property laws for registering specific works.',
+        'The current legal landscape regarding AI-generated art copyright is evolving. While dexericai does not claim copyright over the images you create, we provide a broad license for you to use them. Please consult local intellectual property laws for registering specific works. You retain all usage rights for your generated content',
     },
     {
       question: '4. How does the wallet system work?',
       answer:
-        'AetherFrame operates on a credit-based Wallet system designed for high-frequency rendering. You purchase compute credits (AetherCoins) which are deducted per generation based on model complexity and resolution. Your wallet balance is always visible in the top navigation bar.',
+        'dexericai operates on a credit-based Wallet system. You make deposits to your wallet, and each generation consumes credits based on the model used, image resolution, and quantity. Your tier (Creator, Studio, Professional) determines how many images you can generate per session. Check your dashboard for real-time wallet balance',
     },
     {
-      question: '5. How do I receive PDF invoices?',
+      question: '5. How do I receive invoices?',
       answer:
-        "Invoices are generated automatically for every transaction. Navigate to Settings > Billing > Invoice History. From there, you can download detailed PDF invoices compliant with international B2B standards. You can also add custom tax IDs to your billing profile.",
+        "Invoices are generated automatically for every transaction. Navigate to Settings > Billing > Invoice History. From there, you can download detailed PDF invoices compliant with international B2B standards. You can also add custom tax IDs and company details to your billing profile.",
     },
     {
       question: '6. Can I request a refund?',
       answer:
-        'Unused compute credits can be refunded within 14 days of purchase, provided no more than 10% of the purchased batch has been consumed. Subscription plans can be cancelled anytime, preventing future billing, but current periods are non-refundable. Contact support for assistance.',
+        'Unused wallet credits can be refunded within 14 days of your deposit, provided you have not consumed significant amounts from that deposit. Contact our support team with your refund request for assistance. Enterprise customers may have different refund policies based on their service agreement.',
+    },
+    {
+      question: '7. What makes different AI models unique?',
+      answer:
+        'Each model specializes in different outputs: Aether Ultra excels at general-purpose, balanced quality; Cinema 4K produces cinematic visuals with enhanced depth; Product Studio is optimized for clean, professional product photography; Character Gen ensures consistent character design across multiple generations. Select the model that best fits your creative needs.',
+    },
+    {
+      question: '8. Can I customize models for my brand?',
+      answer:
+        'Yes! Our Professional and Enterprise plans include brand customization options. Professional users get priority processing and advanced optimization. Enterprise customers receive dedicated model fine-tuning where we can train private models exclusively on your brand aesthetic. Contact our team to discuss enterprise options.',
+    },
+    {
+      question: '9. How many images can I generate per session?',
+      answer:
+        'Creator plan: up to 4 images per session. Studio plan: up to 8 images per session. Professional plan: up to 12 images per session. Enterprise customers receive custom limits based on their dedicated infrastructure. All generated images are immediately saved to your gallery.',
+    },
+    {
+      question: '10. What about upscaling and enhancement features?',
+      answer:
+        'Studio and Professional tiers include advanced upscaling options to enhance image quality. You can upscale generated images 2x or apply additional refinements. Studio tier includes standard 2x upscaling, while Professional tier includes advanced optimization. Free and Creator users can generate at base resolution.',
+    },
+    {
+      question: '11. How do I manage projects and organize my work?',
+      answer:
+        'Create projects to organize your generated images by campaign, client, or theme. Assign images to projects during generation or afterward from your gallery. Filter gallery views by project, model, or date. Export project details as reports for client delivery. Projects help teams collaborate and maintain organized archives.',
+    },
+    {
+      question: '12. What if I need help or have technical issues?',
+      answer:
+        'Our support team is available 24/7 for all customers. For urgent issues, contact support through the chat widget or email support@dexeric.ai. Professional and Enterprise customers receive priority response times. Check our documentation and video tutorials in the Knowledge Base for common questions',
     },
   ];
 

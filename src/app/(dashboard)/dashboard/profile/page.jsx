@@ -174,7 +174,7 @@ export default function ProfilePage() {
             <h1>My Profile</h1>
             <p>
               Manage your professional identity, creative preferences, and billing information. Your
-              profile is the foundation of your AetherFrame cinematic intelligence experience.
+              profile is the foundation of your dexericai experience.
             </p>
           </div>
 
@@ -379,7 +379,7 @@ export default function ProfilePage() {
         <section className={styles.footer}>
           <div>
             <h3>Your creative identity is always up to date.</h3>
-            <p>Changes are saved securely across the AetherFrame network.</p>
+            <p>Changes are saved securely across the dexericai network.</p>
           </div>
           <div className={styles.footerActions}>
             <Link href="/dashboard" className={styles.dashboardBtn}>

@@ -179,7 +179,7 @@ void main() {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
-    doc.text('AetherFrame AI', 14, 18);
+    doc.text('dexericai', 14, 18);
     doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
     doc.text('Invoice', 14, 28);
@@ -197,9 +197,9 @@ void main() {
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
-    doc.text('Thank you for choosing AetherFrame AI.', 14, y + 12);
+    doc.text('Thank you for choosing dexericai.', 14, y + 12);
 
-    doc.save('aetherframe-invoice.pdf');
+    doc.save('dexericai-invoice.pdf');
   };
 
   return (
@@ -211,7 +211,7 @@ void main() {
       {/* Header */}
       <header className={styles.header}>
         <div className={styles.headerContainer}>
-          <span className={styles.logo}>AetherFrame AI</span>
+          <span className={styles.logo}>dexericai</span>
           <nav className={styles.nav}>
             <Link href="/dashboard" className={styles.navLink}>Dashboard</Link>
             <Link href="/dashboard/gallery" className={styles.navLink}>Gallery</Link>

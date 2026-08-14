@@ -484,7 +484,7 @@ export default function HomePage() {
             </h1>
 
             <p className={styles.heroDescription}>
-              Experience the pinnacle of AI image generation. AetherFrame brings unprecedented 
+              Experience the pinnacle of AI image generation. dexericai brings unprecedented 
               clarity, detail, and artistic control to transform your prompts into production-ready 
               art, renders, scenes, and visuals instantly.
             </p>
@@ -573,10 +573,6 @@ export default function HomePage() {
 
           <div className={styles.stats}>
             <div className={styles.stat}>
-              <div className={styles.statNumber}>1.2B+</div>
-              <div className={styles.statLabel}>Images Generated</div>
-            </div>
-            <div className={styles.stat}>
               <div className={styles.statNumber}>99.99%</div>
               <div className={styles.statLabel}>Uptime SLA</div>
             </div>
@@ -585,8 +581,12 @@ export default function HomePage() {
               <div className={styles.statLabel}>Avg Latency</div>
             </div>
             <div className={styles.stat}>
-              <div className={styles.statNumber}>SOC2</div>
-              <div className={styles.statLabel}>Certified</div>
+              <div className={styles.statNumber}>24/7</div>
+              <div className={styles.statLabel}>Support</div>
+            </div>
+            <div className={styles.stat}>
+              <div className={styles.statNumber}>Global</div>
+              <div className={styles.statLabel}>Infrastructure</div>
             </div>
           </div>
         </section>
@@ -832,7 +832,7 @@ export default function HomePage() {
                 <span className={styles.exclusiveBadge}>Exclusive</span>
                 <h3>White-Glove Production</h3>
                 <p>End-to-end concierge service. Our elite engineers craft the perfect prompts, tune models to your brand, and deliver production-ready assets.</p>
-                <Link href="#" className={styles.discoverLink}>
+                <Link href="/contact?service=White-Glove%20Production" className={styles.discoverLink}>
                   Discover Production <span className="material-symbols-outlined">arrow_forward</span>
                 </Link>
               </div>
@@ -856,7 +856,7 @@ export default function HomePage() {
         {/* Social Proof */}
         <section className={styles.socialProof}>
           <div className={styles.socialProofContainer}>
-            <h2>Used by luxury brands, film studios,<br/>and global creative teams</h2>
+            <h2>Trusted by creative professionals<br/>worldwide</h2>
             
             <div className={styles.socialProofGrid}>
               <div className={styles.socialProofMain}>
@@ -866,7 +866,7 @@ export default function HomePage() {
                 />
                 <div className={styles.socialProofOverlay}>
                   <div className={styles.campaignLabel}>CAMPAIGN: NEO-HORIZON</div>
-                  <div>Generated entirely in AetherFrame</div>
+                  <div>Generated entirely in dexericai</div>
                 </div>
               </div>
               
@@ -891,8 +891,8 @@ export default function HomePage() {
         {/* Wallet & Pricing */}
         <section className={styles.walletPricing}>
           <div className={styles.walletHeader}>
-            <h2>Luxury AI Services &amp;<br/>Wallet Experience</h2>
-            <p>Seamless institutional-grade treasury management for high-ticket creative productions.</p>
+            <h2>Flexible Tiers for Every<br/>Creative Scale</h2>
+            <p>Choose the plan that matches your production needs. Upgrade anytime.</p>
           </div>
           
           <div className={styles.walletGrid}>
@@ -946,36 +946,59 @@ export default function HomePage() {
             <div className={styles.pricingCards}>
               <div className={styles.pricingCard}>
                 <div>
-                  <h3>Fashion Editorial Collection</h3>
-                  <span>$499</span>
+                  <h3>Creator</h3>
+                  <span>$29</span>
+                  <small>/ deposit min</small>
                 </div>
-                <p>Full suite of ultra-high resolution editorial assets suitable for magazines and fashion brands.</p>
-                <Link href="/contact">Book Service</Link>
+                <p>Perfect for individual artists exploring high-fidelity generation.</p>
+                <ul>
+                  <li><span className="material-symbols-outlined">check</span>Up to 4 images per generation</li>
+                  <li><span className="material-symbols-outlined">check</span>Access to base Aether models</li>
+                  <li><span className="material-symbols-outlined">check</span>Commercial usage rights</li>
+                </ul>
+                <Link href="/pricing">Select Plan</Link>
               </div>
               <div className={styles.pricingCard}>
                 <div>
-                  <h3>Luxury Product Campaign</h3>
-                  <span>$299</span>
+                  <h3>Studio</h3>
+                  <span>$79</span>
+                  <small>/ deposit min</small>
                 </div>
-                <p>Studio-grade lighting simulations for high-end jewelry, watches, and apparel.</p>
-                <Link href="/contact">Book Service</Link>
+                <p>Built for professional workflows requiring speed and precision.</p>
+                <ul>
+                  <li><span className="material-symbols-outlined">check</span>Up to 8 images per generation</li>
+                  <li><span className="material-symbols-outlined">check</span>Access to Aether Cinematic v4</li>
+                  <li><span className="material-symbols-outlined">check</span>Advanced 2x upscaling</li>
+                </ul>
+                <Link href="/pricing">Select Plan</Link>
               </div>
               <div className={styles.pricingCard}>
                 <div>
-                  <h3>Brand Identity Visual System</h3>
-                  <span>$699</span>
+                  <h3>Professional</h3>
+                  <span>$199</span>
+                  <small>/ deposit min</small>
                 </div>
-                <p>Comprehensive visual language generation including custom textures, palettes, and structural forms.</p>
-                <Link href="/contact">Book Service</Link>
+                <p>For studios and agencies with demanding production needs.</p>
+                <ul>
+                  <li><span className="material-symbols-outlined">check</span>Up to 12 images per generation</li>
+                  <li><span className="material-symbols-outlined">check</span>Access to all Aether models</li>
+                  <li><span className="material-symbols-outlined">check</span>Priority processing</li>
+                </ul>
+                <Link href="/pricing">Select Plan</Link>
               </div>
               <div className={`${styles.pricingCard} ${styles.featured}`}>
-                <span className={styles.directorBadge}>Director's Tier</span>
+                <span className={styles.directorBadge}>Enterprise</span>
                 <div>
-                  <h3>Global Advertising Campaign</h3>
-                  <span>$899</span>
+                  <h3>Custom</h3>
+                  <span>Bespoke</span>
                 </div>
-                <p>Billboard-ready, print-perfect assets for large-scale marketing campaigns, led by our elite prompt engineers.</p>
-                <Link href="/contact">Request Session</Link>
+                <p>Dedicated infrastructure for large agencies and production houses.</p>
+                <ul>
+                  <li><span className="material-symbols-outlined">check</span>Dedicated GPU clusters</li>
+                  <li><span className="material-symbols-outlined">check</span>Custom model fine-tuning</li>
+                  <li><span className="material-symbols-outlined">check</span>API Access & SLA</li>
+                </ul>
+                <Link href="/contact">Contact Sales</Link>
               </div>
             </div>
           </div>

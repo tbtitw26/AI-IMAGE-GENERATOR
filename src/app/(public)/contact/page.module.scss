@@ -373,7 +373,7 @@
 .deskImage {
   position: absolute;
   inset: 0;
-  background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDx1xYVw4eh06gHGk_3hfuHlfAXl0smSsfA9JpLyBEzidxEZm1qS_HKJb7lUDdxKiN9kt-eCE5neSOoRL-5kMA-hebZ1fCuRyV1LmVLiJl2rQ0H9iGZX74lDVH8K1hEHFof2O8tOK0c6aNoWQz8JeBU63VFCZi101TXNrw82F2HGI285HkMm_VhxEH6SzHfudH8kiDeywRRBo1OseN5qXS05RdGpmT3yAJQaUyk1kexofQAQBDrvO7P_xbqAM31nH1ep_f33xAzBYY');
+  background-image: url('/98a164b2-e81b-4097-8f53-10518a7173da.png');
   background-size: cover;
   background-position: center;
 }
@@ -394,47 +394,155 @@
   justify-content: space-between;
   z-index: 2;
   pointer-events: none;
+}
+
+.deskAction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(19, 19, 24, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(178, 197, 255, 0.3);
+  border-radius: 8px;
+  color: #b2c5ff;
+  font-size: 13px;
+  font-weight: 500;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(178, 197, 255, 0.1);
+    border-color: #b2c5ff;
+    transform: translateY(-2px);
+  }
+
+  span:first-child {
+    font-size: 18px;
+  }
+}
+
+/* ===== COMPANY DETAILS SECTION ===== */
+.companyDetails {
+  margin-top: 96px;
+  padding: 64px 20px;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
 
   @media (min-width: 768px) {
     padding: 64px;
   }
 }
 
-.deskAction {
-  pointer-events: auto;
-  cursor: pointer;
-  background: rgba(22, 22, 30, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 8px;
-  padding: 8px 16px;
+.companyContainer {
   display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.companyHeader {
+  text-align: center;
+
+  h2 {
+    font-size: 36px;
+    font-weight: 700;
+    color: #f3f4f6;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  p {
+    font-size: 16px;
+    color: #94a3b8;
+  }
+}
+
+.companyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.contactCard {
+  background: rgba(22, 22, 30, 0.5);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(178, 197, 255, 0.2);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  text-align: center;
   transition: all 0.3s ease;
-  width: fit-content;
-  box-shadow: 0 0 20px rgba(178, 197, 255, 0.05);
 
   &:hover {
-    box-shadow: 0 0 40px rgba(178, 197, 255, 0.3);
+    background: rgba(22, 22, 30, 0.8);
     border-color: rgba(178, 197, 255, 0.4);
+    transform: translateY(-4px);
+  }
+
+  span {
+    font-size: 32px;
+    color: #b2c5ff;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #f3f4f6;
+    margin-bottom: 8px;
+  }
+
+  a,
+  p {
+    font-size: 13px;
+    color: #94a3b8;
+    word-break: break-word;
+  }
+
+  a {
+    color: #b2c5ff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #dfe7ff;
+      text-decoration: underline;
+    }
+  }
+}
+
+.deskAction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(19, 19, 24, 0.9);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(178, 197, 255, 0.3);
+  border-radius: 8px;
+  color: #b2c5ff;
+  font-size: 13px;
+  font-weight: 500;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: rgba(178, 197, 255, 0.1);
+    border-color: #b2c5ff;
     transform: translateY(-2px);
   }
 
   span:first-child {
-    font-size: 24px;
-    color: #d0bcff;
-  }
-
-  &:last-child span:first-child {
-    color: #2fd9f4;
-  }
-
-  span:last-child {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.03em;
-    color: #e4e1e9;
+    font-size: 18px;
   }
 }
 

@@ -41,11 +41,11 @@ const Footer = () => {
           <div className={styles.brandColumn}>
             <div className={styles.logo}>
               <img
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8poQwyCUOoCBWHWcQHb-t6X0sHGwYW0V0sh79Z9BVwQ2sSr0HJ49VfKXJe6GZu_RvRYPnh3Rx58e_mTN_I1TJ6KWpRyziU6xZa_bbnEojXKhAVcZ73VCQl2jHfmk6o6-9CZrLqp4CeQqT3ch2MJTYqZAG89n5kGBeE-bmfCrCuoWWXEM_dxew8I92pGP4WXyiemaMzytfySKdapwtFvB176ndytuiZMJeCZu9TPY7drSMS7pkMxGZcQ"
-                alt="AetherFrame Logo"
+                src="/ChatGPT Image 14 серп. 2026 р., 03_32_54-Photoroom.png"
+                alt="dexericai Logo"
                 className={styles.logoImage}
               />
-              <span className={styles.logoText}>AetherFrame</span>
+              <span className={styles.logoText}>dexericai</span>
             </div>
             <p className={styles.description}>
               Create cinematic AI visuals faster with a polished workflow for teams and solo creators.
@@ -85,12 +85,12 @@ const Footer = () => {
 
         <div className={styles.bottomBar}>
           <div className={styles.registration}>
-            <span>VAT: GB 123 4567 89</span>
-            <span>Company No: 01234567</span>
-            <span>San Francisco, CA 94103</span>
+            <span>Registry Code: 17569201</span>
+            <span>Company: DEXERIC OÜ</span>
+            <span>Tallinn, Estonia 10141</span>
           </div>
           <div className={styles.copyright}>
-            © 2024 AetherFrame AI. All rights reserved.
+            © 2024 dexericai. All rights reserved.
           </div>
         </div>
       </div>

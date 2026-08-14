@@ -16,9 +16,28 @@
  * решта коду (generate route, UI) вже орієнтується на getUserPlan().
  */
 
+import { convertPrice, EXCHANGE_RATES } from '@/config/currency';
+
+// Plan thresholds in base currency (EUR)
+export const PLAN_THRESHOLDS_EUR = {
+  studio: 72, // ~€72 (≈$79 USD)
+  creator: 26, // ~€26 (≈$29 USD)
+};
+
+// For backward compatibility with USD
 export const PLAN_THRESHOLDS_USD = {
   studio: 79,
   creator: 29,
+};
+
+// Multi-currency pricing
+export const PLAN_THRESHOLDS = {
+  EUR: PLAN_THRESHOLDS_EUR,
+  USD: PLAN_THRESHOLDS_USD,
+  GBP: {
+    studio: Math.round(PLAN_THRESHOLDS_EUR.studio * EXCHANGE_RATES.GBP * 100) / 100,
+    creator: Math.round(PLAN_THRESHOLDS_EUR.creator * EXCHANGE_RATES.GBP * 100) / 100,
+  },
 };
 
 export const PLAN_LIMITS = {
@@ -89,4 +108,30 @@ export function getPlanInfo(user) {
     nextPlanLabel: nextPlan ? PLAN_LABELS[nextPlan] : null,
     amountToNextPlan: nextThreshold ? Math.max(0, nextThreshold - lifetimeTopUpUSD) : 0,
   };
+}
+
+/**
+ * Get plan threshold for a specific currency
+ * @param {string} planName - 'creator' or 'studio'
+ * @param {string} currency - 'EUR', 'USD', or 'GBP'
+ * @returns {number} Minimum deposit in the specified currency
+ */
+export function getPlanThreshold(planName, currency = 'EUR') {
+  if (!PLAN_THRESHOLDS[currency]) {
+    return PLAN_THRESHOLDS.EUR[planName];
+  }
+  return PLAN_THRESHOLDS[currency][planName] || 0;
+}
+
+/**
+ * Convert plan threshold from USD to another currency
+ * @param {number} usdAmount - Amount in USD
+ * @param {string} toCurrency - Target currency code
+ * @returns {number} Converted amount
+ */
+export function convertPlanThreshold(usdAmount, toCurrency = 'EUR') {
+  if (toCurrency === 'USD') return usdAmount;
+  if (toCurrency === 'EUR') return Math.round((usdAmount / EXCHANGE_RATES.USD) * 100) / 100;
+  if (toCurrency === 'GBP') return Math.round((usdAmount / EXCHANGE_RATES.USD) * EXCHANGE_RATES.GBP * 100) / 100;
+  return usdAmount;
 }

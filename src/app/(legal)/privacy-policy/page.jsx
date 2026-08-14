@@ -207,7 +207,7 @@ void main() {
     {
       icon: 'visibility',
       title: 'Access Your Data',
-      description: 'Review all the personal data and usage history associated with your AetherFrame AI account.',
+      description: 'Review all the personal data and usage history associated with your dexericai account.',
       color: 'primary',
     },
     {
@@ -260,7 +260,7 @@ void main() {
               </div>
               <h1 className={styles.heroTitle}>Privacy Policy</h1>
               <p className={styles.heroDescription}>
-                Learn how AetherFrame AI collects, stores, processes and protects your personal
+                Learn how dexericai collects, stores, processes and protects your personal
                 information while using our platform.
               </p>
               <div className={styles.heroMeta}>
@@ -331,7 +331,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  This Privacy Policy outlines the scope of data protection at AetherFrame AI. It
+                  This Privacy Policy outlines the scope of data protection at dexericai. It
                   explains how we collect, use, and protect your personal data when you use our
                   services.
                 </p>

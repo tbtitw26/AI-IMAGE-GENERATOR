@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState, Suspense } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import styles from './page.module.scss';
+import { COMPANY_INFO } from '@/config/company';
 
 // Імпорт компонентів
 import Header from '@/components/common/Header';
@@ -205,6 +206,46 @@ function ContactPageContent() {
                   <span className="material-symbols-outlined">image_search</span>
                   <span>Inspect Assets</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* SECTION 3: COMPANY DETAILS */}
+        <section className={styles.companyDetails}>
+          <div className={styles.companyContainer}>
+            <div className={styles.companyHeader}>
+              <h2>Direct Contact</h2>
+              <p>Reach out to our team for enterprise partnerships and inquiries.</p>
+            </div>
+            
+            <div className={styles.companyGrid}>
+              <div className={styles.contactCard}>
+                <span className="material-symbols-outlined">email</span>
+                <h3>Business Inquiries</h3>
+                <a href={`mailto:${COMPANY_INFO.email.business}`}>
+                  {COMPANY_INFO.email.business || 'business@dexeric.ai'}
+                </a>
+              </div>
+              
+              <div className={styles.contactCard}>
+                <span className="material-symbols-outlined">mail</span>
+                <h3>Support</h3>
+                <a href={`mailto:${COMPANY_INFO.email.support}`}>
+                  {COMPANY_INFO.email.support || 'support@dexeric.ai'}
+                </a>
+              </div>
+              
+              <div className={styles.contactCard}>
+                <span className="material-symbols-outlined">access_time</span>
+                <h3>Response Time</h3>
+                <p>Professional: {COMPANY_INFO.support.responseTime.professional}</p>
+              </div>
+
+              <div className={styles.contactCard}>
+                <span className="material-symbols-outlined">language</span>
+                <h3>Available</h3>
+                <p>{COMPANY_INFO.support.hours}</p>
               </div>
             </div>
           </div>

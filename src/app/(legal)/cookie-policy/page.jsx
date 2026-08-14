@@ -351,7 +351,7 @@ void main() {
               </div>
               <h1 className={styles.heroTitle}>Cookie Policy</h1>
               <p className={styles.heroDescription}>
-                Learn how AetherFrame AI uses cookies and similar technologies to improve security,
+                Learn how dexericai uses cookies and similar technologies to improve security,
                 personalize your experience and optimize platform performance while respecting your
                 privacy.
               </p>
@@ -423,7 +423,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  This Cookie Policy explains how AetherFrame AI ("we", "us", or "our") uses cookies
+                  This Cookie Policy explains how dexericai ("we", "us", or "our") uses cookies
                   and similar technologies to recognize you when you visit our platform. It explains
                   what these technologies are and why we use them, as well as your rights to control
                   our use of them.

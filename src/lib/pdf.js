@@ -9,7 +9,7 @@ export function createInvoicePdf({ invoiceNumber, date, customerName, amount, cu
     doc.on('end', () => resolve(Buffer.concat(chunks)));
     doc.on('error', reject);
 
-    doc.fontSize(20).text('AetherFrame Invoice', { align: 'left' });
+    doc.fontSize(20).text('dexericai Invoice', { align: 'left' });
     doc.moveDown();
 
     doc.fontSize(12).text(`Invoice #: ${invoiceNumber}`);
@@ -30,7 +30,7 @@ export function createInvoicePdf({ invoiceNumber, date, customerName, amount, cu
     doc.fontSize(12).text(`Amount: ${currency} ${amount}`);
     doc.moveDown();
 
-    doc.text('Thank you for choosing AetherFrame AI.', { align: 'left' });
+    doc.text('Thank you for choosing dexericai.', { align: 'left' });
     doc.end();
   });
 }

@@ -261,7 +261,7 @@ void main() {
               </div>
               <h1 className={styles.heroTitle}>Terms &amp; Conditions</h1>
               <p className={styles.heroDescription}>
-                Please read these Terms &amp; Conditions carefully before using AetherFrame AI. They
+                Please read these Terms &amp; Conditions carefully before using dexericai. They
                 explain your rights, responsibilities and how our services operate within a secure,
                 compliant ecosystem.
               </p>
@@ -333,7 +333,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  AetherFrame AI provides an advanced computational platform for generating,
+                  dexericai provides an advanced computational platform for generating,
                   modifying, and managing digital visual assets through artificial intelligence
                   models. The "Service" encompasses the web interface, API access, underlying
                   generative models, and associated cloud infrastructure.
@@ -378,7 +378,7 @@ void main() {
                 <p>
                   Subscription fees are billed in advance on a recurring basis. All fees are
                   non-refundable unless explicitly stated in our Refund Policy or required by local
-                  law. AetherFrame AI utilizes secure, PCI-DSS compliant third-party payment
+                  law. dexericai utilizes secure, PCI-DSS compliant third-party payment
                   processors.
                 </p>
                 <p>
@@ -397,7 +397,7 @@ void main() {
               <div className={styles.chapterContent}>
                 <p>
                   Subject to your compliance with these Terms and the applicable subscription tier,
-                  AetherFrame AI assigns to you all its right, title, and interest in and to the
+                  dexericai assigns to you all its right, title, and interest in and to the
                   output generated and returned by the Services based on your Input Data ("Generated
                   Output").
                 </p>
@@ -416,7 +416,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  All data processed through the AetherFrame AI platform remains the property of the
+                  All data processed through the dexericai platform remains the property of the
                   user. We do not use your prompts or generated outputs to train our foundational
                   models.
                 </p>

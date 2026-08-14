@@ -199,7 +199,7 @@ void main() {
       {/* Navigation */}
       <nav className={styles.nav}>
         <div className={styles.navContainer}>
-          <span className={styles.logo}>AetherFrame AI</span>
+          <span className={styles.logo}>dexericai</span>
           <div className={styles.navRight}>
             <Link href="/contact" className={styles.supportLink}>Support</Link>
             <Link href="/dashboard/wallet" className={styles.walletLink}>

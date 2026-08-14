@@ -4,14 +4,14 @@ export const defaultLocale = 'en';
 const messages = {
   en: {
     footer: {
-      companyName: 'AetherFrame AI Ltd.',
-      registration: 'Company No: 01234567 | VAT: GB 123 4567 89',
-      address: '1 Market Square, San Francisco, CA 94103',
-      email: 'support@aetherframe.ai',
-      phone: '+1 (415) 555-0123',
+      companyName: 'DEXERIC OÜ',
+      registration: 'Registry Code: 17569201',
+      address: 'Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Estonia',
+      email: 'support@dexeric.ai',
+      phone: '+372 (0) 6 123 456',
     },
     register: {
-      pageTitle: 'Create your AetherFrame account',
+      pageTitle: 'Create your dexericai account',
       submit: 'Create account',
       name: 'Name',
       surname: 'Surname',

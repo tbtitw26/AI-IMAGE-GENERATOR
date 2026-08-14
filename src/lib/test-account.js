@@ -6,7 +6,7 @@ export async function ensureTestAccount() {
   const isTestMode = process.env.TEST_MODE === 'true';
   if (!isTestMode) return;
 
-  const email = process.env.TEST_ACCOUNT_EMAIL || 'test@aetherframe.ai';
+  const email = process.env.TEST_ACCOUNT_EMAIL || 'test@dexeric.ai';
   const password = process.env.TEST_ACCOUNT_PASSWORD || 'Test1234!';
   const initialBalance = 1000000;
 

@@ -304,7 +304,7 @@ void main() {
               <h1 className={styles.heroTitle}>Refund Policy</h1>
               <p className={styles.heroDescription}>
                 Understand how refunds, wallet transactions, premium services and billing disputes
-                are handled at AetherFrame AI.
+                are handled at dexericai.
               </p>
               <div className={styles.heroMeta}>
                 <div className={styles.metaItem}>
@@ -404,7 +404,7 @@ void main() {
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  Funds added to your AetherFrame Wallet can be refunded to the original payment
+                  Funds added to your dexericai Wallet can be refunded to the original payment
                   method if requested within 14 days of the deposit, provided the balance remains
                   entirely unused.
                 </p>

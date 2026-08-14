@@ -139,7 +139,7 @@ export default function GeneratePage() {
 
       const link = document.createElement('a');
       link.href = canvas.toDataURL('image/png');
-      link.download = `aetherframe-${index + 1}-upscaled-2x.png`;
+      link.download = `dexericai-${index + 1}-upscaled-2x.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -397,7 +397,7 @@ export default function GeneratePage() {
                         <div className={styles.generatedOverlay}>
                           <a
                             href={img}
-                            download={`aetherframe-${index + 1}.png`}
+                            download={`dexericai-${index + 1}.png`}
                             className={styles.downloadImageBtn}
                           >
                             <span className="material-symbols-outlined">download</span>

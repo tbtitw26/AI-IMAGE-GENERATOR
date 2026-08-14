@@ -269,6 +269,7 @@
 
 .heroTitleGradient {
   background: linear-gradient(to right, #5b8cff, #8b5cf6);
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
@@ -989,6 +990,10 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .mockModelBtn {
@@ -1003,6 +1008,8 @@
   cursor: pointer;
   transition: all 0.25s ease;
   text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
 
   &:hover {
     border-color: rgba(178, 197, 255, 0.4);

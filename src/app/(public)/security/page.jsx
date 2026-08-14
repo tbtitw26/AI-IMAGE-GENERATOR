@@ -371,7 +371,7 @@ void main() {
                 Built with security.<br />Designed for trust.
               </h1>
               <p className={styles.heroDescription}>
-                AetherFrame AI protects every project, every payment and every account using
+                dexericai protects every project, every payment and every account using
                 enterprise-grade security, encrypted infrastructure and industry-standard compliance.
               </p>
 
@@ -592,7 +592,7 @@ void main() {
             <div className={styles.ctaContent}>
               <span className="material-symbols-outlined">security</span>
               <h2>Create with confidence.<br />Protected by design.</h2>
-              <p>Join the enterprises trusting AetherFrame AI for secure, compliant, high-performance generation.</p>
+              <p>Join the enterprises trusting dexericai for secure, compliant, high-performance generation.</p>
               <div className={styles.ctaActions}>
                 <Link href="/register" className={styles.ctaPrimary}>
                   Start Creating

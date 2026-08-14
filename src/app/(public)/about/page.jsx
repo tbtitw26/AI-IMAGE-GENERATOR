@@ -250,11 +250,11 @@ void main() {
             <div className={styles.heroContent}>
               <div className={styles.heroBadge}>
                 <span className={styles.pulseDot} />
-                <span>About AetherFrame AI</span>
+                <span>About dexericai</span>
               </div>
               <h1 className={styles.heroTitle}>Creating the future of visual creativity.</h1>
               <p className={styles.heroDescription}>
-                AetherFrame AI was born from a singular vision: to equip professional creators, studios, and
+                dexericai was born from a singular vision: to equip professional creators, studios, and
                 enterprise teams with uncompromised generative power. We build cinematic-grade models that
                 respect artistic intent while accelerating workflows, ensuring every pixel aligns with your
                 creative direction.

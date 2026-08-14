@@ -7,6 +7,7 @@ export const COLLECTIONS = {
   PASSWORD_RESETS: 'password_resets',
   PROJECTS: 'projects',
   WALLET_TRANSACTIONS: 'wallet_transactions',
+  CONTACT_MESSAGES: 'contact_messages',
 };
 
 export const DB_NAME = process.env.MONGODB_DB_NAME || 'AI-IMAGE-GENERATOR';

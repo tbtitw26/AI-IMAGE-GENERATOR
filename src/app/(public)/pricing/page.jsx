@@ -307,6 +307,21 @@ void main() {
       popular: true,
     },
     {
+      name: 'Professional',
+      price: '$199',
+      period: '/ deposit min',
+      description: 'For studios and agencies with demanding production needs.',
+      features: [
+        'Up to 12 images per generation',
+        'Access to all Aether models',
+        'Advanced upscaling & optimization',
+        'Priority processing queue',
+        'Commercial usage rights',
+      ],
+      buttonText: 'Select Professional',
+      highlighted: false,
+    },
+    {
       name: 'Enterprise',
       price: 'Custom',
       period: '',
@@ -391,7 +406,7 @@ void main() {
                 Simple pricing.<br />Professional creativity.
               </h1>
               <p className={styles.heroDescription}>
-                AetherFrame AI uses a flexible wallet system designed for creators, agencies and
+                dexericai uses a flexible wallet system designed for creators, agencies and
                 enterprise teams. Add funds whenever you need them, pay only for the work you generate
                 and access premium creative services without subscriptions.
               </p>
@@ -418,7 +433,7 @@ void main() {
                 <div className={styles.walletContent}>
                   <div className={styles.walletHeader}>
                     <div>
-                      <span className={styles.walletLabel}>AetherFrame Balance</span>
+                      <span className={styles.walletLabel}>dexericai Balance</span>
                       <div className={styles.walletBalance}>
                         <span>742.80</span>
                         <span>USD</span>
@@ -496,7 +511,7 @@ void main() {
           <div className={styles.servicesHeader}>
             <h2>Premium Creative Services</h2>
             <p>
-              Beyond AI image generation, AetherFrame AI offers exclusive creative production services
+              Beyond AI image generation, dexericai offers exclusive creative production services
               for businesses, agencies and enterprise clients. Every service includes professional
               deliverables, commercial licensing and downloadable PDF documentation.
             </p>
@@ -582,7 +597,7 @@ void main() {
                     <span className="material-symbols-outlined">bolt</span>
                     24-hour Turnaround
                   </div>
-                  <Link href="/contact" className={styles.featuredBtn}>Book Session</Link>
+                  <Link href="/contact?service=VIP%20Creative%20Director%20Session" className={styles.featuredBtn}>Book Session</Link>
                 </div>
               </div>
             </div>

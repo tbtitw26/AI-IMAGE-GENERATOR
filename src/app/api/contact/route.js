@@ -9,7 +9,7 @@ function jsonResponse(body, status) {
   });
 }
 
-const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || process.env.EMAIL_FROM || 'no-reply@aetherframe.ai';
+const SUPPORT_EMAIL = process.env.SUPPORT_EMAIL || process.env.EMAIL_FROM || 'no-reply@dexeric.ai';
 
 export async function POST(req) {
   const body = await req.json().catch(() => ({}));

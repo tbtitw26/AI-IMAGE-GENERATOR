@@ -427,7 +427,7 @@ void main() {
             <div className={styles.heroContent}>
               <div className={styles.heroBadge}>
                 <span className={styles.pulseDot}></span>
-                <span>AetherFrame V5 is Live</span>
+                <span>dexericai V5 is Live</span>
               </div>
               <h1 className={styles.heroTitle}>
                 Infinite <span className={styles.textGradient}>Visual</span> Intelligence.

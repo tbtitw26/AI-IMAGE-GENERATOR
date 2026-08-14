@@ -104,11 +104,11 @@ const Header = () => {
         <div className={styles.leftSection}>
           <Link href="/" className={styles.logo}>
             <img
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuB8poQwyCUOoCBWHWcQHb-t6X0sHGwYW0V0sh79Z9BVwQ2sSr0HJ49VfKXJe6GZu_RvRYPnh3Rx58e_mTN_I1TJ6KWpRyziU6xZa_bbnEojXKhAVcZ73VCQl2jHfmk6o6-9CZrLqp4CeQqT3ch2MJTYqZAG89n5kGBeE-bmfCrCuoWWXEM_dxew8I92pGP4WXyiemaMzytfySKdapwtFvB176ndytuiZMJeCZu9TPY7drSMS7pkMxGZcQ"
-              alt="AetherFrame Logo"
+              src="/ChatGPT Image 14 серп. 2026 р., 03_32_54-Photoroom.png"
+              alt="dexericai Logo"
               className={styles.logoImage}
             />
-            <span className={styles.logoText}>AetherFrame AI</span>
+            <span className={styles.logoText}>dexericai</span>
           </Link>
 
           <nav className={styles.nav}>

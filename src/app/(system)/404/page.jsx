@@ -67,7 +67,7 @@ void main() {
     
     float t = u_time * 0.05;
     
-    // AetherFrame Dark Palette
+    // dexericai Dark Palette
     vec3 bg = vec3(0.0157, 0.0196, 0.0392);
     vec3 deep = vec3(0.0392, 0.0627, 0.1255);
     
@@ -157,7 +157,7 @@ void main() {
       <nav className={styles.nav}>
         <div className={styles.navContainer}>
           <div className={styles.navLeft}>
-            <Link href="/" className={styles.logo}>AetherFrame AI</Link>
+            <Link href="/" className={styles.logo}>dexericai</Link>
           </div>
           <div className={styles.navCenter}>
             {['Features', 'Gallery', 'Pricing', 'Security', 'FAQ', 'About'].map((item) => (
@@ -193,7 +193,7 @@ void main() {
                   <span className={styles.searchIcon}>search</span>
                   <input 
                     className={styles.searchInput} 
-                    placeholder="Search the AetherFrame cosmos..." 
+                    placeholder="Search the dexericai cosmos..." 
                     type="text"
                   />
                 </div>

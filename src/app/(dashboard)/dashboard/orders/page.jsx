@@ -172,7 +172,7 @@ export default function OrdersPage() {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(20);
-    doc.text('AetherFrame AI', 14, 18);
+    doc.text('dexericai', 14, 18);
     doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
     doc.text('Invoice export', 14, 28);
@@ -206,7 +206,7 @@ export default function OrdersPage() {
     doc.text(formatCurrency(order.amount), pageWidth - 24, y + 18, { align: 'right' });
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
-    doc.text('Thank you for choosing AetherFrame AI.', 14, y + 34);
+    doc.text('Thank you for choosing dexericai.', 14, y + 34);
 
     doc.save(`${order.id}.pdf`);
     setSelectedInvoice(order);
@@ -221,7 +221,7 @@ export default function OrdersPage() {
     doc.setTextColor(255, 255, 255);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
-    doc.text('AetherFrame AI Billing Statement', 14, 20);
+    doc.text('dexericai Billing Statement', 14, 20);
 
     doc.setTextColor(33, 37, 41);
     doc.setFont('helvetica', 'normal');
@@ -245,7 +245,7 @@ export default function OrdersPage() {
       { align: 'right' }
     );
 
-    doc.save('aetherframe-statement.pdf');
+    doc.save('dexericai-statement.pdf');
   };
 
   const exportOrdersCsv = () => {
@@ -264,7 +264,7 @@ export default function OrdersPage() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `aetherframe-orders-${new Date().toISOString().split('T')[0]}.csv`;
+    link.download = `dexericai-orders-${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

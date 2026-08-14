@@ -376,7 +376,7 @@ void main() {
                 Every masterpiece starts with <span className={styles.textGradient}>one idea.</span>
               </h1>
               <p className={styles.introDescription}>
-                AetherFrame AI transforms natural language into professional visual content through
+                dexericai transforms natural language into professional visual content through
                 multiple intelligent stages. Every prompt is analyzed for meaning, artistic intent,
                 lighting, composition and visual storytelling before the first image is generated.
                 The result is a creative workflow that feels fast, intuitive and remarkably human.
@@ -684,7 +684,7 @@ void main() {
             <p>
               Every generated image can be enhanced, reviewed and exported in multiple professional formats.
               Whether the project is created for advertising, product photography, architecture, social media
-              or print, AetherFrame AI delivers production-ready visual assets with exceptional quality.
+              or print, dexericai delivers production-ready visual assets with exceptional quality.
             </p>
           </div>
 
@@ -714,7 +714,7 @@ void main() {
               Your next image starts with <span>one idea.</span>
             </h2>
             <p>
-              Join thousands of creators, designers and studios using AetherFrame AI to transform
+              Join thousands of creators, designers and studios using dexericai to transform
               imagination into professional visual content in just a few seconds.
             </p>
             <div className={styles.ctaButtons}>

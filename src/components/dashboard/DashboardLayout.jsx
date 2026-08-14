@@ -42,7 +42,7 @@ export default function DashboardLayout({ children }) {
             <span className="material-symbols-outlined">temp_preferences_custom</span>
           </div>
           <div>
-            <h1>AetherFrame</h1>
+            <h1>dexericai</h1>
             <p>Creative Workspace</p>
           </div>
         </Link>
@@ -167,7 +167,7 @@ export default function DashboardLayout({ children }) {
                 <span className="material-symbols-outlined">temp_preferences_custom</span>
               </div>
               <div>
-                <h1>AetherFrame</h1>
+                <h1>dexericai</h1>
                 <p>Creative Workspace</p>
               </div>
               <button onClick={() => setIsMobileMenuOpen(false)}>

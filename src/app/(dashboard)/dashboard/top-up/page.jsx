@@ -155,7 +155,7 @@ export default function TopUpPage() {
             </div>
             <h1>Add Funds</h1>
             <p>
-              Securely add balance to your AetherFrame AI Wallet and instantly continue generating
+              Securely add balance to your dexericai Wallet and instantly continue generating
               premium AI images without interruption.
             </p>
           </div>
