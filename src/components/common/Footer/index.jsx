@@ -41,7 +41,7 @@ const Footer = () => {
           <div className={styles.brandColumn}>
             <div className={styles.logo}>
               <img
-                src="/ChatGPT Image 14 серп. 2026 р., 03_32_54-Photoroom.png"
+                src="/ChatGPT Image 14 серп. 2026 р., 03_32_54-Photoroom 1.png"
                 alt="dexericai Logo"
                 className={styles.logoImage}
               />
