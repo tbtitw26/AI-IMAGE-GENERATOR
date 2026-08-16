@@ -63,10 +63,10 @@ const PROCESS_STEPS = [
 ];
 
 const STATS = [
-  { value: '10M+', label: 'Images Generated' },
-  { value: '870+', label: 'Enterprise Clients' },
-  { value: '100k+', label: 'Hours Saved' },
-  { value: '42+', label: 'Countries' },
+  { value: '99.99%', label: 'Uptime SLA' },
+  { value: '<0.5s', label: 'Average Latency' },
+  { value: '24/7', label: 'Priority Support' },
+  { value: 'Global', label: 'Cloud Infrastructure' },
 ];
 
 const TRUST_BADGES = [

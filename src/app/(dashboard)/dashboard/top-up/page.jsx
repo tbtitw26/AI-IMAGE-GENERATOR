@@ -9,14 +9,20 @@ import styles from './page.module.scss';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useCurrency } from '@/context/CurrencyContext';
+import { CURRENCIES } from '@/config/currency';
 
 export default function TopUpPage() {
   const { token, user, refreshUser } = useAuth();
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
-  // Синхронізуємо стартову валюту поповнення з глобальною валютою сайту (EUR за замовчуванням).
-  const { currency: globalCurrency } = useCurrency();
-  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency);
+  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency();
+  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency || 'EUR');
+  const currencySymbol = CURRENCIES[selectedCurrency]?.symbol || '€';
+
+  const changeCurrency = (code) => {
+    setSelectedCurrency(code);
+    setGlobalCurrency(code);
+  };
   const [selectedCard, setSelectedCard] = useState('visa');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
@@ -170,7 +176,7 @@ export default function TopUpPage() {
               <span className="material-symbols-outlined">account_balance_wallet</span>
             </div>
             <div className={styles.balanceAmount}>
-              ${(user?.balance?.[selectedCurrency] ?? 0).toFixed(2)} <span className={styles.balanceCurrency}>{selectedCurrency}</span>
+              {currencySymbol}{(user?.balance?.[selectedCurrency] ?? 0).toFixed(2)} <span className={styles.balanceCurrency}>{selectedCurrency}</span>
             </div>
             <div className={styles.summaryDetails}>
               <div>
@@ -201,7 +207,7 @@ export default function TopUpPage() {
           <div className={styles.amountHeader}>
             <h2>Select Amount</h2>
             <span>
-              <span className="material-symbols-outlined">info</span> Minimum $10.00 USD
+              <span className="material-symbols-outlined">info</span> Minimum {currencySymbol}10.00 {selectedCurrency}
             </span>
           </div>
 
@@ -213,8 +219,8 @@ export default function TopUpPage() {
                 onClick={() => handleAmountSelect(amount)}
               >
                 {amount === 100 && <span className={styles.popularBadge}>Popular</span>}
-                <span className={styles.amountValue}>${amount}</span>
-                <span className={styles.amountCurrency}>USD</span>
+                <span className={styles.amountValue}>{currencySymbol}{amount}</span>
+                <span className={styles.amountCurrency}>{selectedCurrency}</span>
               </button>
             ))}
           </div>
@@ -222,7 +228,7 @@ export default function TopUpPage() {
           <div className={styles.customAmount}>
             <label>Custom Amount:</label>
             <div className={styles.customInputWrapper}>
-              <span className={styles.currencySymbol}>$</span>
+              <span className={styles.currencySymbol}>{currencySymbol}</span>
               <input
                 type="number"
                 placeholder="0.00"
@@ -231,7 +237,7 @@ export default function TopUpPage() {
                 min="10"
                 step="1"
               />
-              <span className={styles.currencyLabel}>USD</span>
+              <span className={styles.currencyLabel}>{selectedCurrency}</span>
             </div>
           </div>
         </section>
@@ -319,20 +325,20 @@ export default function TopUpPage() {
 
               <div className={styles.currencySelector}>
                 <button
-                  className={`${styles.currencyBtn} ${selectedCurrency === 'USD' ? styles.active : ''}`}
-                  onClick={() => setSelectedCurrency('USD')}
-                >
-                  USD
-                </button>
-                <button
                   className={`${styles.currencyBtn} ${selectedCurrency === 'EUR' ? styles.active : ''}`}
-                  onClick={() => setSelectedCurrency('EUR')}
+                  onClick={() => changeCurrency('EUR')}
                 >
                   EUR
                 </button>
                 <button
+                  className={`${styles.currencyBtn} ${selectedCurrency === 'USD' ? styles.active : ''}`}
+                  onClick={() => changeCurrency('USD')}
+                >
+                  USD
+                </button>
+                <button
                   className={`${styles.currencyBtn} ${selectedCurrency === 'GBP' ? styles.active : ''}`}
-                  onClick={() => setSelectedCurrency('GBP')}
+                  onClick={() => changeCurrency('GBP')}
                 >
                   GBP
                 </button>
@@ -341,7 +347,7 @@ export default function TopUpPage() {
               <div className={styles.summaryItems}>
                 <div>
                   <span>Selected Amount</span>
-                  <span>${getDisplayAmount()}</span>
+                  <span>{currencySymbol}{getDisplayAmount()}</span>
                 </div>
                 <div>
                   <span>
@@ -350,7 +356,7 @@ export default function TopUpPage() {
                       <span className="material-symbols-outlined">info</span>
                     </span>
                   </span>
-                  <span className={styles.waived}>Waived ($0.00)</span>
+                  <span className={styles.waived}>Waived ({currencySymbol}0.00)</span>
                 </div>
                 <div>
                   <span>Estimated Tax</span>
@@ -361,7 +367,7 @@ export default function TopUpPage() {
               <div className={styles.totalRow}>
                 <span>Total to Pay</span>
                 <div>
-                  <div className={styles.totalAmount}>${getDisplayAmount()}</div>
+                  <div className={styles.totalAmount}>{currencySymbol}{getDisplayAmount()}</div>
                   <div className={styles.totalCurrency}>{selectedCurrency}</div>
                 </div>
               </div>

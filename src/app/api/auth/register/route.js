@@ -59,16 +59,19 @@ export async function POST(req) {
 
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    // Always require email verification in production
     const requireEmailVerification =
-      process.env.REGISTRATION_REQUIRE_EMAIL_VERIFICATION === 'true' &&
-      process.env.NODE_ENV === 'production';
+      process.env.REGISTRATION_REQUIRE_EMAIL_VERIFICATION !== 'false';
 
     let verificationToken = null;
     if (requireEmailVerification) {
-      verificationToken = createAuthToken({
-        purpose: 'verify_email',
-        email: email.toLowerCase().trim(),
-      });
+      verificationToken = createAuthToken(
+        {
+          purpose: 'verify_email',
+          email: email.toLowerCase().trim(),
+        },
+        { expiresIn: '24h' }
+      );
     }
 
     const newUser = {
@@ -105,7 +108,12 @@ export async function POST(req) {
         'http://localhost:3000';
       const verificationUrl = `${appUrl}/verify-email?token=${encodeURIComponent(verificationToken)}`;
 
-      await sendEmail({
+      console.log(`\n==================================================`);
+      console.log(`🔗 [DEV VERIFICATION LINK] for ${newUser.email}:`);
+      console.log(`👉 ${verificationUrl}`);
+      console.log(`==================================================\n`);
+
+      const emailSent = await sendEmail({
         to: newUser.email,
         ...buildVerificationEmail({
           name: firstName || lastName || 'Customer',
@@ -113,19 +121,26 @@ export async function POST(req) {
         }),
       }).catch((err) => {
         console.warn('Verification email failed to send:', err.message);
+        return false;
       });
+
+      const isDevOrTest = process.env.NODE_ENV === 'development' || process.env.TEST_MODE === 'true';
 
       return Response.json(
         {
-          message:
-            'Registration successful. Please check your email to verify your account.',
+          message: emailSent
+            ? 'Registration successful. Please check your email to verify your account.'
+            : 'Registration successful, but we could not send the verification email right now. Please use "Resend verification email" or contact support.',
+          emailSent: Boolean(emailSent),
+          requiresVerification: true,
+          ...(isDevOrTest ? { devVerificationUrl: verificationUrl } : {}),
         },
         { status: 201 }
       );
     }
 
     return Response.json(
-      { message: 'Registration successful.' },
+      { message: 'Registration successful.', requiresVerification: false },
       { status: 201 }
     );
   } catch (error) {

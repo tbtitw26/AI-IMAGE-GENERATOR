@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import Logo from '@/components/common/Logo';
+import { CURRENCIES } from '@/config/currency';
 import styles from './Header.module.scss';
 
 const Header = () => {
@@ -73,17 +75,20 @@ const Header = () => {
   const ctaLabel = isAuthenticated ? 'Open Studio' : 'Start Creating';
 
   const formatBalance = (balance) => {
-    if (!balance) return '$0.00';
+    if (!balance) return '€0.00';
 
-    const currency = Object.keys(balance).find((key) => balance[key] != null) || 'USD';
+    // Always honour the user's selected currency (stored in localStorage by CurrencyContext).
+    // Fall back to EUR if nothing is saved — EUR is our base currency.
+    const savedCurrency =
+      typeof window !== 'undefined'
+        ? localStorage.getItem('selectedCurrency') || 'EUR'
+        : 'EUR';
+
+    const currency = CURRENCIES[savedCurrency] ? savedCurrency : 'EUR';
     const amount = Number(balance[currency] ?? 0);
+    const symbol = CURRENCIES[currency]?.symbol || '€';
 
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency,
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    }).format(amount);
+    return `${symbol}${amount.toFixed(2)}`;
   };
 
   const handleLogout = () => {
@@ -102,13 +107,8 @@ const Header = () => {
     <header className={`${styles.header} ${isScrolled ? styles.scrolled : ''}`}>
       <div className={styles.container}>
         <div className={styles.leftSection}>
-          <Link href="/" className={styles.logo}>
-            <img
-              src="/ChatGPT Image 14 серп. 2026 р., 03_32_54-Photoroom 1.png"
-              alt="dexericai Logo"
-              className={styles.logoImage}
-            />
-            <span className={styles.logoText}>dexericai</span>
+          <Link href="/" className={styles.logo} style={{ textDecoration: 'none' }}>
+            <Logo />
           </Link>
 
           <nav className={styles.nav}>

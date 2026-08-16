@@ -5,11 +5,12 @@ import { COLLECTIONS } from '../config/constants';
 
 const secret = process.env.JWT_SECRET || process.env.NEXTAUTH_SECRET || (process.env.NODE_ENV !== 'production' ? 'development-secret' : '');
 
-export function createAuthToken(payload) {
+export function createAuthToken(payload, options = {}) {
   if (!secret) {
     throw new Error('Please define JWT_SECRET or NEXTAUTH_SECRET in .env.local');
   }
-  return jwt.sign(payload, secret, { expiresIn: '7d' });
+  const { expiresIn = '7d' } = options;
+  return jwt.sign(payload, secret, { expiresIn });
 }
 
 export function verifyAuthToken(token) {

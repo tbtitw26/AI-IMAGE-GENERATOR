@@ -24,12 +24,15 @@ function ContactPageContent() {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
-    const service = searchParams.get('service');
-    if (service) {
+    const rawService = searchParams.get('service') || searchParams.get('subject') || searchParams.get('plan') || searchParams.get('package');
+    if (rawService) {
+      const decoded = decodeURIComponent(rawService);
       setFormData((prev) => ({
         ...prev,
-        projectType: 'Creative Campaign',
-        message: `Hi, I'm interested in the "${service}" service from your pricing page. Please share more details on availability and next steps.`,
+        projectType: decoded.toLowerCase().includes('custom') || decoded.toLowerCase().includes('director') || decoded.toLowerCase().includes('vip')
+          ? 'Custom Model Training'
+          : 'Creative Campaign',
+        message: `Hi, I'm interested in booking the "${decoded}" service. Please share more details on availability, customization, and next steps for our team.`,
       }));
     }
   }, [searchParams]);

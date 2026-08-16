@@ -8,6 +8,7 @@ import styles from './page.module.scss';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useCurrency } from '@/context/CurrencyContext';
+import { CURRENCIES, priceInCurrency } from '@/config/currency';
 
 const TX_ICONS = {
   top_up: 'add_circle',
@@ -16,21 +17,32 @@ const TX_ICONS = {
 
 export default function WalletPage() {
   const { user, token, refreshUser } = useAuth();
-  // Синхронізуємо стартову валюту гаманця з глобальною валютою сайту (EUR за замовчуванням).
-  const { currency: globalCurrency } = useCurrency();
-  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency);
+  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency();
+  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency || 'EUR');
   const [showStatements, setShowStatements] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const changeCurrency = (code) => {
+    setSelectedCurrency(code);
+    setGlobalCurrency(code);
+  };
+
   useEffect(() => {
     if (!token) return;
-    setIsLoading(true);
+    let isMounted = true;
     fetch('/api/wallet/transactions', { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => r.json())
-      .then((data) => setTransactions(data.transactions || []))
-      .finally(() => setIsLoading(false));
+      .then((data) => {
+        if (isMounted) setTransactions(data.transactions || []);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
     refreshUser();
+    return () => {
+      isMounted = false;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
@@ -75,30 +87,30 @@ export default function WalletPage() {
   };
 
   const balances = [
-    { currency: 'USD', amount: (user?.balance?.USD ?? 0).toFixed(2), icon: 'payments', ...buildSparkline('USD') },
-    { currency: 'EUR', amount: (user?.balance?.EUR ?? 0).toFixed(2), icon: 'euro', ...buildSparkline('EUR') },
-    { currency: 'GBP', amount: (user?.balance?.GBP ?? 0).toFixed(2), icon: 'currency_pound', ...buildSparkline('GBP') },
+    { currency: 'EUR', amount: `€${(user?.balance?.EUR ?? 0).toFixed(2)}`, icon: 'euro', ...buildSparkline('EUR') },
+    { currency: 'USD', amount: `$${(user?.balance?.USD ?? 0).toFixed(2)}`, icon: 'payments', ...buildSparkline('USD') },
+    { currency: 'GBP', amount: `£${(user?.balance?.GBP ?? 0).toFixed(2)}`, icon: 'currency_pound', ...buildSparkline('GBP') },
   ];
 
   const vipServices = [
     {
       name: 'Priority Rendering',
-      price: '299',
-      period: 'USD/mo',
+      price: priceInCurrency(299, selectedCurrency),
+      period: `/${selectedCurrency.toLowerCase()}`,
       description: 'Skip the queue for 30 days. Perfect for tight deadlines.',
       popular: false,
     },
     {
       name: 'Private AI Director',
-      price: '999',
-      period: 'USD/mo',
+      price: priceInCurrency(999, selectedCurrency),
+      period: `/${selectedCurrency.toLowerCase()}`,
       description: 'Dedicated AI tuning, private models, and 1-on-1 strategy sessions.',
       popular: true,
     },
     {
       name: 'Enterprise Campaign',
-      price: '599',
-      period: 'USD/mo',
+      price: priceInCurrency(599, selectedCurrency),
+      period: `/${selectedCurrency.toLowerCase()}`,
       description: 'Bulk generation credits with specialized agency-grade presets.',
       popular: false,
     },
@@ -154,7 +166,7 @@ export default function WalletPage() {
                 <div>
                   <span className={styles.balanceLabel}>Total Available</span>
                   <div className={styles.balanceAmount}>
-                    <span>{balanceValue.toFixed(2)}</span>
+                    <span>{CURRENCIES[selectedCurrency]?.symbol || '€'}{balanceValue.toFixed(2)}</span>
                     <span className={styles.balanceCurrency}>{selectedCurrency}</span>
                   </div>
                 </div>
@@ -165,9 +177,9 @@ export default function WalletPage() {
               <div className={styles.balanceDivider}></div>
               <div className={styles.balanceFooter}>
                 <div className={styles.currencyChips}>
-                  <button className={selectedCurrency === 'USD' ? styles.chipActive : styles.chipInactive} onClick={() => setSelectedCurrency('USD')}>USD</button>
-                  <button className={selectedCurrency === 'EUR' ? styles.chipActive : styles.chipInactive} onClick={() => setSelectedCurrency('EUR')}>EUR</button>
-                  <button className={selectedCurrency === 'GBP' ? styles.chipActive : styles.chipInactive} onClick={() => setSelectedCurrency('GBP')}>GBP</button>
+                  <button className={selectedCurrency === 'EUR' ? styles.chipActive : styles.chipInactive} onClick={() => changeCurrency('EUR')}>EUR</button>
+                  <button className={selectedCurrency === 'USD' ? styles.chipActive : styles.chipInactive} onClick={() => changeCurrency('USD')}>USD</button>
+                  <button className={selectedCurrency === 'GBP' ? styles.chipActive : styles.chipInactive} onClick={() => changeCurrency('GBP')}>GBP</button>
                 </div>
                 <div className={styles.verifiedBadge}>
                   <span className="material-symbols-outlined">verified_user</span>

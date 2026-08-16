@@ -5,6 +5,9 @@ import Footer from '@/components/common/Footer';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrency } from '@/context/CurrencyContext';
+import { priceInCurrency } from '@/config/currency';
+import Logo from '@/components/common/Logo';
 import styles from './DashboardLayout.module.scss';
 
 export default function DashboardLayout({ children }) {
@@ -12,6 +15,9 @@ export default function DashboardLayout({ children }) {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { currency } = useCurrency();
+
+  const userBalanceAmount = user?.balance?.[currency] ?? user?.balance?.EUR ?? 0;
 
   const navItems = [
     { icon: 'dashboard', label: 'Overview', href: '/dashboard' },
@@ -106,7 +112,7 @@ export default function DashboardLayout({ children }) {
           <div className={styles.topBarRight}>
             <Link href="/dashboard/wallet" className={styles.walletBalance}>
               <span className="material-symbols-outlined">account_balance_wallet</span>
-              <span>${(user?.balance?.USD ?? 0).toFixed(2)} USD</span>
+              <span>{priceInCurrency(userBalanceAmount, currency)} {currency}</span>
             </Link>
             <button className={styles.notificationBtn}>
               <span className="material-symbols-outlined">notifications</span>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -182,27 +182,38 @@ void main() {
         throw new Error(data.message || 'Registration failed.');
       }
 
-      const loginResponse = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
+      // Check if email verification is required
+      if (data.requiresVerification) {
+        setSubmitMessage(data.message || 'Registration successful. Please check your email to verify your account.');
+        setIsSubmitted(true);
+        // Redirect to verify-email page with email parameter after 2 seconds
+        setTimeout(() => {
+          window.location.href = `/verify-email?email=${encodeURIComponent(formData.email)}`;
+        }, 2000);
+      } else {
+        // Email verification not required, proceed with login
+        const loginResponse = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
 
-      const loginText = await loginResponse.text();
-      const loginData = loginText ? JSON.parse(loginText) : {};
-      if (!loginResponse.ok) {
-        throw new Error(loginData.message || 'Login failed after registration.');
+        const loginText = await loginResponse.text();
+        const loginData = loginText ? JSON.parse(loginText) : {};
+        if (!loginResponse.ok) {
+          throw new Error(loginData.message || 'Login failed after registration.');
+        }
+
+        window.localStorage.setItem('token', loginData.token);
+        window.localStorage.setItem('user', JSON.stringify(loginData.user));
+        window.dispatchEvent(new Event('auth-state-changed'));
+        window.location.href = '/dashboard';
       }
-
-      window.localStorage.setItem('token', loginData.token);
-      window.localStorage.setItem('user', JSON.stringify(loginData.user));
-      window.dispatchEvent(new Event('auth-state-changed'));
-      window.location.href = '/dashboard';
     } catch (error) {
       console.error(error);
       setError(error.message || 'Registration failed.');

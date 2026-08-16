@@ -81,7 +81,12 @@ export async function POST(req) {
 
     await sendEmail({
       to: user.email,
-      ...buildInvoiceEmail({ name: user.firstName || user.email, invoiceNumber }),
+      ...buildInvoiceEmail({
+        name: user.firstName || user.email,
+        invoiceNumber,
+        amount: numericAmount.toFixed(2),
+        currency,
+      }),
       attachments: [
         {
           filename: `${invoiceNumber}.pdf`,

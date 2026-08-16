@@ -5,12 +5,20 @@ import { jsPDF } from 'jspdf';
 import Link from 'next/link';
 import styles from './page.module.scss';
 
-// Імпорт компонентів
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrency } from '@/context/CurrencyContext';
+import { CURRENCIES } from '@/config/currency';
+
+// Format a number with the correct symbol for a given currency code
+const formatTxCurrency = (value, currencyCode) => {
+  const symbol = CURRENCIES[currencyCode]?.symbol || currencyCode + ' ';
+  return `${symbol}${Math.abs(Number(value)).toFixed(2)}`;
+};
 
 export default function OrdersPage() {
   const { user, token } = useAuth();
+  const { currency: globalCurrency } = useCurrency();
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedInvoice, setSelectedInvoice] = useState(null);
@@ -20,11 +28,16 @@ export default function OrdersPage() {
 
   useEffect(() => {
     if (!token) return;
-    setIsLoading(true);
+    let isMounted = true;
     fetch('/api/wallet/transactions', { headers: { Authorization: `Bearer ${token}` } })
       .then((r) => r.json())
-      .then((data) => setRawTransactions(data.transactions || []))
-      .finally(() => setIsLoading(false));
+      .then((data) => {
+        if (isMounted) setRawTransactions(data.transactions || []);
+      })
+      .finally(() => {
+        if (isMounted) setIsLoading(false);
+      });
+    return () => { isMounted = false; };
   }, [token]);
 
   // Мапимо реальні транзакції у формат "order/invoice", який очікує решта сторінки
@@ -35,24 +48,31 @@ export default function OrdersPage() {
       description: tx.type === 'top_up' ? `Wallet Top Up (${tx.paymentMethod || 'card'})` : 'AI Image Generation',
       date: new Date(tx.date).toISOString().split('T')[0],
       amount: Math.abs(Number(tx.amount)),
+      // Preserve the currency the transaction was made in; fall back to globalCurrency
+      currency: tx.currency || globalCurrency || 'EUR',
       status: tx.status === 'completed' ? 'paid' : 'pending',
       customer: customerName,
       email: user?.email || '',
       serviceType: tx.type === 'top_up' ? 'Wallet top up' : 'Generation credits',
       dueDate: new Date(tx.date).toISOString().split('T')[0],
       items: [
-        { name: tx.type === 'top_up' ? 'Wallet top up' : 'AI image generation', quantity: 1, price: Math.abs(Number(tx.amount)) },
+        { name: tx.type === 'top_up' ? 'Wallet top up' : 'AI image generation', quantity: 1, price: Math.abs(Number(tx.amount)), currency: tx.currency || globalCurrency || 'EUR' },
       ],
     }));
-  }, [rawTransactions, user]);
+  }, [rawTransactions, user, globalCurrency]);
 
   const stats = [
     { label: 'Total Orders', value: String(orders.length) },
     {
       label: 'Total Spent',
-      value: new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(
-        orders.filter((o) => o.status === 'paid').reduce((sum, o) => sum + o.amount, 0)
-      ),
+      // Show total spent in the currency of the most recent paid transaction, or globalCurrency
+      value: (() => {
+        const paidOrders = orders.filter((o) => o.status === 'paid');
+        if (paidOrders.length === 0) return `${CURRENCIES[globalCurrency]?.symbol || '€'}0.00`;
+        const mainCurrency = paidOrders[paidOrders.length - 1]?.currency || globalCurrency || 'EUR';
+        const total = paidOrders.filter((o) => o.currency === mainCurrency).reduce((sum, o) => sum + o.amount, 0);
+        return formatTxCurrency(total, mainCurrency);
+      })(),
     },
   ];
 
@@ -157,11 +177,8 @@ export default function OrdersPage() {
     return true;
   });
 
-  const formatCurrency = (value) =>
-    new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(value);
+  // Global formatter uses selected UI currency for analytics figures
+  const formatCurrency = (value) => formatTxCurrency(value, globalCurrency || 'EUR');
 
   const createInvoicePdf = (order) => {
     const doc = new jsPDF();
@@ -196,14 +213,14 @@ export default function OrdersPage() {
     order.items.forEach((item) => {
       doc.text(item.name, 14, y);
       doc.text(`${item.quantity} x`, pageWidth - 90, y);
-      doc.text(formatCurrency(item.price), pageWidth - 24, y, { align: 'right' });
+      doc.text(formatTxCurrency(item.price, item.currency || order.currency || 'EUR'), pageWidth - 24, y, { align: 'right' });
       y += 10;
     });
 
     doc.line(14, y + 4, pageWidth - 14, y + 4);
     doc.setFont('helvetica', 'bold');
     doc.text('Total Due', 14, y + 18);
-    doc.text(formatCurrency(order.amount), pageWidth - 24, y + 18, { align: 'right' });
+    doc.text(formatTxCurrency(order.amount, order.currency || 'EUR'), pageWidth - 24, y + 18, { align: 'right' });
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
     doc.text('Thank you for choosing dexericai.', 14, y + 34);
@@ -391,7 +408,7 @@ export default function OrdersPage() {
                       <td className={styles.orderId}>{order.id}</td>
                       <td className={styles.orderDescription}>{order.description}</td>
                       <td className={styles.orderDate}>{order.date}</td>
-                      <td className={styles.orderAmount}>{formatCurrency(order.amount)}</td>
+                      <td className={styles.orderAmount}>{formatTxCurrency(order.amount, order.currency)}</td>
                       <td>
                         <span className={`${styles.statusBadge} ${styles[`status${statusColors[order.status].charAt(0).toUpperCase() + statusColors[order.status].slice(1)}`]}`}>
                           {statusLabels[order.status]}
@@ -485,7 +502,7 @@ export default function OrdersPage() {
               </div>
               <button onClick={() => setSelectedInvoice(null)} style={{ background: 'transparent', color: '#b2c5ff', border: '1px solid rgba(178, 197, 255, 0.2)', borderRadius: '999px', padding: '8px 12px', cursor: 'pointer' }}>Close</button>
             </div>
-            <p style={{ marginTop: '10px', color: '#c3c6d6' }}>Amount: {formatCurrency(selectedInvoice.amount)} • Status: {statusLabels[selectedInvoice.status]}</p>
+            <p style={{ marginTop: '10px', color: '#c3c6d6' }}>Amount: {formatTxCurrency(selectedInvoice.amount, selectedInvoice.currency)} • Status: {statusLabels[selectedInvoice.status]}</p>
             <p style={{ marginTop: '6px', color: '#c3c6d6' }}>Service: {selectedInvoice.serviceType} • Due: {selectedInvoice.dueDate}</p>
           </div>
         )}

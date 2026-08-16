@@ -36,7 +36,9 @@ export async function POST(req) {
   }
 
   const isLocalDevelopment = process.env.NODE_ENV !== 'production';
-  if (!user.emailVerified && !isLocalDevelopment) {
+  const requireEmailVerification = process.env.REGISTRATION_REQUIRE_EMAIL_VERIFICATION !== 'false';
+
+  if (requireEmailVerification && !user.emailVerified && !isLocalDevelopment) {
     return new Response(JSON.stringify({ message: 'Please verify your email address before signing in.' }), {
       status: 403,
       headers: { 'Content-Type': 'application/json' },

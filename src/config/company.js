@@ -10,9 +10,9 @@ export const COMPANY_INFO = {
   
   // Contact Information
   email: {
-    support: 'support@dexeric.ai',
-    business: 'business@dexeric.ai',
-    sales: 'sales@dexeric.ai',
+    support: 'info@dexericai.com',
+    business: 'info@dexericai.com',
+    sales: 'info@dexericai.com',
   },
   
   // Company Details

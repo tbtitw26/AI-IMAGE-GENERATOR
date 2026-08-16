@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Logo from '@/components/common/Logo';
 import styles from './Footer.module.scss';
 
 const Footer = () => {
@@ -39,14 +40,9 @@ const Footer = () => {
       <div className={styles.container}>
         <div className={styles.grid}>
           <div className={styles.brandColumn}>
-            <div className={styles.logo}>
-              <img
-                src="/ChatGPT Image 14 серп. 2026 р., 03_32_54-Photoroom 1.png"
-                alt="dexericai Logo"
-                className={styles.logoImage}
-              />
-              <span className={styles.logoText}>dexericai</span>
-            </div>
+            <Link href="/" style={{ textDecoration: 'none' }}>
+              <Logo />
+            </Link>
             <p className={styles.description}>
               Create cinematic AI visuals faster with a polished workflow for teams and solo creators.
             </p>

@@ -573,7 +573,7 @@ export default function HomePage() {
 
         {/* Ecosystem Section */}
         <section className={styles.ecosystem}>
-          <h2 className={styles.sectionTitle}>Powering the World's Leading Studios</h2>
+          <h2 className={styles.sectionTitle}>Engineered for Professional Studios & Creative Teams</h2>
           
           <div className={styles.studioIcons}>
             {['movie_creation', 'architecture', 'diamond', 'domain', 'memory', 'design_services', 
@@ -845,7 +845,7 @@ export default function HomePage() {
                 <span className={styles.exclusiveBadge}>Exclusive</span>
                 <h3>White-Glove Production</h3>
                 <p>End-to-end concierge service. Our elite engineers craft the perfect prompts, tune models to your brand, and deliver production-ready assets.</p>
-                <Link href="/contact?service=White-Glove%20Production" className={styles.discoverLink}>
+                <Link href="/about" className={styles.discoverLink}>
                   Discover Production <span className="material-symbols-outlined">arrow_forward</span>
                 </Link>
               </div>

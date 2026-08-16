@@ -12,8 +12,13 @@ export function CurrencyProvider({ children }) {
   // Load currency preference from localStorage
   useEffect(() => {
     const savedCurrency = localStorage.getItem('selectedCurrency');
-    if (savedCurrency && getCurrencyCodes().includes(savedCurrency)) {
+    // EUR is the base currency. If nothing is saved, or the saved value is USD
+    // (from an old session before EUR became the default), default to EUR.
+    if (savedCurrency && savedCurrency !== 'USD' && getCurrencyCodes().includes(savedCurrency)) {
       setCurrency(savedCurrency);
+    } else {
+      // Ensure EUR is persisted as the canonical default
+      localStorage.setItem('selectedCurrency', 'EUR');
     }
     setIsLoaded(true);
   }, []);
