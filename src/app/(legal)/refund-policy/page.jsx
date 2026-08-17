@@ -186,7 +186,7 @@ void main() {
     { icon: 'info', label: 'Overview', href: '#overview' },
     { icon: 'check_circle', label: 'Eligible Refunds', href: '#eligible' },
     { icon: 'block', label: 'Non-Refundable Services', href: '#non-refundable' },
-    { icon: 'account_balance_wallet', label: 'Wallet Balance', href: '#wallet' },
+    { icon: 'account_balance_wallet', label: 'Account Balance', href: '#balance' },
     { icon: 'star', label: 'VIP Services', href: '#vip' },
     { icon: 'error', label: 'Payment Errors', href: '#errors' },
     { icon: 'schedule', label: 'Refund Timeline', href: '#timeline' },
@@ -198,7 +198,7 @@ void main() {
   const tocItems = [
     { number: '01', label: 'Eligible Refunds', href: '#overview' },
     { number: '02', label: 'Non-Refundable Items', href: '#non-refundable-items' },
-    { number: '03', label: 'Wallet Terms', href: '#wallet-terms' },
+    { number: '03', label: 'Balance Terms', href: '#balance-terms' },
     { number: '04', label: 'Disputes', href: '#disputes' },
   ];
 
@@ -223,7 +223,7 @@ void main() {
     },
     {
       icon: 'account_balance_wallet',
-      title: 'Unused Wallet Balance',
+      title: 'Unused Balance',
       description: 'Refundable within 14 days if completely untouched.',
       color: 'primary',
     },

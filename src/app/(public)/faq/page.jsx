@@ -32,9 +32,9 @@ export default function FAQPage() {
         'The current legal landscape regarding AI-generated art copyright is evolving. While dexericai does not claim copyright over the images you create, we provide a broad license for you to use them. Please consult local intellectual property laws for registering specific works. You retain all usage rights for your generated content',
     },
     {
-      question: '4. How does the wallet system work?',
+      question: '4. How does the balance system work?',
       answer:
-        'dexericai operates on a credit-based Wallet system. You make deposits to your wallet, and each generation consumes credits based on the model used, image resolution, and quantity. Your tier (Creator, Studio, Professional) determines how many images you can generate per session. Check your dashboard for real-time wallet balance',
+        'dexericai operates on a credit-based Balance system. You make deposits to your balance, and each generation consumes tokens based on the model used, prompt complexity, aspect ratio, and quantity. Your tier (Creator, Studio, Professional) determines how many images you can generate per session. Check your dashboard for real-time balance.',
     },
     {
       question: '5. How do I receive invoices?',
@@ -577,12 +577,8 @@ void main() {
                 </p>
                 <div className={styles.helpButtons}>
                   <Link href="/contact" className={styles.helpPrimary}>
-                    <span className="material-symbols-outlined">support_agent</span>
-                    Live Support
-                  </Link>
-                  <Link href="/contact" className={styles.helpSecondary}>
                     <span className="material-symbols-outlined">mail</span>
-                    Business Inquiries
+                    Contact Support
                   </Link>
                 </div>
               </div>

@@ -1,23 +1,33 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Footer from '@/components/common/Footer';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useCurrency } from '@/context/CurrencyContext';
-import { priceInCurrency } from '@/config/currency';
+import { CURRENCIES, getCurrencyCodes, formatUserBalance } from '@/config/currency';
 import Logo from '@/components/common/Logo';
 import styles from './DashboardLayout.module.scss';
 
 export default function DashboardLayout({ children }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
+  const currencyMenuRef = useRef(null);
   const pathname = usePathname();
   const { user, logout } = useAuth();
-  const { currency } = useCurrency();
+  const { currency, setCurrency } = useCurrency();
 
-  const userBalanceAmount = user?.balance?.[currency] ?? user?.balance?.EUR ?? 0;
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (currencyMenuRef.current && !currencyMenuRef.current.contains(e.target)) {
+        setIsCurrencyOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const navItems = [
     { icon: 'dashboard', label: 'Overview', href: '/dashboard' },
@@ -25,7 +35,7 @@ export default function DashboardLayout({ children }) {
     { icon: 'folder_open', label: 'Projects', href: '/dashboard/projects' },
     { icon: 'photo_library', label: 'Gallery', href: '/dashboard/gallery' },
     { icon: 'receipt_long', label: 'Orders', href: '/dashboard/orders' },
-    { icon: 'account_balance_wallet', label: 'Wallet', href: '/dashboard/wallet' },
+    { icon: 'account_balance_wallet', label: 'Balance', href: '/dashboard/wallet' },
     { icon: 'credit_card', label: 'Top Up', href: '/dashboard/top-up' },
     { icon: 'person', label: 'Profile', href: '/dashboard/profile' },
     { icon: 'security', label: 'Security', href: '/dashboard/security' },
@@ -82,6 +92,10 @@ export default function DashboardLayout({ children }) {
               {item.label}
             </Link>
           ))}
+          <button type="button" onClick={logout} className={styles.sidebarLogoutBtn}>
+            <span className="material-symbols-outlined">logout</span>
+            Log Out
+          </button>
         </div>
       </nav>
 
@@ -110,14 +124,50 @@ export default function DashboardLayout({ children }) {
           </div>
 
           <div className={styles.topBarRight}>
-            <Link href="/dashboard/wallet" className={styles.walletBalance}>
+            {/* Currency Selector */}
+            <div className={styles.currencySelector} ref={currencyMenuRef}>
+              <button
+                type="button"
+                className={styles.currencyBtn}
+                onClick={() => setIsCurrencyOpen((prev) => !prev)}
+                aria-label="Select currency"
+              >
+                <span>{currency}</span>
+                <span>{CURRENCIES[currency]?.symbol}</span>
+                <span className="material-symbols-outlined" style={{ transform: isCurrencyOpen ? 'rotate(180deg)' : 'none' }}>
+                  expand_more
+                </span>
+              </button>
+              {isCurrencyOpen && (
+                <div className={styles.currencyMenu}>
+                  {getCurrencyCodes().map((code) => (
+                    <button
+                      key={code}
+                      type="button"
+                      className={`${styles.currencyOption} ${currency === code ? styles.activeOption : ''}`}
+                      onClick={() => {
+                        setCurrency(code);
+                        setIsCurrencyOpen(false);
+                      }}
+                    >
+                      <span>{code}</span>
+                      <span>{CURRENCIES[code]?.symbol}</span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <Link href="/dashboard/wallet" className={styles.walletBalance} title="Your Balance">
               <span className="material-symbols-outlined">account_balance_wallet</span>
-              <span>{priceInCurrency(userBalanceAmount, currency)} {currency}</span>
+              <span>{formatUserBalance(user, currency)}</span>
             </Link>
-            <button className={styles.notificationBtn}>
+
+            <button className={styles.notificationBtn} aria-label="Notifications">
               <span className="material-symbols-outlined">notifications</span>
               <span className={styles.notificationDot}></span>
             </button>
+
             <div className={styles.profileAvatar} style={{ position: 'relative' }}>
               <button
                 type="button"
@@ -192,10 +242,22 @@ export default function DashboardLayout({ children }) {
                   {item.label}
                 </Link>
               ))}
+              <button
+                type="button"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  logout();
+                }}
+                className={styles.sidebarLogoutBtn}
+                style={{ padding: '12px 0', marginTop: 12, borderTop: '1px solid rgba(255,255,255,0.1)' }}
+              >
+                <span className="material-symbols-outlined">logout</span>
+                Log Out
+              </button>
             </div>
           </div>
         </div>
       )}
     </div>
   );
-}
+}

@@ -7,13 +7,15 @@ import styles from './page.module.scss';
 // Імпорт компонентів
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrency } from '@/context/CurrencyContext';
+import { formatUserBalance } from '@/config/currency';
 
 const DEFAULT_SETTINGS = {
   language: 'English (United States)',
   region: 'United States',
   timezone: 'Pacific Time (UTC-8)',
   dateFormat: 'DD/MM/YYYY',
-  currency: 'USD ($)',
+  currency: 'EUR (€)',
   theme: 'Dark Mode',
   defaultModel: 'Aether Ultra',
   notifications: true,
@@ -23,6 +25,7 @@ const DEFAULT_SETTINGS = {
 
 export default function SettingsPage() {
   const { token, user, logout } = useAuth();
+  const { currency } = useCurrency();
   const [settings, setSettings] = useState(DEFAULT_SETTINGS);
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -359,8 +362,8 @@ export default function SettingsPage() {
                   <div className={styles.previewLine}></div>
                   <div className={styles.previewLine}></div>
                   <div className={styles.previewFooter}>
-                    <span className={styles.previewTextPrimary}>Generar</span>
-                    <span className={styles.previewTextSecondary}>$12.50</span>
+                    <span className={styles.previewTextPrimary}>Generate</span>
+                    <span className={styles.previewTextSecondary}>€12.50</span>
                   </div>
                 </div>
               </div>
@@ -572,12 +575,8 @@ export default function SettingsPage() {
                 </div>
                 <div className={styles.billingDetails}>
                   <div>
-                    <span>Lifetime Top-Ups</span>
-                    <span>${(user?.lifetimeTopUpUSD ?? 0).toFixed(2)} USD</span>
-                  </div>
-                  <div>
-                    <span>Wallet Balance</span>
-                    <span>${(user?.balance?.USD ?? 0).toFixed(2)} USD</span>
+                    <span>Balance</span>
+                    <span>{formatUserBalance(user, currency)}</span>
                   </div>
                   <div>
                     <span>Status</span>

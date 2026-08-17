@@ -6,9 +6,12 @@ import styles from './page.module.scss';
 
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrency } from '@/context/CurrencyContext';
+import { formatUserBalance } from '@/config/currency';
 
 export default function DashboardPage() {
-  const { user, token } = useAuth();
+  const { user, token, refreshUser } = useAuth();
+  const { currency } = useCurrency();
   const [projects, setProjects] = useState([]);
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -18,6 +21,7 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!token) return;
     setIsLoading(true);
+    refreshUser();
     Promise.all([
       fetch('/api/projects', { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json()),
       fetch('/api/wallet/transactions', { headers: { Authorization: `Bearer ${token}` } }).then((r) => r.json()),
@@ -40,9 +44,9 @@ export default function DashboardPage() {
       detail: `${projects.length} total`,
     },
     {
-      label: 'Wallet Balance',
-      value: `$${(user?.balance?.USD ?? 0).toFixed(2)}`,
-      detail: 'USD credits available',
+      label: 'Balance',
+      value: formatUserBalance(user, currency),
+      detail: `${currency} available`,
     },
     {
       label: 'Top Ups',
@@ -146,7 +150,7 @@ export default function DashboardPage() {
                 <span className="material-symbols-outlined">account_balance_wallet</span>
               </div>
               <div>
-                <h4>Wallet Balance</h4>
+                <h4>Balance</h4>
                 <p>Top up credits</p>
               </div>
             </Link>

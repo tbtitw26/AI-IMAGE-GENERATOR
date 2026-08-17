@@ -10,9 +10,10 @@ import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useImageGeneration } from '@/hooks/useImageGeneration';
 import { useAuth } from '@/hooks/useAuth';
 import { PLAN_LIMITS, PREMIUM_MODELS } from '@/lib/plan';
+import { calculateGenerationTokens } from '@/config/currency';
 
 export default function GeneratePage() {
-  const { token, user } = useAuth();
+  const { token, user, refreshUser } = useAuth();
   const plan = user?.plan || 'free';
   const planLimits = PLAN_LIMITS[plan] || PLAN_LIMITS.free;
   const [prompt, setPrompt] = useState('');
@@ -29,6 +30,14 @@ export default function GeneratePage() {
   const [lockedModelHint, setLockedModelHint] = useState('');
 
   const effectiveImageCount = Math.min(imageCount, planLimits.maxImagesPerGeneration);
+
+  const tokenEstimate = calculateGenerationTokens({
+    prompt,
+    negativePrompt,
+    model: selectedModel,
+    aspectRatio,
+    imageCount: effectiveImageCount,
+  });
 
   useEffect(() => {
     if (!token) return;
@@ -72,7 +81,7 @@ export default function GeneratePage() {
       projectId: selectedProjectId || null,
     });
 
-    if (result.success) {
+    if (result.success && result.images) {
       setGeneratedImages(result.images);
       setLastGeneration({
         prompt: prompt.trim(),
@@ -82,6 +91,7 @@ export default function GeneratePage() {
         negativePrompt: negativePrompt.trim(),
         commercialLicense: result.commercialLicense,
       });
+      if (refreshUser) refreshUser();
     } else if (result.message) {
       alert(result.message);
     }
@@ -337,7 +347,7 @@ export default function GeneratePage() {
               >
                 <span className={styles.generateBtnShine} />
                 <span className="material-symbols-outlined">bolt</span>
-                {isGenerating ? 'Generating...' : `Generate Now (${effectiveImageCount} Credits)`}
+                {isGenerating ? 'Generating...' : `Generate Now (${tokenEstimate.totalTokens.toLocaleString()} Tokens)`}
               </button>
 
               {generationError && (

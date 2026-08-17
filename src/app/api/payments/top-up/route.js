@@ -3,6 +3,7 @@ import { getUserFromToken } from '../../../../lib/auth';
 import { createInvoicePdf } from '../../../../lib/pdf';
 import { sendEmail, buildInvoiceEmail } from '../../../../lib/email';
 import { COLLECTIONS } from '../../../../config/constants';
+import { convertToBaseEur } from '../../../../config/currency';
 
 const supportedCurrencies = new Set(['USD', 'EUR', 'GBP']);
 
@@ -24,11 +25,11 @@ export async function POST(req) {
     });
   }
 
-  const { amount, currency, paymentMethod } = await req.json();
+  const { amount, currency = 'EUR', paymentMethod = 'card' } = await req.json();
   const numericAmount = Number(amount);
 
   if (!numericAmount || numericAmount < 10) {
-    return new Response(JSON.stringify({ message: 'Minimum top-up amount is $10.00 USD.' }), {
+    return new Response(JSON.stringify({ message: 'Minimum top-up amount is 10.00.' }), {
       status: 400,
       headers: { 'Content-Type': 'application/json' },
     });
@@ -44,25 +45,29 @@ export async function POST(req) {
   try {
     const { db } = await connectToDatabase();
     const invoiceNumber = `AF-${Date.now()}`;
-    const paymentMethodLabel = paymentMethod === 'visa' ? 'VISA' : paymentMethod === 'mastercard' ? 'Mastercard' : paymentMethod;
+    const paymentMethodLabel = paymentMethod === 'visa' ? 'VISA' : paymentMethod === 'mastercard' ? 'Mastercard' : 'Credit/Debit Card';
+    const addedBaseEur = convertToBaseEur(numericAmount, currency);
 
     await db.collection(COLLECTIONS.USER).updateOne(
-    { _id: user._id },
-    {
-      $inc: { [`balance.${currency}`]: numericAmount },
-      $push: {
-        transactions: {
-          id: invoiceNumber,
-          type: 'top_up',
-          amount: numericAmount,
-          currency,
-          paymentMethod: paymentMethodLabel,
-          date: new Date(),
-          status: 'completed',
+      { _id: user._id },
+      {
+        $inc: {
+          balanceEur: addedBaseEur,
+          [`balance.${currency}`]: numericAmount,
         },
-      },
-    }
-  );
+        $push: {
+          transactions: {
+            id: invoiceNumber,
+            type: 'top_up',
+            amount: numericAmount,
+            currency,
+            paymentMethod: paymentMethodLabel,
+            date: new Date(),
+            status: 'completed',
+          },
+        },
+      }
+    );
 
   const pdfBuffer = await createInvoicePdf({
     invoiceNumber,

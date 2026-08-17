@@ -203,7 +203,7 @@ void main() {
           <div className={styles.navRight}>
             <Link href="/contact" className={styles.supportLink}>Support</Link>
             <Link href="/dashboard/wallet" className={styles.walletLink}>
-              Go to Wallet
+              Go to Balance
             </Link>
           </div>
         </div>
@@ -284,8 +284,8 @@ void main() {
                 Try Again
               </Link>
               <Link href="/dashboard/wallet" className={styles.ctaSecondary}>
-                <span className="material-symbols-outlined">wallet</span>
-                Go to Wallet
+                <span className="material-symbols-outlined">account_balance_wallet</span>
+                Go to Balance
               </Link>
             </div>
             <div className={styles.ctaFooter}>

@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import styles from './page.module.scss';
@@ -8,7 +10,7 @@ import styles from './page.module.scss';
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 import { useCurrency } from '@/context/CurrencyContext';
-import { CURRENCIES, priceInCurrency, getCurrencyCodes } from '@/config/currency';
+import { priceInCurrency, CURRENCIES, convertPrice } from '@/config/currency';
 
 // Ті самі моделі, іконки та кольорові варіанти, що й на реальній сторінці
 // /dashboard/generate — щоб маркетингові макети виглядали ідентично продукту.
@@ -36,6 +38,7 @@ export default function HomePage() {
   const [aspectRatio, setAspectRatio] = useState('16:9');
   const [mockModel, setMockModel] = useState('Aether Ultra');
   const [mockImageCount, setMockImageCount] = useState(4);
+  const [customAmount, setCustomAmount] = useState('');
   const { currency: walletCurrency, setCurrency: setWalletCurrency } = useCurrency();
   // Всі базові ціни на сторінці зберігаються в EUR (базова валюта) і конвертуються
   // у вибрану валюту через priceIn() нижче.
@@ -901,7 +904,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Wallet & Pricing */}
+        {/* Balance & Pricing */}
         <section className={styles.walletPricing}>
           <div className={styles.walletHeader}>
             <h2>Flexible Tiers for Every<br/>Creative Scale</h2>
@@ -912,22 +915,11 @@ export default function HomePage() {
             <div className={styles.walletCard}>
               <div className={styles.walletBalance}>
                 <div className={styles.walletHeaderRow}>
-                  <span>Available Treasury</span>
-                  <span className="material-symbols-outlined">account_balance</span>
+                  <span>Available Balance</span>
+                  <span className="material-symbols-outlined">account_balance_wallet</span>
                 </div>
                 <div className={styles.balanceAmount}>
                   {splitPrice(12450).whole}<span className={styles.balanceCents}>{splitPrice(12450).cents}</span>
-                </div>
-                <div className={styles.currencyButtons}>
-                  {getCurrencyCodes().map((code) => (
-                    <button
-                      key={code}
-                      className={walletCurrency === code ? styles.activeCurrency : ''}
-                      onClick={() => setWalletCurrency(code)}
-                    >
-                      {code}
-                    </button>
-                  ))}
                 </div>
                 <Link href="/register" className={styles.addFundsBtn}>
                   <span className="material-symbols-outlined">add</span> Add Production Funds
@@ -937,7 +929,7 @@ export default function HomePage() {
               <div className={styles.invoicePreview}>
                 <div className={styles.invoiceHeader}>
                   <span>Recent Invoices</span>
-                  <span>AUG 2024</span>
+                  <span>AUG 2026</span>
                 </div>
                 <div className={styles.invoiceList}>
                   <div><span>Fashion Editorial Collection</span><span>{priceIn(499)}</span></div>
@@ -959,6 +951,7 @@ export default function HomePage() {
                   <li><span className="material-symbols-outlined">check</span>Up to 4 images per generation</li>
                   <li><span className="material-symbols-outlined">check</span>Access to base Aether models</li>
                   <li><span className="material-symbols-outlined">check</span>Commercial usage rights</li>
+                  <li><span className="material-symbols-outlined">check</span>Standard generation queue</li>
                 </ul>
                 <Link href="/pricing">Select Plan</Link>
               </div>
@@ -973,6 +966,7 @@ export default function HomePage() {
                   <li><span className="material-symbols-outlined">check</span>Up to 8 images per generation</li>
                   <li><span className="material-symbols-outlined">check</span>Access to Aether Cinematic v4</li>
                   <li><span className="material-symbols-outlined">check</span>Advanced 2x upscaling</li>
+                  <li><span className="material-symbols-outlined">check</span>Commercial usage rights</li>
                 </ul>
                 <Link href="/pricing">Select Plan</Link>
               </div>
@@ -986,23 +980,42 @@ export default function HomePage() {
                 <ul>
                   <li><span className="material-symbols-outlined">check</span>Up to 12 images per generation</li>
                   <li><span className="material-symbols-outlined">check</span>Access to all Aether models</li>
-                  <li><span className="material-symbols-outlined">check</span>Priority processing</li>
+                  <li><span className="material-symbols-outlined">check</span>Priority rendering queue</li>
+                  <li><span className="material-symbols-outlined">check</span>Full commercial licensing</li>
                 </ul>
                 <Link href="/pricing">Select Plan</Link>
               </div>
               <div className={`${styles.pricingCard} ${styles.featured}`}>
-                <span className={styles.directorBadge}>Enterprise</span>
+                <span className={styles.directorBadge}>Custom Tier</span>
                 <div>
                   <h3>Custom</h3>
-                  <span>Bespoke</span>
+                  <span>{CURRENCIES[walletCurrency]?.symbol || '€'}{customAmount || convertPrice(10, walletCurrency).toFixed(2)}</span>
                 </div>
-                <p>Dedicated infrastructure for large agencies and production houses.</p>
+                <p>Flexible deposit amount tailored to your project scale (min {CURRENCIES[walletCurrency]?.symbol || '€'}{convertPrice(10, walletCurrency).toFixed(2)}).</p>
+                
+                <div className={styles.customInputContainer}>
+                  <span className={styles.customSymbol}>{CURRENCIES[walletCurrency]?.symbol || '€'}</span>
+                  <input
+                    type="number"
+                    className={styles.customInputField}
+                    placeholder={(convertPrice(10, walletCurrency)).toFixed(2)}
+                    value={customAmount}
+                    onChange={(e) => setCustomAmount(e.target.value)}
+                    min={convertPrice(10, walletCurrency)}
+                    step="1"
+                  />
+                  <span className={styles.customCurrencyTag}>{walletCurrency}</span>
+                </div>
+
                 <ul>
-                  <li><span className="material-symbols-outlined">check</span>Dedicated GPU clusters</li>
-                  <li><span className="material-symbols-outlined">check</span>Custom model fine-tuning</li>
-                  <li><span className="material-symbols-outlined">check</span>API Access & SLA</li>
+                  <li><span className="material-symbols-outlined">check</span>Custom generation volume</li>
+                  <li><span className="material-symbols-outlined">check</span>High-resolution output</li>
+                  <li><span className="material-symbols-outlined">check</span>Full commercial usage rights</li>
+                  <li><span className="material-symbols-outlined">check</span>Direct funds credit</li>
                 </ul>
-                <Link href="/contact">Contact Sales</Link>
+                <Link href={`/register?amount=${customAmount || convertPrice(10, walletCurrency)}&currency=${walletCurrency}`}>
+                  Get Started
+                </Link>
               </div>
             </div>
           </div>

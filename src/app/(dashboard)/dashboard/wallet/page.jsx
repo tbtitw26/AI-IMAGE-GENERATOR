@@ -8,7 +8,7 @@ import styles from './page.module.scss';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useCurrency } from '@/context/CurrencyContext';
-import { CURRENCIES, priceInCurrency } from '@/config/currency';
+import { CURRENCIES, priceInCurrency, formatUserBalance, getUserBalance } from '@/config/currency';
 
 const TX_ICONS = {
   top_up: 'add_circle',
@@ -17,16 +17,10 @@ const TX_ICONS = {
 
 export default function WalletPage() {
   const { user, token, refreshUser } = useAuth();
-  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency();
-  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency || 'EUR');
+  const { currency } = useCurrency();
   const [showStatements, setShowStatements] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const changeCurrency = (code) => {
-    setSelectedCurrency(code);
-    setGlobalCurrency(code);
-  };
 
   useEffect(() => {
     if (!token) return;
@@ -46,13 +40,11 @@ export default function WalletPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
-  const balanceValue = user?.balance?.[selectedCurrency] ?? 0;
-
   // Будуємо реальний спарклайн для кожної валюти на основі фактичної історії
   // транзакцій (замість статичної/фейкової лінії).
-  const buildSparkline = (currency) => {
+  const buildSparkline = (curCode) => {
     const currencyTx = transactions
-      .filter((tx) => tx.currency === currency && tx.status === 'completed')
+      .filter((tx) => tx.status === 'completed')
       .slice()
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
@@ -60,9 +52,7 @@ export default function WalletPage() {
       return { path: 'M0,25 L100,25', trend: 'neutral' };
     }
 
-    // Відновлюємо відносну траєкторію балансу: рухаємось назад від поточного
-    // балансу, віднімаючи кожну транзакцію, щоб отримати баланс "до" неї.
-    const currentBalance = user?.balance?.[currency] ?? 0;
+    const currentBalance = getUserBalance(user, curCode);
     let running = currentBalance;
     const points = [running];
     for (let i = currencyTx.length - 1; i >= 0; i -= 1) {
@@ -87,30 +77,30 @@ export default function WalletPage() {
   };
 
   const balances = [
-    { currency: 'EUR', amount: `€${(user?.balance?.EUR ?? 0).toFixed(2)}`, icon: 'euro', ...buildSparkline('EUR') },
-    { currency: 'USD', amount: `$${(user?.balance?.USD ?? 0).toFixed(2)}`, icon: 'payments', ...buildSparkline('USD') },
-    { currency: 'GBP', amount: `£${(user?.balance?.GBP ?? 0).toFixed(2)}`, icon: 'currency_pound', ...buildSparkline('GBP') },
+    { currency: 'EUR', amount: formatUserBalance(user, 'EUR'), icon: 'euro', ...buildSparkline('EUR') },
+    { currency: 'USD', amount: formatUserBalance(user, 'USD'), icon: 'payments', ...buildSparkline('USD') },
+    { currency: 'GBP', amount: formatUserBalance(user, 'GBP'), icon: 'currency_pound', ...buildSparkline('GBP') },
   ];
 
   const vipServices = [
     {
       name: 'Priority Rendering',
-      price: priceInCurrency(299, selectedCurrency),
-      period: `/${selectedCurrency.toLowerCase()}`,
+      price: priceInCurrency(299, currency),
+      period: `/${currency.toLowerCase()}`,
       description: 'Skip the queue for 30 days. Perfect for tight deadlines.',
       popular: false,
     },
     {
-      name: 'Private AI Director',
-      price: priceInCurrency(999, selectedCurrency),
-      period: `/${selectedCurrency.toLowerCase()}`,
+      name: 'Private Creative Director',
+      price: priceInCurrency(999, currency),
+      period: `/${currency.toLowerCase()}`,
       description: 'Dedicated AI tuning, private models, and 1-on-1 strategy sessions.',
       popular: true,
     },
     {
       name: 'Enterprise Campaign',
-      price: priceInCurrency(599, selectedCurrency),
-      period: `/${selectedCurrency.toLowerCase()}`,
+      price: priceInCurrency(599, currency),
+      period: `/${currency.toLowerCase()}`,
       description: 'Bulk generation credits with specialized agency-grade presets.',
       popular: false,
     },
@@ -132,13 +122,13 @@ export default function WalletPage() {
     {
       icon: 'support_agent',
       title: 'Billing Support',
-      description: '24/7 priority routing for all payment and credit inquiries.',
+      description: 'Priority routing for all payment and balance inquiries.',
       color: 'secondary',
     },
     {
       icon: 'settings_account_box',
       title: 'Team Allocation',
-      description: 'Distribute credits across workspace members automatically.',
+      description: 'Distribute balance across workspace members automatically.',
       color: 'outline',
     },
   ];
@@ -146,10 +136,10 @@ export default function WalletPage() {
   return (
     <DashboardLayout>
       <div className={styles.wallet}>
-        {/* SECTION 1: WALLET OVERVIEW */}
+        {/* SECTION 1: BALANCE OVERVIEW */}
         <section className={styles.overview}>
           <div className={styles.overviewContent}>
-            <h1>Wallet &amp; Balance</h1>
+            <h1>Balance</h1>
             <p>Manage your creative credits, payments, invoices and premium services from one secure workspace.</p>
             <div className={styles.overviewActions}>
               <Link href="/dashboard/top-up" className={styles.primaryBtn}>
@@ -166,24 +156,19 @@ export default function WalletPage() {
                 <div>
                   <span className={styles.balanceLabel}>Total Available</span>
                   <div className={styles.balanceAmount}>
-                    <span>{CURRENCIES[selectedCurrency]?.symbol || '€'}{balanceValue.toFixed(2)}</span>
-                    <span className={styles.balanceCurrency}>{selectedCurrency}</span>
+                    <span>{formatUserBalance(user, currency)}</span>
+                    <span className={styles.balanceCurrency}>{currency}</span>
                   </div>
                 </div>
                 <div className={styles.balanceIcon}>
-                  <span className="material-symbols-outlined">wallet</span>
+                  <span className="material-symbols-outlined">account_balance_wallet</span>
                 </div>
               </div>
               <div className={styles.balanceDivider}></div>
               <div className={styles.balanceFooter}>
-                <div className={styles.currencyChips}>
-                  <button className={selectedCurrency === 'EUR' ? styles.chipActive : styles.chipInactive} onClick={() => changeCurrency('EUR')}>EUR</button>
-                  <button className={selectedCurrency === 'USD' ? styles.chipActive : styles.chipInactive} onClick={() => changeCurrency('USD')}>USD</button>
-                  <button className={selectedCurrency === 'GBP' ? styles.chipActive : styles.chipInactive} onClick={() => changeCurrency('GBP')}>GBP</button>
-                </div>
-                <div className={styles.verifiedBadge}>
+                <div className={styles.verifiedBadge} style={{ marginLeft: 0 }}>
                   <span className="material-symbols-outlined">verified_user</span>
-                  <span>Verified</span>
+                  <span>Unified Multi-Currency Balance</span>
                 </div>
               </div>
             </div>

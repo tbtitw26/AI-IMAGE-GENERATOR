@@ -2,6 +2,7 @@ import { getUserFromToken } from '../../../../lib/auth';
 import { connectToDatabase } from '../../../../lib/mongodb';
 import { COLLECTIONS } from '../../../../config/constants';
 import { getPlanInfo } from '../../../../lib/plan';
+import { getUserTotalBalanceInEur, convertPrice } from '../../../../config/currency';
 
 function jsonResponse(body, status) {
   return new Response(JSON.stringify(body), {
@@ -11,6 +12,13 @@ function jsonResponse(body, status) {
 }
 
 function toSafeUser(user, imageCount) {
+  const balanceEur = getUserTotalBalanceInEur(user);
+  const balance = {
+    EUR: convertPrice(balanceEur, 'EUR', 2),
+    USD: convertPrice(balanceEur, 'USD', 2),
+    GBP: convertPrice(balanceEur, 'GBP', 2),
+  };
+
   return {
     id: user._id.toString(),
     email: user.email,
@@ -26,7 +34,8 @@ function toSafeUser(user, imageCount) {
     city: user.city || '',
     country: user.country || '',
     postalCode: user.postalCode || '',
-    balance: user.balance || { USD: 0, EUR: 0, GBP: 0 },
+    balanceEur,
+    balance,
     settings: user.settings || {},
     emailVerified: Boolean(user.emailVerified),
     createdAt: user.createdAt || null,

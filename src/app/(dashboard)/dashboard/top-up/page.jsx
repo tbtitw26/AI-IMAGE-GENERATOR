@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.scss';
@@ -9,26 +9,28 @@ import styles from './page.module.scss';
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
 import { useCurrency } from '@/context/CurrencyContext';
-import { CURRENCIES } from '@/config/currency';
+import { CURRENCIES, convertPrice, formatUserBalance, priceInCurrency } from '@/config/currency';
 
 export default function TopUpPage() {
   const { token, user, refreshUser } = useAuth();
+  const { currency } = useCurrency();
   const [selectedAmount, setSelectedAmount] = useState(100);
   const [customAmount, setCustomAmount] = useState('');
-  const { currency: globalCurrency, setCurrency: setGlobalCurrency } = useCurrency();
-  const [selectedCurrency, setSelectedCurrency] = useState(globalCurrency || 'EUR');
-  const currencySymbol = CURRENCIES[selectedCurrency]?.symbol || '€';
+  const currencySymbol = CURRENCIES[currency]?.symbol || '€';
 
-  const changeCurrency = (code) => {
-    setSelectedCurrency(code);
-    setGlobalCurrency(code);
-  };
-  const [selectedCard, setSelectedCard] = useState('visa');
+  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [cardholderName, setCardholderName] = useState(
+    user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : 'ALEXANDER WRIGHT'
+  );
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvc, setCvc] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
-  const amountOptions = [10, 25, 50, 100, 250, 500, 1000];
+  const minAmount = convertPrice(10, currency);
+  const amountOptions = [10, 25, 50, 100, 250, 500, 1000].map((eur) => convertPrice(eur, currency));
 
   const handleAmountSelect = (amount) => {
     setSelectedAmount(amount);
@@ -45,7 +47,7 @@ export default function TopUpPage() {
 
   const getDisplayAmount = () => {
     if (customAmount) return parseFloat(customAmount).toFixed(2);
-    return selectedAmount ? selectedAmount.toFixed(2) : '0.00';
+    return selectedAmount ? selectedAmount.toFixed(2) : minAmount.toFixed(2);
   };
 
   const handlePayment = async () => {
@@ -53,8 +55,8 @@ export default function TopUpPage() {
     setError('');
     setSuccessMessage('');
 
-    if (!amount || amount < 10) {
-      setError('Please enter an amount of at least $10.00 USD.');
+    if (!amount || amount < minAmount) {
+      setError(`Please enter an amount of at least ${currencySymbol}${minAmount.toFixed(2)} ${currency}.`);
       return;
     }
 
@@ -73,8 +75,8 @@ export default function TopUpPage() {
         },
         body: JSON.stringify({
           amount,
-          currency: selectedCurrency,
-          paymentMethod: selectedCard,
+          currency,
+          paymentMethod,
         }),
       });
 
@@ -84,7 +86,7 @@ export default function TopUpPage() {
         throw new Error(data.message || 'Unable to complete top-up.');
       }
 
-      setSuccessMessage(data.message || 'Top-up completed successfully. Your wallet balance has been updated.');
+      setSuccessMessage(data.message || 'Top-up completed successfully. Your balance has been updated.');
       await refreshUser(token);
     } catch (err) {
       setError(err.message || 'Unable to complete top-up.');
@@ -97,25 +99,25 @@ export default function TopUpPage() {
     {
       icon: 'bolt',
       title: 'Instant Generation',
-      description: 'No waiting. Your topped-up balance is instantly available for high-res rendering.',
+      description: 'No waiting. Your topped-up balance is instantly available for rendering.',
       color: 'primary',
     },
     {
       icon: 'speed',
       title: 'Priority Processing',
-      description: 'Jump the queue. Premium balances guarantee priority GPU allocation during peak hours.',
+      description: 'Jump the queue. Premium balances guarantee fast GPU processing during peak hours.',
       color: 'secondary',
     },
     {
       icon: 'copyright',
       title: 'Commercial License',
-      description: 'Full rights ownership. Every image generated with premium funds is yours to monetize.',
+      description: 'Full rights ownership. Every image generated is yours to monetize.',
       color: 'tertiary',
     },
     {
       icon: 'shield',
       title: 'Secure Transactions',
-      description: 'Bank-grade security. Your payment data is never stored on our servers.',
+      description: 'Bank-grade security. Your payment data is processed securely and never stored.',
       color: 'emerald',
     },
   ];
@@ -123,31 +125,31 @@ export default function TopUpPage() {
   const packages = [
     {
       name: 'Priority Rendering',
-      price: '$299',
-      period: '/mo',
-      description: 'Perfect for independent creators.',
-      features: ['15,000 Generation Credits', 'Tier 2 GPU Access', 'Standard API Access'],
+      price: priceInCurrency(299, currency),
+      period: `/${currency.toLowerCase()}`,
+      description: 'Perfect for independent creators with high render demands.',
+      features: ['Priority Rendering Queue', 'High-Resolution Presets', 'Commercial Licensing'],
       popular: false,
     },
     {
-      name: 'Private AI Director',
-      price: '$999',
-      period: '/mo',
-      description: 'For enterprise agencies & studios.',
+      name: 'Private Creative Director',
+      price: priceInCurrency(999, currency),
+      period: `/${currency.toLowerCase()}`,
+      description: 'For enterprise agencies & creative studios.',
       features: [
-        'Unlimited Generation Credits',
-        'Dedicated H100 GPU Cluster',
-        'Custom Model Fine-Tuning',
-        '24/7 Slack Support Channel',
+        'Dedicated AI tuning support',
+        'Direct consultation sessions',
+        'Custom Prompt Engineering',
+        'Priority Technical Support',
       ],
       popular: true,
     },
     {
       name: 'Enterprise Campaign',
-      price: '$599',
-      period: '/mo',
-      description: 'For growing design teams.',
-      features: ['50,000 Generation Credits', 'Tier 1 GPU Access', 'Advanced API + Webhooks'],
+      price: priceInCurrency(599, currency),
+      period: `/${currency.toLowerCase()}`,
+      description: 'For growing design teams and branding agencies.',
+      features: ['High-Volume Generation Presets', 'Multi-format optimization', 'Commercial Asset Packaging'],
       popular: false,
     },
   ];
@@ -155,7 +157,7 @@ export default function TopUpPage() {
   return (
     <DashboardLayout>
       <div className={styles.topUp}>
-        {/* SECTION 1: TOP UP YOUR WALLET */}
+        {/* SECTION 1: TOP UP YOUR BALANCE */}
         <section className={styles.hero}>
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
@@ -164,7 +166,7 @@ export default function TopUpPage() {
             </div>
             <h1>Add Funds</h1>
             <p>
-              Securely add balance to your dexericai Wallet and instantly continue generating
+              Securely add balance to your dexericai account and instantly continue generating
               premium AI images without interruption.
             </p>
           </div>
@@ -176,7 +178,7 @@ export default function TopUpPage() {
               <span className="material-symbols-outlined">account_balance_wallet</span>
             </div>
             <div className={styles.balanceAmount}>
-              {currencySymbol}{(user?.balance?.[selectedCurrency] ?? 0).toFixed(2)} <span className={styles.balanceCurrency}>{selectedCurrency}</span>
+              {formatUserBalance(user, currency)} <span className={styles.balanceCurrency}>{currency}</span>
             </div>
             <div className={styles.summaryDetails}>
               <div>
@@ -207,7 +209,7 @@ export default function TopUpPage() {
           <div className={styles.amountHeader}>
             <h2>Select Amount</h2>
             <span>
-              <span className="material-symbols-outlined">info</span> Minimum {currencySymbol}10.00 {selectedCurrency}
+              <span className="material-symbols-outlined">info</span> Minimum {currencySymbol}{minAmount.toFixed(2)} {currency}
             </span>
           </div>
 
@@ -218,9 +220,9 @@ export default function TopUpPage() {
                 className={`${styles.amountCard} ${selectedAmount === amount ? styles.active : ''}`}
                 onClick={() => handleAmountSelect(amount)}
               >
-                {amount === 100 && <span className={styles.popularBadge}>Popular</span>}
+                {amount === convertPrice(100, currency) && <span className={styles.popularBadge}>Popular</span>}
                 <span className={styles.amountValue}>{currencySymbol}{amount}</span>
-                <span className={styles.amountCurrency}>{selectedCurrency}</span>
+                <span className={styles.amountCurrency}>{currency}</span>
               </button>
             ))}
           </div>
@@ -231,81 +233,105 @@ export default function TopUpPage() {
               <span className={styles.currencySymbol}>{currencySymbol}</span>
               <input
                 type="number"
-                placeholder="0.00"
+                placeholder={minAmount.toFixed(2)}
                 value={customAmount}
                 onChange={handleCustomAmount}
-                min="10"
+                min={minAmount}
                 step="1"
               />
-              <span className={styles.currencyLabel}>{selectedCurrency}</span>
+              <span className={styles.currencyLabel}>{currency}</span>
             </div>
           </div>
         </section>
 
         {/* Two Column Layout */}
         <div className={styles.twoColumn}>
-          {/* SECTION 3: PAYMENT METHODS */}
+          {/* SECTION 3: PAYMENT METHOD (DIRECT CHECKOUT, NO STORED CARDS) */}
           <section className={styles.paymentSection}>
             <h2>Payment Method</h2>
 
             <div className={styles.cardsGrid}>
-              <div className={`${styles.cardOption} ${styles.cardSelected}`}>
-                <div className={styles.cardSelectedIndicator}></div>
+              <div
+                className={`${styles.cardOption} ${paymentMethod === 'card' ? styles.cardSelected : ''}`}
+                onClick={() => setPaymentMethod('card')}
+              >
+                {paymentMethod === 'card' && <div className={styles.cardSelectedIndicator}></div>}
                 <div className={styles.cardInfo}>
                   <div className={styles.cardBrand}>
-                    <span>VISA</span>
+                    <span>💳</span>
                   </div>
                   <div>
-                    <div className={styles.cardNumber}>Visa ending in 4242</div>
-                    <div className={styles.cardExpiry}>Expires 12/26</div>
+                    <div className={styles.cardNumber}>Credit / Debit Card</div>
+                    <div className={styles.cardExpiry}>Visa, Mastercard, Maestro</div>
                   </div>
-                </div>
-                <div className={styles.cardCheck}>
-                  <span className="material-symbols-outlined">check_circle</span> Selected
                 </div>
               </div>
 
-              <div className={styles.cardOption}>
+              <div
+                className={`${styles.cardOption} ${paymentMethod === 'bank' ? styles.cardSelected : ''}`}
+                onClick={() => setPaymentMethod('bank')}
+              >
+                {paymentMethod === 'bank' && <div className={styles.cardSelectedIndicator}></div>}
                 <div className={styles.cardInfo}>
                   <div className={styles.cardBrand}>
-                    <div className={styles.mastercardIcons}>
-                      <div className={styles.mastercardRed}></div>
-                      <div className={styles.mastercardYellow}></div>
-                    </div>
+                    <span>🏦</span>
                   </div>
                   <div>
-                    <div className={styles.cardNumber}>Mastercard ending in 8899</div>
-                    <div className={styles.cardExpiry}>Expires 08/25</div>
+                    <div className={styles.cardNumber}>Instant Bank Transfer</div>
+                    <div className={styles.cardExpiry}>SEPA / Direct Checkout</div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <Link href="/contact" className={styles.addCardBtn}>
-              <span className="material-symbols-outlined">add_card</span>
-              Add New Payment Method
-            </Link>
-
             <div className={styles.billingDetails}>
-              <h4>Billing Details</h4>
+              <h4>Card Details</h4>
               <div className={styles.billingGrid}>
-                <div className={styles.billingField}>
-                  <label>Name on Card</label>
-                  <input type="text" value="ALEXANDER WRIGHT" />
+                <div className={styles.billingField} style={{ gridColumn: '1 / -1' }}>
+                  <label>Cardholder Name</label>
+                  <input
+                    type="text"
+                    value={cardholderName}
+                    onChange={(e) => setCardholderName(e.target.value)}
+                    placeholder="Full name as on card"
+                  />
+                </div>
+                <div className={styles.billingField} style={{ gridColumn: '1 / -1' }}>
+                  <label>Card Number</label>
+                  <input
+                    type="text"
+                    value={cardNumber}
+                    onChange={(e) => setCardNumber(e.target.value)}
+                    placeholder="•••• •••• •••• ••••"
+                    maxLength="19"
+                  />
                 </div>
                 <div className={styles.billingField}>
-                  <label>Country/Region</label>
-                  <select>
-                    <option>United States</option>
-                    <option>United Kingdom</option>
-                    <option>European Union</option>
-                  </select>
+                  <label>Expiry Date</label>
+                  <input
+                    type="text"
+                    value={expiry}
+                    onChange={(e) => setExpiry(e.target.value)}
+                    placeholder="MM/YY"
+                    maxLength="5"
+                  />
+                </div>
+                <div className={styles.billingField}>
+                  <label>CVC / CVV</label>
+                  <input
+                    type="password"
+                    value={cvc}
+                    onChange={(e) => setCvc(e.target.value)}
+                    placeholder="•••"
+                    maxLength="4"
+                  />
                 </div>
               </div>
+
               <div className={styles.securityBadges}>
                 <div>
                   <span className="material-symbols-outlined">lock</span>
-                  <span>256-bit SSL Encryption</span>
+                  <span>256-bit SSL Direct Processing</span>
                 </div>
                 <div>
                   <span className="material-symbols-outlined">verified_user</span>
@@ -323,27 +349,6 @@ export default function TopUpPage() {
                 <span className="material-symbols-outlined">receipt_long</span>
               </h3>
 
-              <div className={styles.currencySelector}>
-                <button
-                  className={`${styles.currencyBtn} ${selectedCurrency === 'EUR' ? styles.active : ''}`}
-                  onClick={() => changeCurrency('EUR')}
-                >
-                  EUR
-                </button>
-                <button
-                  className={`${styles.currencyBtn} ${selectedCurrency === 'USD' ? styles.active : ''}`}
-                  onClick={() => changeCurrency('USD')}
-                >
-                  USD
-                </button>
-                <button
-                  className={`${styles.currencyBtn} ${selectedCurrency === 'GBP' ? styles.active : ''}`}
-                  onClick={() => changeCurrency('GBP')}
-                >
-                  GBP
-                </button>
-              </div>
-
               <div className={styles.summaryItems}>
                 <div>
                   <span>Selected Amount</span>
@@ -352,15 +357,15 @@ export default function TopUpPage() {
                 <div>
                   <span>
                     Processing Fee
-                    <span className={styles.infoIcon} title="We cover all processing fees for premium accounts.">
+                    <span className={styles.infoIcon} title="We cover all processing fees for all accounts.">
                       <span className="material-symbols-outlined">info</span>
                     </span>
                   </span>
                   <span className={styles.waived}>Waived ({currencySymbol}0.00)</span>
                 </div>
                 <div>
-                  <span>Estimated Tax</span>
-                  <span>Calculated at checkout</span>
+                  <span>Payment Security</span>
+                  <span>Direct Encrypted</span>
                 </div>
               </div>
 
@@ -368,7 +373,7 @@ export default function TopUpPage() {
                 <span>Total to Pay</span>
                 <div>
                   <div className={styles.totalAmount}>{currencySymbol}{getDisplayAmount()}</div>
-                  <div className={styles.totalCurrency}>{selectedCurrency}</div>
+                  <div className={styles.totalCurrency}>{currency}</div>
                 </div>
               </div>
 
@@ -395,7 +400,7 @@ export default function TopUpPage() {
               {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
 
               <Link href="/dashboard/wallet" className={styles.cancelLink}>
-                Cancel and return to Wallet
+                Cancel and return to Balance
               </Link>
             </div>
           </section>
@@ -423,8 +428,8 @@ export default function TopUpPage() {
             <span className={styles.packagesBadge}>Enterprise Solutions</span>
             <h2>VIP Creative Packages</h2>
             <p>
-              Looking for bulk rendering power? Upgrade to a VIP package for dedicated hardware
-              access and personalized support.
+              Looking for customized production workflows? Select a specialized package for personalized
+              consultation and priority handling.
             </p>
           </div>
 
@@ -463,4 +468,4 @@ export default function TopUpPage() {
       </div>
     </DashboardLayout>
   );
-}
+}

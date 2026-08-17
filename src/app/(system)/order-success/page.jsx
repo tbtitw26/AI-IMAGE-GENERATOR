@@ -141,7 +141,7 @@ void main() {
     },
     {
       icon: 'account_balance_wallet',
-      label: 'Wallet Updated',
+      label: 'Balance Updated',
       value: '+ Credits',
       color: 'primary',
     },
@@ -161,12 +161,12 @@ void main() {
 
   const orderDetails = [
     { label: 'Order #', value: 'AF-9842' },
-    { label: 'Invoice #', value: 'INV-2024-001' },
-    { label: 'Purchase Date', value: 'Oct 24, 2024' },
-    { label: 'Method', value: 'Visa ****4242', icon: 'credit_card' },
-    { label: 'Currency', value: 'USD' },
-    { label: 'Amount', value: '$999.00', highlight: true },
-    { label: 'Wallet Balance', value: '$2,450.00' },
+    { label: 'Invoice #', value: 'INV-2026-001' },
+    { label: 'Purchase Date', value: 'Aug 17, 2026' },
+    { label: 'Method', value: 'Credit/Debit Card', icon: 'credit_card' },
+    { label: 'Currency', value: 'EUR' },
+    { label: 'Amount', value: '€999.00', highlight: true },
+    { label: 'Balance', value: '€2,450.00' },
     { label: 'License Type', value: 'Enterprise' },
   ];
 
@@ -243,7 +243,7 @@ void main() {
           </div>
           <h1 className={styles.heroTitle}>Payment completed successfully.</h1>
           <p className={styles.heroDescription}>
-            Your payment has been securely processed. Your wallet has been updated, your order is
+            Your payment has been securely processed. Your balance has been updated, your order is
             confirmed and your PDF invoice is now available.
           </p>
 
@@ -297,7 +297,7 @@ void main() {
               </Link>
               <Link href="/dashboard/wallet" className={styles.actionBtn}>
                 <span className="material-symbols-outlined">account_balance_wallet</span>
-                Go to Wallet
+                Go to Balance
               </Link>
             </div>
           </div>

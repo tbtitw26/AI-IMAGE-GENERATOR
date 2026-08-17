@@ -54,7 +54,39 @@ export async function POST(req) {
       });
     }
 
-    const jti = randomUUID();
+    const userAgent = req.headers.get('user-agent') || 'Unknown device';
+    const forwardedFor = req.headers.get('x-forwarded-for');
+    const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : req.headers.get('x-real-ip') || null;
+
+    // Reuse an existing active session for this exact device (same user agent + IP)
+    // instead of creating a brand new "Trusted Device" entry on every login.
+    const sessionsCollection = db.collection(COLLECTIONS.SESSIONS);
+    const existingSession = await sessionsCollection.findOne({
+      userId: user._id,
+      userAgent,
+      ip,
+      revokedAt: null,
+    });
+
+    let jti;
+    if (existingSession) {
+      jti = existingSession._id;
+      await sessionsCollection.updateOne(
+        { _id: jti },
+        { $set: { lastActiveAt: new Date() } }
+      );
+    } else {
+      jti = randomUUID();
+      await sessionsCollection.insertOne({
+        _id: jti,
+        userId: user._id,
+        userAgent,
+        ip,
+        createdAt: new Date(),
+        lastActiveAt: new Date(),
+        revokedAt: null,
+      });
+    }
 
     const token = jwt.sign(
       {
@@ -67,20 +99,6 @@ export async function POST(req) {
         expiresIn: '7d',
       }
     );
-
-    const userAgent = req.headers.get('user-agent') || 'Unknown device';
-    const forwardedFor = req.headers.get('x-forwarded-for');
-    const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : req.headers.get('x-real-ip') || null;
-
-    await db.collection(COLLECTIONS.SESSIONS).insertOne({
-      _id: jti,
-      userId: user._id,
-      userAgent,
-      ip,
-      createdAt: new Date(),
-      lastActiveAt: new Date(),
-      revokedAt: null,
-    });
 
     const safeUser = {
       id: user._id.toString(),

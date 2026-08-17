@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
@@ -7,6 +7,8 @@ import styles from './page.module.scss';
 
 import DashboardLayout from '@/components/dashboard/DashboardLayout';
 import { useAuth } from '@/hooks/useAuth';
+import { useCurrency } from '@/context/CurrencyContext';
+import { formatUserBalance } from '@/config/currency';
 
 const DEFAULT_AVATAR =
   'data:image/svg+xml;utf8,' +
@@ -28,6 +30,7 @@ const defaultProfile = {
 
 export default function ProfilePage() {
   const { user, token, refreshUser } = useAuth();
+  const { currency } = useCurrency();
   const [profile, setProfile] = useState(defaultProfile);
   const [savedProfile, setSavedProfile] = useState(defaultProfile);
   const [isEditing, setIsEditing] = useState(false);
@@ -158,7 +161,7 @@ export default function ProfilePage() {
   const quickStats = [
     { label: 'Member Since', value: user?.createdAt ? new Date(user.createdAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : '—' },
     { label: 'Workspace Status', value: 'Active', highlight: true },
-    { label: 'Balance', value: `$${(user?.balance?.USD ?? 0).toFixed(2)}` },
+    { label: 'Balance', value: formatUserBalance(user, currency) },
     { label: 'Generations', value: String(user?.stats?.generations ?? 0) },
   ];
 

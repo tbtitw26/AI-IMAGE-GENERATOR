@@ -1,17 +1,21 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import Logo from '@/components/common/Logo';
-import { CURRENCIES } from '@/config/currency';
+import { useCurrency } from '@/context/CurrencyContext';
+import { CURRENCIES, getCurrencyCodes, formatUserBalance } from '@/config/currency';
 import styles from './Header.module.scss';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userBalance, setUserBalance] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const { currency, setCurrency } = useCurrency();
+  const currencyMenuRef = useRef(null);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -30,15 +34,15 @@ const Header = () => {
       setIsAuthenticated(hasAuth);
 
       if (!storedUser) {
-        setUserBalance(null);
+        setUserData(null);
         return;
       }
 
       try {
         const parsedUser = JSON.parse(storedUser);
-        setUserBalance(parsedUser?.balance || null);
+        setUserData(parsedUser);
       } catch {
-        setUserBalance(null);
+        setUserData(null);
       }
     };
 
@@ -49,10 +53,18 @@ const Header = () => {
     window.addEventListener('storage', syncAuthState);
     window.addEventListener('auth-state-changed', syncAuthState);
 
+    const handleClickOutside = (e) => {
+      if (currencyMenuRef.current && !currencyMenuRef.current.contains(e.target)) {
+        setIsCurrencyOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('storage', syncAuthState);
       window.removeEventListener('auth-state-changed', syncAuthState);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
@@ -65,31 +77,11 @@ const Header = () => {
     { label: 'Contact', href: '/contact' },
   ];
 
-  // Signed-in users keep every public page reachable in the nav; getting into
-  // the workspace itself is handled by the single "Open Studio" CTA below,
-  // so we don't duplicate that with a separate "Dashboard" nav link.
   const navItems = guestNavItems;
   const secondaryHref = '/login';
   const secondaryLabel = 'Log In';
   const ctaHref = isAuthenticated ? '/dashboard/generate' : '/register';
   const ctaLabel = isAuthenticated ? 'Open Studio' : 'Start Creating';
-
-  const formatBalance = (balance) => {
-    if (!balance) return '€0.00';
-
-    // Always honour the user's selected currency (stored in localStorage by CurrencyContext).
-    // Fall back to EUR if nothing is saved — EUR is our base currency.
-    const savedCurrency =
-      typeof window !== 'undefined'
-        ? localStorage.getItem('selectedCurrency') || 'EUR'
-        : 'EUR';
-
-    const currency = CURRENCIES[savedCurrency] ? savedCurrency : 'EUR';
-    const amount = Number(balance[currency] ?? 0);
-    const symbol = CURRENCIES[currency]?.symbol || '€';
-
-    return `${symbol}${amount.toFixed(2)}`;
-  };
 
   const handleLogout = () => {
     if (typeof window === 'undefined') return;
@@ -98,9 +90,14 @@ const Header = () => {
     window.localStorage.removeItem('authToken');
     window.localStorage.removeItem('user');
     setIsAuthenticated(false);
-    setUserBalance(null);
+    setUserData(null);
     window.dispatchEvent(new Event('auth-state-changed'));
     router.push('/');
+  };
+
+  const handleSelectCurrency = (code) => {
+    setCurrency(code);
+    setIsCurrencyOpen(false);
   };
 
   return (
@@ -125,11 +122,42 @@ const Header = () => {
         </div>
 
         <div className={styles.rightSection}>
+          {/* Currency Selector */}
+          <div className={styles.currencySelector} ref={currencyMenuRef}>
+            <button
+              type="button"
+              className={styles.currencyBtn}
+              onClick={() => setIsCurrencyOpen((prev) => !prev)}
+              aria-label="Select currency"
+            >
+              <span>{currency}</span>
+              <span>{CURRENCIES[currency]?.symbol}</span>
+              <span className="material-symbols-outlined" style={{ transform: isCurrencyOpen ? 'rotate(180deg)' : 'none' }}>
+                expand_more
+              </span>
+            </button>
+            {isCurrencyOpen && (
+              <div className={styles.currencyMenu}>
+                {getCurrencyCodes().map((code) => (
+                  <button
+                    key={code}
+                    type="button"
+                    className={`${styles.currencyOption} ${currency === code ? styles.activeOption : ''}`}
+                    onClick={() => handleSelectCurrency(code)}
+                  >
+                    <span>{code}</span>
+                    <span>{CURRENCIES[code]?.symbol}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           {isAuthenticated ? (
             <>
-              <div className={styles.balancePill}>
+              <div className={styles.balancePill} title="Your Balance">
                 <span className="material-symbols-outlined">account_balance_wallet</span>
-                <span>{formatBalance(userBalance)}</span>
+                <span>{formatUserBalance(userData, currency)}</span>
               </div>
               <Link href={ctaHref} className={styles.ctaBtn}>
                 {ctaLabel}
@@ -176,7 +204,7 @@ const Header = () => {
               <>
                 <div className={styles.mobileBalance}>
                   <span className="material-symbols-outlined">account_balance_wallet</span>
-                  <span>{formatBalance(userBalance)}</span>
+                  <span>{formatUserBalance(userData, currency)}</span>
                 </div>
                 <Link href={ctaHref} className={styles.mobileCta}>
                   {ctaLabel}
@@ -202,4 +230,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header;

@@ -47,21 +47,27 @@ const Footer = () => {
               Create cinematic AI visuals faster with a polished workflow for teams and solo creators.
             </p>
             <div className={styles.paymentIcons}>
-              <img
-                src="/images/icons/visa-logo.svg"
-                alt="Visa"
-                className={styles.paymentLogo}
-              />
-              <img
-                src="/images/icons/mastercard-logo.svg"
-                alt="Mastercard"
-                className={styles.paymentLogo}
-              />
-              <img
-                src="/images/icons/pci-dss-logo.svg"
-                alt="PCI DSS"
-                className={styles.paymentLogo}
-              />
+              <div className={styles.paymentCard} title="Visa">
+                <img
+                  src="/images/icons/visa-logo.svg"
+                  alt="Visa"
+                  className={styles.paymentLogo}
+                />
+              </div>
+              <div className={styles.paymentCard} title="Mastercard">
+                <img
+                  src="/images/icons/mastercard-logo.svg"
+                  alt="Mastercard"
+                  className={styles.paymentLogo}
+                />
+              </div>
+              <div className={styles.paymentCard} title="PCI DSS Compliant">
+                <img
+                  src="/images/icons/pci-dss-logo.svg"
+                  alt="PCI DSS"
+                  className={styles.paymentLogo}
+                />
+              </div>
             </div>
           </div>
 
@@ -81,12 +87,12 @@ const Footer = () => {
 
         <div className={styles.bottomBar}>
           <div className={styles.registration}>
-            <span>Registry Code: 17569201</span>
-            <span>Company: DEXERIC OÜ</span>
-            <span>Tallinn, Estonia 10141</span>
+            <span className={styles.companyName}>DEXERIC OÜ</span>
+            <span className={styles.companyDetails}>Registry code: 17569201</span>
+            <span className={styles.companyDetails}>Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond</span>
           </div>
           <div className={styles.copyright}>
-            © 2024 dexericai. All rights reserved.
+            © 2026 dexericai. All rights reserved.
           </div>
         </div>
       </div>
@@ -94,4 +100,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Footer;

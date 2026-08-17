@@ -47,7 +47,8 @@ export function CurrencyProvider({ children }) {
 export function useCurrency() {
   const context = useContext(CurrencyContext);
   if (!context) {
-    throw new Error('useCurrency must be used within CurrencyProvider');
+    // Return safe SSR defaults — real context hydrates on the client
+    return { currency: 'EUR', setCurrency: () => {}, isLoaded: false };
   }
   return context;
 }

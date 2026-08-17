@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,12 +11,13 @@ import styles from './page.module.scss';
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
 import { useCurrency } from '@/context/CurrencyContext';
-import { priceInCurrency } from '@/config/currency';
+import { priceInCurrency, CURRENCIES, convertPrice } from '@/config/currency';
 
 export default function PricingPage() {
   const canvasRef = useRef(null);
   const threeContainerRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [customAmount, setCustomAmount] = useState('');
   const { currency } = useCurrency();
   // Всі базові ціни нижче задані в EUR (базова валюта) і конвертуються
   // у вибрану користувачем валюту.
@@ -293,7 +296,7 @@ void main() {
       price: priceIn(29),
       period: '/ deposit min',
       description: 'Perfect for individual artists exploring high-fidelity generation.',
-      features: ['Up to 4 images per generation', 'Access to base Aether models', 'Commercial usage rights'],
+      features: ['Up to 4 images per generation', 'Access to base Aether models', 'Commercial usage rights', 'Standard generation speed'],
       buttonText: 'Select Creator',
       highlighted: false,
     },
@@ -328,17 +331,16 @@ void main() {
       highlighted: false,
     },
     {
-      name: 'Enterprise',
-      price: 'Custom',
-      period: '',
-      description: 'Dedicated infrastructure for large agencies and production houses.',
+      name: 'Custom',
+      isCustom: true,
+      description: `Flexible deposit tailored to your scale (min ${CURRENCIES[currency]?.symbol || '€'}${convertPrice(10, currency).toFixed(2)}).`,
       features: [
-        'Dedicated GPU clusters',
-        'Custom model fine-tuning',
-        'API Access & SLA',
-        'Dedicated Account Manager',
+        'Custom generation volume',
+        'High-resolution rendering',
+        'Full commercial usage rights',
+        'Direct balance credit',
       ],
-      buttonText: 'Contact Sales',
+      buttonText: 'Get Started',
       highlighted: false,
     },
   ];
@@ -412,7 +414,7 @@ void main() {
                 Simple pricing.<br />Professional creativity.
               </h1>
               <p className={styles.heroDescription}>
-                dexericai uses a flexible wallet system designed for creators, agencies and
+                dexericai uses a flexible balance system designed for creators, agencies and
                 enterprise teams. Add funds whenever you need them, pay only for the work you generate
                 and access premium creative services without subscriptions.
               </p>
@@ -423,7 +425,7 @@ void main() {
                 </div>
                 <div className={styles.heroFeature}>
                   <span className="material-symbols-outlined">bolt</span>
-                  Instant Wallet Top-Up
+                  Instant Balance Top-Up
                 </div>
                 <div className={styles.heroFeature}>
                   <span className="material-symbols-outlined">receipt_long</span>
@@ -452,8 +454,8 @@ void main() {
                   <div className={styles.walletDivider}></div>
                   <div className={styles.walletFooter}>
                     <div>
-                      <span className={styles.walletLabel}>Last added</span>
-                      <span className={styles.walletDate}>May 14, 2024</span>
+                      <span className={styles.walletLabel}>Available Funds</span>
+                      <span className={styles.walletDate}>Verified</span>
                     </div>
                     <Link href="/register" className={styles.walletAddBtn}>
                       <span className="material-symbols-outlined">add</span>
@@ -487,10 +489,31 @@ void main() {
                   <span className={`${styles.planName} ${plan.highlighted ? styles.planNameHighlighted : ''}`}>
                     {plan.name}
                   </span>
-                  <div className={styles.planPrice}>
-                    <span>{plan.price}</span>
-                    <span>{plan.period}</span>
-                  </div>
+                  {plan.isCustom ? (
+                    <>
+                      <div className={styles.planPrice}>
+                        <span>{CURRENCIES[currency]?.symbol || '€'}{customAmount || convertPrice(10, currency).toFixed(2)}</span>
+                      </div>
+                      <div className={styles.customInputContainer}>
+                        <span className={styles.customSymbol}>{CURRENCIES[currency]?.symbol || '€'}</span>
+                        <input
+                          type="number"
+                          className={styles.customInputField}
+                          placeholder={convertPrice(10, currency).toFixed(2)}
+                          value={customAmount}
+                          onChange={(e) => setCustomAmount(e.target.value)}
+                          min={convertPrice(10, currency)}
+                          step="1"
+                        />
+                        <span className={styles.customCurrencyTag}>{currency}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className={styles.planPrice}>
+                      <span>{plan.price}</span>
+                      <span>{plan.period}</span>
+                    </div>
+                  )}
                   <p className={styles.planDescription}>{plan.description}</p>
                 </div>
                 <ul className={styles.planFeatures}>
@@ -502,7 +525,13 @@ void main() {
                   ))}
                 </ul>
                 <Link
-                  href={plan.buttonText === 'Contact Sales' ? '/contact' : '/register'}
+                  href={
+                    plan.isCustom
+                      ? `/register?amount=${customAmount || convertPrice(10, currency)}&currency=${currency}`
+                      : plan.buttonText === 'Contact Sales'
+                      ? '/contact'
+                      : '/register'
+                  }
                   className={`${styles.planBtn} ${plan.highlighted ? styles.planBtnPrimary : ''}`}
                 >
                   {plan.buttonText}

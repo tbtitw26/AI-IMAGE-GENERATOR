@@ -4,16 +4,13 @@ import { connectToDatabase } from '../../../lib/mongodb';
 import { getUserFromToken } from '../../../lib/auth';
 import { COLLECTIONS } from '../../../config/constants';
 import { getPlanInfo, PREMIUM_MODELS } from '../../../lib/plan';
-
-// Скільки коштує одне згенероване зображення (у USD, списується з user.balance.USD).
-// Безкоштовний тестовий провайдер (Pollinations) коштує $0.
-const COST_PER_IMAGE_USD = 0.04;
+import { calculateGenerationTokens, getUserTotalBalanceInEur } from '../../../config/currency';
 
 // "Категорії" з UI (Model Engine) -> стильові модифікатори промпту.
 // gpt-image-1 не має окремих "моделей", тому стиль додається текстом до промпту.
 const STYLE_PRESETS = {
   'Aether Ultra': 'premium ultra-detailed digital art, dramatic lighting, hyperrealistic, high production value',
-  'Cinema 4K': 'cinematic film still, anamorphic lens flare, dramatic film lighting, 4K movie quality, color graded',
+  'Cinema 4K': 'cinematic film still, anamorphic lens flare, dramatic film lighting, 4K movie quality, ultra high resolution color graded',
   'Product Studio': 'professional product photography, clean studio lighting, seamless background, commercial catalog photo',
   'Character Gen': 'detailed character design, concept art, expressive character illustration, clean line work',
 };
@@ -95,12 +92,21 @@ export async function POST(req) {
 
   const count = Math.min(Math.max(Number(imageCount) || 1, 1), planLimits.maxImagesPerGeneration);
   const usingOpenAI = Boolean(process.env.OPENAI_API_KEY);
-  const totalCost = usingOpenAI ? Number((COST_PER_IMAGE_USD * count).toFixed(2)) : 0;
 
-  const currentBalance = user.balance?.USD ?? 0;
-  if (usingOpenAI && currentBalance < totalCost) {
+  const { totalTokens, singleImageTokens, costEur } = calculateGenerationTokens({
+    prompt,
+    negativePrompt,
+    model,
+    aspectRatio,
+    imageCount: count,
+  });
+
+  const totalCost = usingOpenAI ? costEur : 0;
+  const currentBalanceEur = getUserTotalBalanceInEur(user);
+
+  if (usingOpenAI && currentBalanceEur < totalCost) {
     return jsonResponse(
-      { message: `Insufficient balance. This generation costs $${totalCost.toFixed(2)}, your balance is $${currentBalance.toFixed(2)}.` },
+      { message: `Insufficient balance. This generation costs ${totalTokens} credits (€${totalCost.toFixed(2)}), but your balance is €${currentBalanceEur.toFixed(2)}.` },
       402
     );
   }
@@ -115,7 +121,6 @@ export async function POST(req) {
     .join('. ');
 
   const validProjectId = projectId && ObjectId.isValid(projectId) ? new ObjectId(projectId) : null;
-
   const size = resolveSize(aspectRatio);
 
   try {
@@ -157,6 +162,7 @@ export async function POST(req) {
       size,
       provider: usingOpenAI ? 'openai' : 'pollinations',
       imageCount: images.length,
+      tokens: totalTokens,
       cost: totalCost,
       plan,
       commercialLicense: planLimits.commercialLicense,
@@ -191,13 +197,17 @@ export async function POST(req) {
       await db.collection(COLLECTIONS.USER).updateOne(
         { _id: user._id },
         {
-          $inc: { 'balance.USD': -totalCost },
+          $inc: {
+            balanceEur: -totalCost,
+            'balance.EUR': -totalCost,
+          },
           $push: {
             transactions: {
               id: `GEN-${Date.now()}`,
               type: 'generation',
               amount: -totalCost,
-              currency: 'USD',
+              currency: 'EUR',
+              tokens: totalTokens,
               date: new Date(),
               status: 'completed',
             },
@@ -210,8 +220,10 @@ export async function POST(req) {
       {
         generationId: insertedId.toString(),
         images,
+        tokens: totalTokens,
+        singleImageTokens,
         cost: totalCost,
-        balance: currentBalance - totalCost,
+        balanceEur: currentBalanceEur - totalCost,
         provider: usingOpenAI ? 'openai' : 'pollinations',
         projectId: project ? project._id.toString() : null,
         plan,
