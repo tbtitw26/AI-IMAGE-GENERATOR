@@ -183,24 +183,44 @@ void main() {
   }, []);
 
   const quickLinks = [
-    { icon: 'handshake', label: 'Acceptance', href: '#acceptance' },
-    { icon: 'manage_accounts', label: 'Accounts', href: '#accounts' },
-    { icon: 'credit_card', label: 'Payments', href: '#payments' },
-    { icon: 'store', label: 'Commercial Use', href: '#commercial' },
-    { icon: 'currency_exchange', label: 'Refunds', href: '#refunds' },
-    { icon: 'visibility_off', label: 'Privacy', href: '#privacy' },
-    { icon: 'shield_lock', label: 'Security', href: '#security' },
-    { icon: 'copyright', label: 'Intellectual Prop.', href: '#ip' },
-    { icon: 'block', label: 'Termination', href: '#termination' },
-    { icon: 'support_agent', label: 'Contact', href: '#contact' },
+    { icon: 'handshake', label: 'About These Terms', href: '#ch01' },
+    { icon: 'manage_accounts', label: 'Accounts', href: '#ch06' },
+    { icon: 'credit_card', label: 'Credits & Payments', href: '#ch07' },
+    { icon: 'store', label: 'Outputs & Ownership', href: '#ch11' },
+    { icon: 'currency_exchange', label: 'Consumer Rights', href: '#ch18' },
+    { icon: 'visibility_off', label: 'Privacy of Generations', href: '#ch12' },
+    { icon: 'shield_lock', label: 'Acceptable Use', href: '#ch13' },
+    { icon: 'copyright', label: 'Limitation of Liability', href: '#ch20' },
+    { icon: 'block', label: 'Suspension & Termination', href: '#ch16' },
+    { icon: 'support_agent', label: 'Contact', href: '#ch25' },
   ];
 
   const tocItems = [
-    { number: '01', label: 'Service Scope', href: '#ch01' },
-    { number: '02', label: 'User Responsibilities', href: '#ch02' },
-    { number: '03', label: 'Financial Governance', href: '#ch03' },
-    { number: '04', label: 'Intellectual Property', href: '#ch04' },
-    { number: '05', label: 'Data Sovereignty', href: '#ch05' },
+    { number: '01', label: 'About These Terms', href: '#ch01' },
+    { number: '02', label: 'Definitions', href: '#ch02' },
+    { number: '03', label: 'Eligibility and Age Requirement', href: '#ch03' },
+    { number: '04', label: 'Geographic Availability', href: '#ch04' },
+    { number: '05', label: 'The Service', href: '#ch05' },
+    { number: '06', label: 'Accounts', href: '#ch06' },
+    { number: '07', label: 'Credits and Purchases', href: '#ch07' },
+    { number: '08', label: 'Prices, Taxes and Payment', href: '#ch08' },
+    { number: '09', label: 'Inputs and User Responsibilities', href: '#ch09' },
+    { number: '10', label: 'Licence to Process Inputs', href: '#ch10' },
+    { number: '11', label: 'Outputs and Ownership', href: '#ch11' },
+    { number: '12', label: 'Privacy of Generations', href: '#ch12' },
+    { number: '13', label: 'Acceptable Use', href: '#ch13' },
+    { number: '14', label: 'Third-Party Technology', href: '#ch14' },
+    { number: '15', label: 'Service Changes and Availability', href: '#ch15' },
+    { number: '16', label: 'Suspension and Termination', href: '#ch16' },
+    { number: '17', label: 'Account Closure', href: '#ch17' },
+    { number: '18', label: 'Consumer Rights and Digital Performance', href: '#ch18' },
+    { number: '19', label: 'Disclaimers', href: '#ch19' },
+    { number: '20', label: 'Limitation of Liability', href: '#ch20' },
+    { number: '21', label: 'Business User Indemnity', href: '#ch21' },
+    { number: '22', label: 'Governing Law and Disputes', href: '#ch22' },
+    { number: '23', label: 'Changes to These Terms', href: '#ch23' },
+    { number: '24', label: 'General Provisions', href: '#ch24' },
+    { number: '25', label: 'Contact', href: '#ch25' },
   ];
 
   const rightsCards = [
@@ -208,28 +228,28 @@ void main() {
       icon: 'storefront',
       title: 'Commercial Usage',
       description:
-        'Pro and Enterprise users retain full commercial rights to monetize, distribute, and reproduce generated imagery without royalties.',
+        'You may use your Outputs for personal or commercial purposes, subject to applicable law, third-party rights and these Terms.',
       color: 'primary',
     },
     {
-      icon: 'manage_accounts',
-      title: 'Account Ownership',
+      icon: 'visibility_off',
+      title: 'Private by Default',
       description:
-        'Your prompt history, custom presets, and generated assets remain firmly attached to your account and are strictly private.',
+        'Your Inputs and Outputs are private by default. dexericai does not run a public gallery or make your generations publicly visible.',
       color: 'secondary',
     },
     {
       icon: 'image',
-      title: 'Generated Images',
+      title: 'Ownership of Outputs',
       description:
-        'You own the output. We do not claim copyright over the specific pixel arrangements produced by your unique prompts.',
+        'dexericai does not claim ownership of your Outputs and assigns any right it acquires in them to you to the fullest extent permitted by law.',
       color: 'tertiary',
     },
     {
       icon: 'shield',
-      title: 'Billing Protection',
+      title: 'One-Time Credits',
       description:
-        'Transparent billing cycles with no hidden fees. Cancel anytime with prorated credit for remaining annual balances.',
+        'Credits are purchased once, do not expire while your Account is active, and are never auto-renewed or billed on a recurring basis.',
       color: 'error',
     },
   ];
@@ -261,19 +281,19 @@ void main() {
               </div>
               <h1 className={styles.heroTitle}>Terms &amp; Conditions</h1>
               <p className={styles.heroDescription}>
-                Please read these Terms &amp; Conditions carefully before using dexericai. They
-                explain your rights, responsibilities and how our services operate within a secure,
-                compliant ecosystem.
+                These Terms of Service govern access to and use of the Dexeric AI Website, the
+                AI-powered image generation service, user accounts, credit-purchase functionality
+                and all related features made available by DEXERIC OÜ.
               </p>
               <div className={styles.heroMeta}>
                 <div className={styles.metaItem}>
                   <span className="material-symbols-outlined">update</span>
-                  Last Updated: October 24, 2024
+                  Effective date: 17 August 2026
                 </div>
                 <div className={styles.metaDivider}></div>
                 <div className={styles.metaItem}>
                   <span className="material-symbols-outlined">timer</span>
-                  12 min read
+                  18 min read
                 </div>
               </div>
             </div>
@@ -329,21 +349,36 @@ void main() {
             <div className={styles.chapter} id="ch01">
               <div className={styles.chapterHeader}>
                 <span className={styles.chapterNumber}>01</span>
-                <h2>Service Scope</h2>
+                <h2>About These Terms</h2>
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  dexericai provides an advanced computational platform for generating,
-                  modifying, and managing digital visual assets through artificial intelligence
-                  models. The "Service" encompasses the web interface, API access, underlying
-                  generative models, and associated cloud infrastructure.
+                  These Terms of Service (the &quot;Terms&quot;) govern access to and use of the{' '}
+                  <a href="https://www.dexericai.com/">Dexeric AI Website</a>, the AI-powered image
+                  generation service, user accounts, credit-purchase functionality and all related
+                  features made available by DEXERIC OÜ (collectively, the &quot;Service&quot;).
                 </p>
                 <p>
-                  We reserve the right to modify, suspend, or discontinue any aspect of the Service
-                  at any time, including the availability of specific AI models or rendering
-                  capabilities, with or without notice. However, we strive to provide minimal
-                  disruption to Enterprise and Pro tier subscribers.
+                  DEXERIC OÜ is an Estonian private limited company with registry code 17569201 and
+                  registered office at Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond,
+                  Estonia (&quot;Dexeric&quot;, &quot;we&quot;, &quot;us&quot; or &quot;our&quot;).
                 </p>
+                <p>
+                  By creating an account, purchasing Credits, clicking an acceptance button or
+                  otherwise accessing or using the Service, you agree to these Terms. If you use the
+                  Service on behalf of a company or other organisation, you represent that you have
+                  authority to bind that organisation, and &quot;you&quot; includes that organisation.
+                </p>
+                <p>These Terms incorporate the following policies by reference:</p>
+                <ul>
+                  <li>Payment, Credits, Digital Delivery and Refund Policy;</li>
+                  <li>Privacy Policy;</li>
+                  <li>Cookie Policy;</li>
+                  <li>Acceptable Use Policy;</li>
+                  <li>AI Output and Intellectual Property Policy; and</li>
+                  <li>Legal Notice and Complaints Procedure.</li>
+                </ul>
+                <p>If you do not agree to these Terms, you must not access or use the Service.</p>
               </div>
             </div>
 
@@ -351,19 +386,18 @@ void main() {
             <div className={styles.chapter} id="ch02">
               <div className={styles.chapterHeader}>
                 <span className={styles.chapterNumber}>02</span>
-                <h2>User Responsibilities</h2>
+                <h2>Definitions</h2>
               </div>
               <div className={styles.chapterContent}>
-                <p>
-                  You agree not to use the Service to generate content that is unlawful,
-                  defamatory, harassing, abusive, fraudulent, or obscene. You are solely
-                  responsible for the text prompts, images, or other data you input into the
-                  Service ("Input Data").
-                </p>
+                <p>For the purposes of these Terms:</p>
                 <ul>
-                  <li>Do not attempt to reverse engineer the AI models.</li>
-                  <li>Do not use the platform for automated bulk generation without API authorization.</li>
-                  <li>Maintain the confidentiality of your account credentials.</li>
+                  <li><strong>&quot;Account&quot;</strong> means a registered user account used to access the Service.</li>
+                  <li><strong>&quot;Credits&quot;</strong> means prepaid digital units purchased from Dexeric and used to request eligible image generations through the Service. Credits are not money, electronic money, cryptocurrency or a stored-value payment instrument.</li>
+                  <li><strong>&quot;Input&quot;</strong> means a text prompt or other text instruction submitted by a user to the Service.</li>
+                  <li><strong>&quot;Output&quot;</strong> means an image or other visual content generated by the Service in response to an Input.</li>
+                  <li><strong>&quot;Policies&quot;</strong> means the policies incorporated into these Terms.</li>
+                  <li><strong>&quot;User Content&quot;</strong> means Inputs and Outputs associated with a user.</li>
+                  <li><strong>&quot;Website&quot;</strong> means the Dexeric AI Website and its related pages.</li>
                 </ul>
               </div>
             </div>
@@ -372,18 +406,18 @@ void main() {
             <div className={styles.chapter} id="ch03">
               <div className={styles.chapterHeader}>
                 <span className={styles.chapterNumber}>03</span>
-                <h2>Financial Governance</h2>
+                <h2>Eligibility and Age Requirement</h2>
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  Subscription fees are billed in advance on a recurring basis. All fees are
-                  non-refundable unless explicitly stated in our Refund Policy or required by local
-                  law. dexericai utilizes secure, PCI-DSS compliant third-party payment
-                  processors.
+                  You may use the Service only if you are at least 18 years old and have the legal
+                  capacity to enter into a binding contract. By using the Service, you represent and
+                  warrant that you satisfy these requirements.
                 </p>
                 <p>
-                  Failure to settle outstanding balances within 7 days of the billing cycle may
-                  result in temporary suspension of generation capabilities.
+                  The Service is intended for both consumers and business users. Additional mandatory
+                  rights may apply to consumers. Nothing in these Terms excludes or limits a right
+                  that cannot lawfully be excluded or limited.
                 </p>
               </div>
             </div>
@@ -392,18 +426,45 @@ void main() {
             <div className={styles.chapter} id="ch04">
               <div className={styles.chapterHeader}>
                 <span className={styles.chapterNumber}>04</span>
-                <h2>Intellectual Property</h2>
+                <h2>Geographic Availability</h2>
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  Subject to your compliance with these Terms and the applicable subscription tier,
-                  dexericai assigns to you all its right, title, and interest in and to the
-                  output generated and returned by the Services based on your Input Data ("Generated
-                  Output").
+                  The Service is not offered to persons who are located, resident, established or
+                  ordinarily based in any of the following jurisdictions:
+                </p>
+                <ul>
+                  <li>Afghanistan;</li>
+                  <li>Belarus;</li>
+                  <li>Central African Republic;</li>
+                  <li>Cuba;</li>
+                  <li>Democratic Republic of the Congo;</li>
+                  <li>Haiti;</li>
+                  <li>Iran;</li>
+                  <li>Iraq;</li>
+                  <li>Mali;</li>
+                  <li>Myanmar (Burma);</li>
+                  <li>North Korea;</li>
+                  <li>Russia;</li>
+                  <li>Somalia;</li>
+                  <li>South Sudan;</li>
+                  <li>Sudan;</li>
+                  <li>Syria;</li>
+                  <li>Venezuela;</li>
+                  <li>Yemen; and</li>
+                  <li>Zimbabwe.</li>
+                </ul>
+                <p>
+                  The Service is also unavailable where access, use, supply or payment would violate
+                  applicable law, trade restrictions, sanctions, export controls or the requirements
+                  of a payment or infrastructure provider.
                 </p>
                 <p>
-                  You may use the Generated Output for commercial purposes, provided your
-                  subscription tier explicitly grants Commercial Licensing rights.
+                  You must not conceal your location, use false information, use another person&apos;s
+                  payment method, or employ a virtual private network, proxy or other mechanism for
+                  the purpose of circumventing these restrictions. Dexeric may request reasonable
+                  information to verify eligibility and may refuse, suspend or terminate access where
+                  eligibility cannot be verified.
                 </p>
               </div>
             </div>
@@ -412,17 +473,560 @@ void main() {
             <div className={styles.chapter} id="ch05">
               <div className={styles.chapterHeader}>
                 <span className={styles.chapterNumber}>05</span>
-                <h2>Data Sovereignty</h2>
+                <h2>The Service</h2>
               </div>
               <div className={styles.chapterContent}>
                 <p>
-                  All data processed through the dexericai platform remains the property of the
-                  user. We do not use your prompts or generated outputs to train our foundational
-                  models.
+                  Dexeric provides a web-based tool that uses artificial intelligence models to
+                  generate images from text prompts. The Service does not currently accept
+                  user-uploaded source images.
                 </p>
                 <p>
-                  Data is encrypted at rest and in transit using AES-256 encryption standards. Your
-                  data is stored in compliance with GDPR and CCPA regulations.
+                  AI generation is probabilistic. The same or similar Input may produce different
+                  Outputs, and different users may receive identical or similar Outputs. Outputs may
+                  be inaccurate, incomplete, unexpected, unsuitable for a particular purpose or
+                  similar to existing material.
+                </p>
+                <p>
+                  The Service is a creative technology tool and does not provide legal, financial,
+                  medical or other professional advice. You remain responsible for reviewing every
+                  Output and deciding whether and how it may lawfully and appropriately be used.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 06 */}
+            <div className={styles.chapter} id="ch06">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>06</span>
+                <h2>Accounts</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  You must provide accurate, current and complete information when creating and
+                  maintaining an Account. You must keep your login credentials confidential and must
+                  not share, sell, lease or transfer your Account.
+                </p>
+                <p>
+                  You are responsible for activity conducted through your Account unless the activity
+                  results directly from a security failure for which Dexeric is responsible. You must
+                  promptly notify us at info@dexericai.com if you suspect unauthorised access, loss of
+                  credentials or other compromise.
+                </p>
+                <p>
+                  We may require you to verify your email address or complete reasonable
+                  fraud-prevention or eligibility checks. You may not create multiple Accounts to
+                  evade restrictions, obtain promotional benefits improperly or avoid enforcement
+                  action.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 07 */}
+            <div className={styles.chapter} id="ch07">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>07</span>
+                <h2>Credits and Purchases</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  The Service is offered through one-time purchases of Credit packages. Dexeric does
+                  not currently offer recurring subscriptions or automatic renewals.
+                </p>
+                <p>Credits:</p>
+                <ul>
+                  <li>are delivered digitally to the Account associated with the completed purchase;</li>
+                  <li>do not expire while the Account remains active;</li>
+                  <li>may be used only within the Service;</li>
+                  <li>have no cash value and cannot be redeemed for money;</li>
+                  <li>may not be sold, transferred, exchanged or used as a payment instrument;</li>
+                  <li>are deducted only when an eligible generation is completed successfully; and</li>
+                  <li>are not deducted, or are restored, when a generation fails because of a verified technical error in the Service.</li>
+                </ul>
+                <p>
+                  The number of Credits required for a generation may vary depending on the selected
+                  model, output settings, processing requirements or feature. The applicable Credit
+                  cost must be shown before the user confirms the generation request.
+                </p>
+                <p>
+                  Purchases are governed by the Payment, Credits, Digital Delivery and Refund Policy.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 08 */}
+            <div className={styles.chapter} id="ch08">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>08</span>
+                <h2>Prices, Taxes and Payment</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Credit packages may be offered in euros (EUR), pounds sterling (GBP) and United
+                  States dollars (USD). Available currencies may depend on location or checkout
+                  configuration.
+                </p>
+                <p>
+                  Displayed prices are inclusive of all applicable taxes, including value added tax
+                  where applicable, unless the checkout clearly states otherwise. The final price and
+                  currency are displayed before the user submits an order.
+                </p>
+                <p>
+                  Payments may be made using Visa or Mastercard through a third-party payment service
+                  provider. Dexeric does not receive or store complete payment-card numbers or card
+                  security codes. Your payment may also be governed by the terms of your card issuer
+                  and the payment service provider.
+                </p>
+                <p>
+                  You authorise the applicable purchase amount to be charged to the payment method
+                  selected at checkout. You represent that you are authorised to use that payment
+                  method.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 09 */}
+            <div className={styles.chapter} id="ch09">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>09</span>
+                <h2>Inputs and User Responsibilities</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  You retain any rights you hold in your Inputs. You are solely responsible for each
+                  Input you submit and for ensuring that it complies with these Terms, the Acceptable
+                  Use Policy and applicable law.
+                </p>
+                <p>You represent and warrant that your Inputs, instructions and intended use of Outputs:</p>
+                <ul>
+                  <li>do not infringe copyright, trademark, privacy, publicity, personality or other rights;</li>
+                  <li>do not contain unlawful personal data or confidential information that you are not authorised to disclose;</li>
+                  <li>do not request prohibited, deceptive, abusive or harmful content; and</li>
+                  <li>do not violate a contractual, fiduciary or other legal obligation.</li>
+                </ul>
+                <p>
+                  You should not include sensitive personal data, payment information, passwords,
+                  authentication credentials, confidential business information or other information
+                  that is not necessary for image generation.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 10 */}
+            <div className={styles.chapter} id="ch10">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>10</span>
+                <h2>Licence to Process Inputs</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  You grant Dexeric a limited, worldwide, non-exclusive, royalty-free licence to host,
+                  reproduce, transmit and technically process an Input solely to provide, secure,
+                  maintain and support the Service, generate the requested Output, prevent abuse and
+                  comply with law.
+                </p>
+                <p>
+                  This licence does not permit Dexeric to sell your Input or use it to train
+                  general-purpose AI models. Dexeric does not use Inputs or Outputs to train its own
+                  models or third-party general-purpose AI models.
+                </p>
+                <p>
+                  The licence ends when the relevant data is deleted from active systems, except to
+                  the limited extent that retention is required by law, necessary to resolve a
+                  dispute, needed for security or fraud prevention, or temporarily persists in
+                  protected backups.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 11 */}
+            <div className={styles.chapter} id="ch11">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>11</span>
+                <h2>Outputs and Ownership</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  As between you and Dexeric, Dexeric does not claim ownership of your Outputs. To the
+                  extent Dexeric acquires any right, title or interest in an Output, Dexeric assigns
+                  that right, title and interest to you to the fullest extent permitted by applicable
+                  law, subject to your compliance with these Terms.
+                </p>
+                <p>
+                  You may use Outputs for personal or commercial purposes, subject to applicable law,
+                  third-party rights and these Terms. Dexeric does not require attribution for an
+                  Output unless a specific feature clearly states otherwise before use.
+                </p>
+                <p>Because Outputs are generated by artificial intelligence:</p>
+                <ul>
+                  <li>copyright or other exclusive rights may not arise in every jurisdiction;</li>
+                  <li>an Output may not be unique;</li>
+                  <li>another user may independently receive the same or a similar Output;</li>
+                  <li>an Output may resemble existing works, brands, persons or protected material; and</li>
+                  <li>Dexeric cannot guarantee that an Output is eligible for registration, exclusive ownership or unrestricted commercial use.</li>
+                </ul>
+                <p>
+                  The allocation of rights between you and Dexeric does not override the rights of
+                  third parties. You are responsible for conducting any clearance, legal review or
+                  permissions process appropriate to your intended use.
+                </p>
+                <p>Further provisions are contained in the AI Output and Intellectual Property Policy.</p>
+              </div>
+            </div>
+
+            {/* Chapter 12 */}
+            <div className={styles.chapter} id="ch12">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>12</span>
+                <h2>Privacy of Generations</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Inputs and Outputs are private by default. Dexeric does not provide a public gallery
+                  or make a user&apos;s generations publicly available through the Service.
+                </p>
+                <p>
+                  Dexeric and its contracted service providers may access or process User Content only
+                  to operate and secure the Service, provide support, investigate suspected abuse,
+                  comply with law or enforce these Terms. Privacy does not prevent legally required
+                  disclosure or limited review where reasonably necessary for safety, security or
+                  compliance.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 13 */}
+            <div className={styles.chapter} id="ch13">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>13</span>
+                <h2>Acceptable Use</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  You must comply with the Acceptable Use Policy. Prohibited conduct includes illegal
+                  use, infringement of third-party rights, sexual exploitation, non-consensual
+                  intimate content, harmful deception, abusive impersonation, fraud, circumvention of
+                  safety controls and attempts to compromise the Service.
+                </p>
+                <p>
+                  Dexeric may use automated filters and human review to detect suspected violations. A
+                  filter decision does not guarantee that content is lawful, safe or permitted. You
+                  remain responsible for all Inputs and Outputs.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 14 */}
+            <div className={styles.chapter} id="ch14">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>14</span>
+                <h2>Third-Party Technology</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  The Service uses third-party infrastructure and AI models, including models supplied
+                  by OpenAI. Third-party components may be updated, interrupted, restricted or
+                  discontinued and may produce errors or delays outside Dexeric&apos;s direct control.
+                </p>
+                <p>
+                  Dexeric may replace or add model and infrastructure providers, provided that
+                  material changes to personal-data processing are reflected in the Privacy Policy as
+                  required by law.
+                </p>
+                <p>
+                  The Service may contain links to third-party websites. Dexeric does not control and
+                  is not responsible for third-party websites, content, security or practices.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 15 */}
+            <div className={styles.chapter} id="ch15">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>15</span>
+                <h2>Service Changes and Availability</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Dexeric may improve, modify, add, remove or discontinue features where reasonably
+                  necessary for technical, security, legal or commercial reasons. We will not
+                  intentionally invalidate lawfully purchased, unused Credits solely because a feature
+                  changes. Where a material discontinuation prevents Credits from being used, we will
+                  provide an appropriate remedy as required by applicable law.
+                </p>
+                <p>
+                  We do not guarantee uninterrupted or error-free availability. Maintenance, demand,
+                  model-provider capacity, network conditions, security incidents and events outside
+                  reasonable control may affect performance.
+                </p>
+                <p>
+                  Dexeric may impose reasonable rate limits, generation limits or technical
+                  restrictions to protect the Service and users.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 16 */}
+            <div className={styles.chapter} id="ch16">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>16</span>
+                <h2>Suspension and Termination</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Dexeric may restrict, suspend or terminate an Account or generation request where
+                  reasonably necessary to:
+                </p>
+                <ul>
+                  <li>address a breach of these Terms or the Policies;</li>
+                  <li>prevent fraud, abuse, security threats or unlawful conduct;</li>
+                  <li>comply with law, a court order or a binding request from a competent authority;</li>
+                  <li>comply with geographic or payment restrictions;</li>
+                  <li>protect Dexeric, users, service providers or third parties; or</li>
+                  <li>investigate a credible complaint.</li>
+                </ul>
+                <p>
+                  Where appropriate and legally permitted, we will provide notice and a reasonable
+                  opportunity to respond. Immediate action may be taken where delay could create
+                  legal, safety, security or financial risk.
+                </p>
+                <p>
+                  If an Account is terminated for a material violation, unused Credits may be
+                  cancelled to the extent permitted by law. Mandatory consumer rights remain
+                  unaffected. A user may request review through the contact details in the Legal
+                  Notice and Complaints Procedure.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 17 */}
+            <div className={styles.chapter} id="ch17">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>17</span>
+                <h2>Account Closure</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  You may request Account closure through the Website or by contacting
+                  info@dexericai.com. Account closure is permanent after any applicable confirmation
+                  period.
+                </p>
+                <p>
+                  Because Credits are linked to the Account and are not transferable or redeemable for
+                  cash, unused Credits will be permanently lost when an Account is deleted at the
+                  user&apos;s request, except where a refund or other remedy is required by mandatory
+                  law. Before completing deletion, Dexeric should present a clear warning about the
+                  remaining Credit balance.
+                </p>
+                <p>
+                  Provisions that by their nature should survive termination remain in effect,
+                  including provisions concerning accrued payment obligations, ownership, third-party
+                  rights, disclaimers, liability, disputes and enforcement.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 18 */}
+            <div className={styles.chapter} id="ch18">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>18</span>
+                <h2>Consumer Rights and Digital Performance</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Consumers may have statutory rights concerning digital services, conformity,
+                  remedies and withdrawal. Nothing in these Terms restricts those rights.
+                </p>
+                <p>
+                  Where legally required, checkout will ask a consumer to request immediate delivery
+                  of Credits and immediate access to the digital Service during a statutory withdrawal
+                  period. Where applicable, the consumer will also be asked to acknowledge that
+                  beginning or completing digital performance may affect or end the right of
+                  withdrawal.
+                </p>
+                <p>
+                  The effect of activation or use depends on the law applicable to the consumer.
+                  Details are provided in the Payment, Credits, Digital Delivery and Refund Policy.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 19 */}
+            <div className={styles.chapter} id="ch19">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>19</span>
+                <h2>Disclaimers</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  To the maximum extent permitted by law, the Service is provided on an &quot;as
+                  is&quot; and &quot;as available&quot; basis. Dexeric does not warrant that:
+                </p>
+                <ul>
+                  <li>every Input will be accepted or generate an Output;</li>
+                  <li>an Output will be accurate, unique, original, non-infringing or fit for a particular purpose;</li>
+                  <li>an Output will satisfy legal, professional, platform or advertising requirements;</li>
+                  <li>the Service will always be available, secure or error-free; or</li>
+                  <li>defects or interruptions will always be corrected immediately.</li>
+                </ul>
+                <p>
+                  You must use independent judgment and obtain professional advice where appropriate.
+                  No statement in these Terms excludes warranties or remedies that cannot lawfully be
+                  excluded.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 20 */}
+            <div className={styles.chapter} id="ch20">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>20</span>
+                <h2>Limitation of Liability</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Nothing in these Terms excludes or limits liability for fraud, fraudulent
+                  misrepresentation, death or personal injury caused by negligence, intentional
+                  misconduct, or any liability that cannot lawfully be excluded or limited.
+                </p>
+                <p>
+                  For consumers, Dexeric remains responsible for losses that are a foreseeable result
+                  of Dexeric&apos;s breach of these Terms or failure to use reasonable care, subject to
+                  mandatory consumer law. Dexeric is not responsible for losses caused by the user, an
+                  unauthorised or unlawful use, or circumstances outside Dexeric&apos;s reasonable
+                  control.
+                </p>
+                <p>For business users, to the maximum extent permitted by law:</p>
+                <ul>
+                  <li>Dexeric is not liable for loss of profit, revenue, business, contracts, anticipated savings, goodwill, data or opportunity, or for indirect or consequential loss; and</li>
+                  <li>Dexeric&apos;s aggregate liability arising from the Service during any twelve-month period is limited to the greater of EUR 100 and the total amount paid by the business user to Dexeric during that period.</li>
+                </ul>
+                <p>
+                  These limitations apply regardless of the legal basis of the claim, but only to the
+                  extent permitted by applicable law.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 21 */}
+            <div className={styles.chapter} id="ch21">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>21</span>
+                <h2>Business User Indemnity</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  If you use the Service for or on behalf of a business, you will indemnify Dexeric
+                  against third-party claims, damages, liabilities and reasonable costs arising from
+                  your unlawful Inputs, your unlawful or infringing use of Outputs, or your material
+                  breach of these Terms, except to the extent the claim results from Dexeric&apos;s own
+                  breach, negligence or intentional misconduct.
+                </p>
+                <p>
+                  This section does not apply to consumers acting wholly outside their trade,
+                  business, craft or profession.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 22 */}
+            <div className={styles.chapter} id="ch22">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>22</span>
+                <h2>Governing Law and Disputes</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  These Terms are governed by the laws of Estonia, without prejudice to mandatory
+                  consumer protections that apply in the country where a consumer habitually resides.
+                </p>
+                <p>
+                  Before starting formal proceedings, you should contact Dexeric and provide a
+                  reasonable opportunity to resolve the dispute. Dexeric will handle consumer
+                  complaints in accordance with the Legal Notice and Complaints Procedure.
+                </p>
+                <p>
+                  Business disputes are subject to the exclusive jurisdiction of the competent courts
+                  of Estonia. Consumers may bring claims before any court available under mandatory
+                  consumer-protection and jurisdiction rules.
+                </p>
+                <p>
+                  An eligible consumer may also apply to the Consumer Disputes Committee operating at
+                  the Estonian Consumer Protection and Technical Regulatory Authority after first
+                  submitting a complaint to Dexeric.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 23 */}
+            <div className={styles.chapter} id="ch23">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>23</span>
+                <h2>Changes to These Terms</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Dexeric may update these Terms to reflect changes in the Service, law, security
+                  requirements or business practices. The updated Terms will display a revised
+                  &quot;Last updated&quot; date.
+                </p>
+                <p>
+                  If a change materially affects existing rights or obligations, Dexeric will provide
+                  reasonable advance notice through the Website, Account or email where required.
+                  Changes will not retroactively remove purchased Credits or rights already accrued
+                  unless required by law.
+                </p>
+                <p>
+                  Continued use after the effective date of updated Terms constitutes acceptance where
+                  permitted by law. If mandatory law requires express consent, Dexeric will request
+                  it.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 24 */}
+            <div className={styles.chapter} id="ch24">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>24</span>
+                <h2>General Provisions</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  If any provision is found invalid or unenforceable, the remaining provisions remain
+                  in effect, and the affected provision will be applied to the maximum extent
+                  permitted by law.
+                </p>
+                <p>
+                  Dexeric&apos;s failure to enforce a provision is not a waiver. You may not assign
+                  your Account or rights under these Terms without Dexeric&apos;s prior written
+                  consent. Dexeric may assign these Terms as part of a merger, reorganisation, sale of
+                  business or transfer of the Service, subject to applicable law.
+                </p>
+                <p>
+                  These Terms and the incorporated Policies constitute the entire agreement concerning
+                  the Service, except for any separate written agreement signed by Dexeric.
+                </p>
+              </div>
+            </div>
+
+            {/* Chapter 25 */}
+            <div className={styles.chapter} id="ch25">
+              <div className={styles.chapterHeader}>
+                <span className={styles.chapterNumber}>25</span>
+                <h2>Contact</h2>
+              </div>
+              <div className={styles.chapterContent}>
+                <p>
+                  Questions about these Terms may be submitted through the contact form on the Website
+                  or by email to info@dexericai.com.
+                </p>
+                <p>
+                  Legal entity: DEXERIC OÜ
+                  <br />
+                  Registry code: 17569201
+                  <br />
+                  Registered office: Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond,
+                  Estonia
                 </p>
               </div>
             </div>
