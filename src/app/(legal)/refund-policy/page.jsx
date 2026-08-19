@@ -5,9 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.scss';
 
-// Імпорт компонентів
+// Component imports
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
+import { REFUND_POLICY, COMPANY_LEGAL_INFO } from '@/data/legalPolicies';
 
 export default function RefundPolicyPage() {
   const canvasRef = useRef(null);
@@ -37,7 +38,7 @@ export default function RefundPolicyPage() {
 
     let mouseX = canvas.width / 2;
     let mouseY = canvas.height / 2;
-    window.addEventListener('mousemove', (event) => {
+    const handleMouseMove = (event) => {
       const rect = canvas.getBoundingClientRect();
       if (rect.width && rect.height) {
         const nx = (event.clientX - rect.left) / rect.width;
@@ -45,7 +46,8 @@ export default function RefundPolicyPage() {
         mouseX = nx * canvas.width;
         mouseY = ny * canvas.height;
       }
-    });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
 
     const vs = `attribute vec2 a_position;
 varying vec2 v_texCoord;
@@ -122,6 +124,7 @@ void main() {
     const uRes = gl.getUniformLocation(prog, 'u_resolution');
     const uMouse = gl.getUniformLocation(prog, 'u_mouse');
 
+    let animId;
     const render = (timestamp) => {
       if (typeof ResizeObserver === 'undefined') syncSize();
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -129,12 +132,13 @@ void main() {
       if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
       if (uMouse) gl.uniform2f(uMouse, mouseX, mouseY);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      requestAnimationFrame(render);
+      animId = requestAnimationFrame(render);
     };
-    requestAnimationFrame(render);
+    animId = requestAnimationFrame(render);
 
     return () => {
-      window.removeEventListener('mousemove', () => {});
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, []);
 
@@ -183,103 +187,14 @@ void main() {
   }, []);
 
   const quickLinks = [
-    { icon: 'info', label: 'Overview', href: '#overview' },
-    { icon: 'check_circle', label: 'Eligible Refunds', href: '#eligible' },
-    { icon: 'block', label: 'Non-Refundable Services', href: '#non-refundable' },
-    { icon: 'account_balance_wallet', label: 'Account Balance', href: '#balance' },
-    { icon: 'star', label: 'VIP Services', href: '#vip' },
-    { icon: 'error', label: 'Payment Errors', href: '#errors' },
-    { icon: 'schedule', label: 'Refund Timeline', href: '#timeline' },
-    { icon: 'receipt_long', label: 'Invoice Policy', href: '#invoice' },
-    { icon: 'gavel', label: 'Chargebacks', href: '#chargebacks' },
-    { icon: 'contact_support', label: 'Contact Billing', href: '#contact' },
-  ];
-
-  const tocItems = [
-    { number: '01', label: 'Eligible Refunds', href: '#overview' },
-    { number: '02', label: 'Non-Refundable Items', href: '#non-refundable-items' },
-    { number: '03', label: 'Balance Terms', href: '#balance-terms' },
-    { number: '04', label: 'Disputes', href: '#disputes' },
-  ];
-
-  const eligibilityItems = [
-    {
-      icon: 'credit_card_off',
-      title: 'Failed Payments',
-      description: 'Automatically reversed if the service was not rendered.',
-      color: 'primary',
-    },
-    {
-      icon: 'content_copy',
-      title: 'Duplicate Charges',
-      description: 'Fully refundable upon verification of the duplicate transaction.',
-      color: 'primary',
-    },
-    {
-      icon: 'bug_report',
-      title: 'Technical Errors',
-      description: 'Refunds or credits issued for verified system outages or rendering failures.',
-      color: 'primary',
-    },
-    {
-      icon: 'account_balance_wallet',
-      title: 'Unused Balance',
-      description: 'Refundable within 14 days if completely untouched.',
-      color: 'primary',
-    },
-    {
-      icon: 'star',
-      title: 'VIP Service Terms',
-      description: 'Subject to specific contractual agreements and milestone completions.',
-      color: 'primary',
-    },
-    {
-      icon: 'receipt_long',
-      title: 'Billing Exceptions',
-      description: 'Reviewed on a case-by-case basis by our billing support team.',
-      color: 'primary',
-    },
-  ];
-
-  const billingSteps = [
-    { icon: 'payment', label: 'Payment Submitted' },
-    { icon: 'check_circle', label: 'Payment Confirmed' },
-    { icon: 'receipt', label: 'Invoice Generated' },
-    { icon: 'undo', label: 'Refund Requested' },
-    { icon: 'rate_review', label: 'Billing Review' },
-    { icon: 'task_alt', label: 'Refund Completed' },
-  ];
-
-  const vipServices = [
-    {
-      title: 'Priority Rendering',
-      price: '299 USD',
-      description: 'Dedicated GPU clusters for rapid generation.',
-      variant: 'default',
-    },
-    {
-      title: 'Professional Campaign',
-      price: '599 USD',
-      description: 'Full suite of marketing assets generated to your specs.',
-      variant: 'default',
-    },
-    {
-      title: 'Private AI Creative Director',
-      price: '999 USD',
-      description: '1-on-1 consultation and bespoke AI model fine-tuning.',
-      variant: 'premium',
-    },
-  ];
-
-  const complianceMarks = [
-    { icon: 'smart_toy', label: 'AI Content Moderation' },
-    { icon: 'lock', label: 'Encrypted Infrastructure' },
-    { icon: 'policy', label: 'GDPR Compliance' },
-    { icon: 'credit_card', label: 'PCI DSS' },
-    { icon: 'shield', label: 'Account Protection' },
-    { icon: 'security', label: 'Fraud Detection' },
-    { icon: 'corporate_fare', label: 'Enterprise Security' },
-    { icon: 'workspace_premium', label: 'Commercial Licensing' },
+    { icon: 'shopping_cart', label: '2. One-Time Purchases', href: '#sec-2' },
+    { icon: 'credit_card', label: '3. Payments & Currencies', href: '#sec-3' },
+    { icon: 'local_shipping', label: '6. Digital Delivery', href: '#sec-6' },
+    { icon: 'event_available', label: '7. Credit Validity', href: '#sec-7' },
+    { icon: 'published_with_changes', label: '9. Error Correction', href: '#sec-9' },
+    { icon: 'currency_exchange', label: '10. Refund Rules', href: '#sec-10' },
+    { icon: 'gavel', label: '12. Withdrawal Rights', href: '#sec-12' },
+    { icon: 'mail', label: '13. Requesting Refund', href: '#sec-13' },
   ];
 
   return (
@@ -293,28 +208,27 @@ void main() {
         {/* Background */}
         <canvas ref={canvasRef} className={styles.bgCanvas} />
 
-        {/* SECTION 1: HERO */}
+        {/* HERO SECTION */}
         <section className={styles.hero}>
           <div className={styles.heroGrid}>
             <div className={styles.heroContent}>
               <div className={styles.heroBadge}>
-                <span className="material-symbols-outlined">shield</span>
-                <span>LEGAL CENTER</span>
+                <span className="material-symbols-outlined">payments</span>
+                <span>Payment &amp; Refund Terms</span>
               </div>
-              <h1 className={styles.heroTitle}>Refund Policy</h1>
+              <h1 className={styles.heroTitle}>{REFUND_POLICY.title}</h1>
               <p className={styles.heroDescription}>
-                Understand how refunds, wallet transactions, premium services and billing disputes
-                are handled at dexericai.
+                This policy explains how credit purchases, instant digital delivery, credit validity, withdrawal rights, and refund requests operate for {COMPANY_LEGAL_INFO.name}.
               </p>
               <div className={styles.heroMeta}>
                 <div className={styles.metaItem}>
                   <span className="material-symbols-outlined">update</span>
-                  Last Updated: October 24, 2024
+                  Effective Date: {REFUND_POLICY.effectiveDate}
                 </div>
                 <div className={styles.metaDivider}></div>
                 <div className={styles.metaItem}>
-                  <span className="material-symbols-outlined">timer</span>
-                  10 min read
+                  <span className="material-symbols-outlined">shield</span>
+                  Visa &amp; Mastercard Accepted
                 </div>
               </div>
             </div>
@@ -322,8 +236,8 @@ void main() {
             <div className={styles.heroImage}>
               <div className={styles.heroImageWrapper}>
                 <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4b_l_SR9PaLjfep2ThglKE4cLlrzO9RMm3hq6-JZXyjEDVPX_onb7w9yo5QwTXoJrp1lh-aD4FspA5hyfqgF3tRCgrEBxaSWMUzGvj4Y4kOaybt-EY3Ep4pf6NwV4yvxKczDKwmEsnzWDWtlPnJTr_DHz6hnM9xS3DgEOEW1YNEGkTx0XqqqR-O1cUyUnHrP6rT27mOVAhrGIboPe8MzPna42_fscDlZeUynUkAQMkec7J1nc9tEZ2uYQAQnWiG646ORtIOnaKQw"
-                  alt="Refund Policy"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGWtgtYNVU5ckFte5loMSLRIu0ZAkFvHqwCcY3MnIPsZI5-_hGLpZwyUc9QD4ZAS1f9_gbJgPMmbKX5K53hhWtzns1y1Pjc0kNy28Dhtv4nxofsHrhijR2-joYpUaOI5lhs1qhQWwH7mlqy7Hw-0fompZ6oFSAdpOEw74m9hb7y4_RkC_MCfH2otGuDJ7icT1tOd6dp1yblOt7Q3cmKz1Eh1ah4iApWFcsiHJcZUIjQ_mQl6mSev9s3BkOlKWQ7V2X_dXoIoh5Xm8"
+                  alt="Payment & Refund Policy"
                 />
                 <div className={styles.heroImageOverlay}></div>
               </div>
@@ -331,10 +245,10 @@ void main() {
           </div>
         </section>
 
-        {/* SECTION 2: QUICK NAVIGATION */}
+        {/* QUICK NAVIGATION */}
         <section className={styles.quickNav}>
           <div className={styles.quickNavHeader}>
-            <h2>Quick Reference</h2>
+            <h2>Quick Navigation</h2>
             <div className={styles.quickNavLine}></div>
           </div>
           <div className={styles.quickNavGrid}>
@@ -347,17 +261,19 @@ void main() {
           </div>
         </section>
 
-        {/* SECTION 3: LEGAL CONTENT */}
+        {/* LEGAL CONTENT SECTION */}
         <section className={styles.legalContent}>
           <aside className={styles.toc}>
             <div className={styles.tocContainer}>
-              <h3>Contents</h3>
+              <h3>Sections</h3>
               <ul>
-                {tocItems.map((item, index) => (
-                  <li key={index}>
-                    <a href={item.href} className={styles.tocLink}>
-                      <span className={styles.tocNumber}>{item.number}</span>
-                      {item.label}
+                {REFUND_POLICY.sections.map((sec) => (
+                  <li key={sec.number}>
+                    <a href={`#sec-${sec.number}`} className={styles.tocLink}>
+                      <span className={styles.tocNumber}>
+                        {String(sec.number).padStart(2, '0')}
+                      </span>
+                      {sec.title}
                     </a>
                   </li>
                 ))}
@@ -366,178 +282,56 @@ void main() {
           </aside>
 
           <article ref={articleRef} className={styles.article}>
-            {/* Chapter 01 */}
-            <div className={styles.chapter} id="overview">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>01</span>
-                <h2>Eligible Refunds</h2>
+            {REFUND_POLICY.sections.map((sec) => (
+              <div key={sec.number} className={styles.chapter} id={`sec-${sec.number}`}>
+                <div className={styles.chapterHeader}>
+                  <span className={styles.chapterNumber}>
+                    {String(sec.number).padStart(2, '0')}
+                  </span>
+                  <h2>{sec.fullTitle}</h2>
+                </div>
+                <div className={styles.chapterContent}>
+                  {sec.blocks.map((block, bIdx) => {
+                    if (block.type === 'paragraph') {
+                      return <p key={bIdx}>{block.text}</p>;
+                    }
+                    if (block.type === 'list') {
+                      return (
+                        <ul key={bIdx}>
+                          {block.items.map((item, iIdx) => (
+                            <li key={iIdx}>{item}</li>
+                          ))}
+                        </ul>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
               </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  We offer refunds for specific scenarios such as duplicate charges, accidental
-                  subscription renewals (within 48 hours), and verifiable technical errors that
-                  prevented the delivery of our service.
-                </p>
-              </div>
-            </div>
-
-            {/* Chapter 02 */}
-            <div className={styles.chapter} id="non-refundable-items">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>02</span>
-                <h2>Non-Refundable Items</h2>
-              </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  Due to the computational resources required for AI generation, credits that have
-                  already been consumed, customized enterprise plans, and specific VIP services are
-                  generally non-refundable once initiated.
-                </p>
-              </div>
-            </div>
-
-            {/* Chapter 03 */}
-            <div className={styles.chapter} id="wallet-terms">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>03</span>
-                <h2>Wallet Terms</h2>
-              </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  Funds added to your dexericai Wallet can be refunded to the original payment
-                  method if requested within 14 days of the deposit, provided the balance remains
-                  entirely unused.
-                </p>
-              </div>
-            </div>
-
-            {/* Chapter 04 */}
-            <div className={styles.chapter} id="disputes">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>04</span>
-                <h2>Disputes</h2>
-              </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  If you believe there is a billing error, please contact our support team before
-                  initiating a chargeback with your bank, as chargebacks may result in immediate
-                  account suspension while under investigation.
-                </p>
-              </div>
-            </div>
+            ))}
           </article>
         </section>
 
-        {/* SECTION 4: REFUND ELIGIBILITY GRID */}
-        <section className={styles.eligibility} id="eligible">
-          <div className={styles.eligibilityHeader}>
-            <h2>Refund Eligibility</h2>
-            <p>Common scenarios and their refund eligibility status.</p>
-          </div>
-          <div className={styles.eligibilityGrid}>
-            {eligibilityItems.map((item, index) => (
-              <div key={index} className={`${styles.eligibilityCard} ${styles[`eligibility${item.color.charAt(0).toUpperCase() + item.color.slice(1)}`]}`}>
-                <div className={styles.eligibilityGlow}></div>
-                <span className="material-symbols-outlined">{item.icon}</span>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 4.5: BILLING PROCESS */}
-        <section className={styles.billingProcess} id="timeline">
-          <div className={styles.billingProcessHeader}>
-            <h2>Billing &amp; Refund Process</h2>
-            <p>How we handle your transactions and requests.</p>
-          </div>
-
-          <div className={styles.billingProcessContainer}>
-            <svg className={styles.billingLine} viewBox="0 0 100 40" preserveAspectRatio="none">
-              <line x1="10" y1="20" x2="90" y2="20" stroke="rgba(178, 197, 255, 0.2)" strokeWidth="2" />
-              <line className={styles.billingLineFlow} x1="10" y1="20" x2="90" y2="20" stroke="#b2c5ff" strokeWidth="2" />
-            </svg>
-
-            <div className={styles.billingSteps}>
-              {billingSteps.map((step, index) => (
-                <div key={index} className={styles.billingStep}>
-                  <div className={styles.billingIcon}>
-                    <span className="material-symbols-outlined">{step.icon}</span>
-                  </div>
-                  <span className={styles.billingLabel}>{step.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* SECTION 4.75: VIP SERVICES */}
-        <section className={styles.vipServices} id="vip">
-          <div className={styles.vipServicesHeader}>
-            <h2>VIP Services</h2>
-            <p>Premium non-refundable service packages.</p>
-          </div>
-          <div className={styles.vipServicesGrid}>
-            {vipServices.map((service, index) => (
-              <div
-                key={index}
-                className={`${styles.vipCard} ${service.variant === 'premium' ? styles.vipCardPremium : ''}`}
-              >
-                {service.variant === 'premium' && (
-                  <div className={styles.vipBadge}>
-                    <span className={styles.vipBadgeText}>Premium</span>
-                  </div>
-                )}
-                <h3>{service.title}</h3>
-                <div className={service.variant === 'premium' ? styles.vipPriceGold : styles.vipPrice}>
-                  {service.price}
-                </div>
-                <p>{service.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 5: COMPLIANCE MARKS */}
-        <section className={styles.compliance}>
-          <div className={styles.complianceContainer}>
-            {complianceMarks.map((mark, index) => (
-              <div key={index} className={styles.complianceItem}>
-                <span className="material-symbols-outlined">{mark.icon}</span>
-                <span>{mark.label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 6: FINAL CTA */}
+        {/* CONTACT CTA */}
         <section className={styles.cta}>
           <div className={styles.ctaContainer}>
-            <span className="material-symbols-outlined">health_and_safety</span>
-            <h2>Need help with a refund?</h2>
+            <span className="material-symbols-outlined">help_center</span>
+            <h2>Need help with a purchase or refund?</h2>
             <p>
-              Our Billing Team is available to assist with payment questions, invoices and refund
-              requests.
+              Send refund requests or transaction questions to info@dexericai.com including your Account email and order details.
             </p>
             <div className={styles.ctaButtons}>
-              <Link href="/contact" className={styles.ctaPrimary}>
-                Contact Billing
-                <span className="material-symbols-outlined">email</span>
-              </Link>
-              <Link href="/dashboard/orders" className={styles.ctaSecondary}>
-                View Orders
-              </Link>
+              <a href="mailto:info@dexericai.com" className={styles.ctaPrimary}>
+                Request Support / Refund
+                <span className="material-symbols-outlined">arrow_forward</span>
+              </a>
               <Link href="/terms-and-conditions" className={styles.ctaSecondary}>
-                Terms &amp; Conditions
-              </Link>
-              <Link href="/privacy-policy" className={styles.ctaSecondary}>
-                Privacy Policy
+                Terms of Service
               </Link>
             </div>
             <div className={styles.ctaMeta}>
               <span className="material-symbols-outlined">schedule</span>
-              Average response: 24 Hours
+              EEA/UK 14-day statutory consumer rights respected | Estonian Consumer Complaints Committee available
             </div>
           </div>
         </section>

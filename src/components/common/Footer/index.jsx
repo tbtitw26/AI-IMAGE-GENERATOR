@@ -30,6 +30,8 @@ const Footer = () => {
         { label: 'Terms & Conditions', href: '/terms-and-conditions' },
         { label: 'Cookie Policy', href: '/cookie-policy' },
         { label: 'Acceptable Use', href: '/acceptable-use-policy' },
+        { label: 'AI Output & IP', href: '/ai-output-and-intellectual-property-policy' },
+        { label: 'Legal Notice & Complaints', href: '/legal-notice-and-complaints' },
         { label: 'Refund Policy', href: '/refund-policy' },
       ],
     },
@@ -100,4 +102,4 @@ const Footer = () => {
   );
 };
 
-export default Footer;
+export default Footer;

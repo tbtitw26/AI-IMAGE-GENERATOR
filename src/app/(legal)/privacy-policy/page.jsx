@@ -5,9 +5,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './page.module.scss';
 
-// Імпорт компонентів
+// Component imports
 import Header from '@/components/common/Header';
 import Footer from '@/components/common/Footer';
+import { PRIVACY_POLICY, COMPANY_LEGAL_INFO } from '@/data/legalPolicies';
 
 export default function PrivacyPolicyPage() {
   const canvasRef = useRef(null);
@@ -37,7 +38,7 @@ export default function PrivacyPolicyPage() {
 
     let mouseX = canvas.width / 2;
     let mouseY = canvas.height / 2;
-    window.addEventListener('mousemove', (event) => {
+    const handleMouseMove = (event) => {
       const rect = canvas.getBoundingClientRect();
       if (rect.width && rect.height) {
         const nx = (event.clientX - rect.left) / rect.width;
@@ -45,7 +46,8 @@ export default function PrivacyPolicyPage() {
         mouseX = nx * canvas.width;
         mouseY = ny * canvas.height;
       }
-    });
+    };
+    window.addEventListener('mousemove', handleMouseMove);
 
     const vs = `attribute vec2 a_position;
 varying vec2 v_texCoord;
@@ -122,6 +124,7 @@ void main() {
     const uRes = gl.getUniformLocation(prog, 'u_resolution');
     const uMouse = gl.getUniformLocation(prog, 'u_mouse');
 
+    let animId;
     const render = (timestamp) => {
       if (typeof ResizeObserver === 'undefined') syncSize();
       gl.viewport(0, 0, canvas.width, canvas.height);
@@ -129,12 +132,13 @@ void main() {
       if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
       if (uMouse) gl.uniform2f(uMouse, mouseX, mouseY);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-      requestAnimationFrame(render);
+      animId = requestAnimationFrame(render);
     };
-    requestAnimationFrame(render);
+    animId = requestAnimationFrame(render);
 
     return () => {
-      window.removeEventListener('mousemove', () => {});
+      window.removeEventListener('mousemove', handleMouseMove);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, []);
 
@@ -183,60 +187,14 @@ void main() {
   }, []);
 
   const quickLinks = [
-    { icon: 'info', label: 'Introduction', href: '#ch01' },
-    { icon: 'inventory_2', label: 'Information We Collect', href: '#ch02' },
-    { icon: 'analytics', label: 'How We Use Data', href: '#ch03' },
-    { icon: 'cookie', label: 'Cookies', href: '#cookies' },
-    { icon: 'security', label: 'Data Security', href: '#ch04' },
-    { icon: 'public', label: 'International Transfers', href: '#international' },
-    { icon: 'gavel', label: 'User Rights', href: '#ch05' },
-    { icon: 'handshake', label: 'Third Parties', href: '#thirdparties' },
-    { icon: 'history', label: 'Data Retention', href: '#retention' },
-    { icon: 'support_agent', label: 'Contact', href: '#contact' },
-  ];
-
-  const tocItems = [
-    { number: '01', label: 'Introduction', href: '#ch01' },
-    { number: '02', label: 'Information We Collect', href: '#ch02' },
-    { number: '03', label: 'How We Use Data', href: '#ch03' },
-    { number: '04', label: 'Data Security', href: '#ch04' },
-    { number: '05', label: 'User Rights', href: '#ch05' },
-  ];
-
-  const rightsCards = [
-    {
-      icon: 'visibility',
-      title: 'Access Your Data',
-      description: 'Review all the personal data and usage history associated with your dexericai account.',
-      color: 'primary',
-    },
-    {
-      icon: 'download',
-      title: 'Download Your Data',
-      description: 'Export your personal data and generation history in a standard, machine-readable format.',
-      color: 'secondary',
-    },
-    {
-      icon: 'delete',
-      title: 'Request Data Deletion',
-      description: 'Permanently remove your account and all associated personal data from our active systems.',
-      color: 'tertiary',
-    },
-    {
-      icon: 'settings',
-      title: 'Manage Communication Preferences',
-      description: 'Control the types of emails and notifications you receive from our platform.',
-      color: 'error',
-    },
-  ];
-
-  const complianceMarks = [
-    { icon: 'policy', label: 'GDPR' },
-    { icon: 'lock', label: 'PCI DSS' },
-    { icon: 'verified', label: 'Encrypted Storage' },
-    { icon: 'security', label: 'Secure Authentication' },
-    { icon: 'mark_email_read', label: 'Email Verification' },
-    { icon: 'business', label: 'Enterprise Privacy' },
+    { icon: 'shield_lock', label: '1. Data Controller', href: '#sec-1' },
+    { icon: 'database', label: '3. Data We Collect', href: '#sec-3' },
+    { icon: 'smart_toy', label: '6. AI Processing', href: '#sec-6' },
+    { icon: 'visibility_off', label: '7. Private Generations', href: '#sec-7' },
+    { icon: 'share', label: '9. How We Share Data', href: '#sec-9' },
+    { icon: 'language', label: '10. International Transfers', href: '#sec-10' },
+    { icon: 'history_toggle_off', label: '11. Data Retention', href: '#sec-11' },
+    { icon: 'user_attributes', label: '13. Your GDPR Rights', href: '#sec-13' },
   ];
 
   return (
@@ -250,28 +208,27 @@ void main() {
         {/* Background */}
         <canvas ref={canvasRef} className={styles.bgCanvas} />
 
-        {/* SECTION 1: HERO */}
+        {/* HERO SECTION */}
         <section className={styles.hero}>
           <div className={styles.heroGrid}>
             <div className={styles.heroContent}>
               <div className={styles.heroBadge}>
-                <span className="material-symbols-outlined">shield</span>
-                <span>Privacy Center</span>
+                <span className="material-symbols-outlined">security</span>
+                <span>Privacy &amp; Data Governance</span>
               </div>
-              <h1 className={styles.heroTitle}>Privacy Policy</h1>
+              <h1 className={styles.heroTitle}>{PRIVACY_POLICY.title}</h1>
               <p className={styles.heroDescription}>
-                Learn how dexericai collects, stores, processes and protects your personal
-                information while using our platform.
+                This Policy explains how {COMPANY_LEGAL_INFO.name} collects, uses, stores, and protects your personal data when you use Dexeric AI.
               </p>
               <div className={styles.heroMeta}>
                 <div className={styles.metaItem}>
                   <span className="material-symbols-outlined">update</span>
-                  Last Updated: October 24, 2024
+                  Effective Date: {PRIVACY_POLICY.effectiveDate}
                 </div>
                 <div className={styles.metaDivider}></div>
                 <div className={styles.metaItem}>
-                  <span className="material-symbols-outlined">timer</span>
-                  12 min read
+                  <span className="material-symbols-outlined">verified_user</span>
+                  GDPR Data Controller: {COMPANY_LEGAL_INFO.name}
                 </div>
               </div>
             </div>
@@ -279,8 +236,8 @@ void main() {
             <div className={styles.heroImage}>
               <div className={styles.heroImageWrapper}>
                 <img
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlGcXIQKarLdpI2vPxKIRJmjb2BsZVF3e1si3swWwJeJ1GIGduyHrgF8H9l7XjE0Vw_gGnwuU0qi_jy0B7xDzTBGqpHj2LLZLhDiVOORHxcig4WbEBnSbPHt4xfgrfBPCQEWmicMsOfw5waQt2HfJQVakqFhZGJod3vI6N-r742x2nxv8O53l619kzjhXHww2aqIwUon8nRvo7_UpRub5QxHNzvkzrQlEmS26wtUo4ffCtwWxOHQgWCvSWv5ieGoxcHTAuS2kSZXQ"
-                  alt="Privacy Shield"
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGWtgtYNVU5ckFte5loMSLRIu0ZAkFvHqwCcY3MnIPsZI5-_hGLpZwyUc9QD4ZAS1f9_gbJgPMmbKX5K53hhWtzns1y1Pjc0kNy28Dhtv4nxofsHrhijR2-joYpUaOI5lhs1qhQWwH7mlqy7Hw-0fompZ6oFSAdpOEw74m9hb7y4_RkC_MCfH2otGuDJ7icT1tOd6dp1yblOt7Q3cmKz1Eh1ah4iApWFcsiHJcZUIjQ_mQl6mSev9s3BkOlKWQ7V2X_dXoIoh5Xm8"
+                  alt="Privacy Policy"
                 />
                 <div className={styles.heroImageOverlay}></div>
               </div>
@@ -288,10 +245,10 @@ void main() {
           </div>
         </section>
 
-        {/* SECTION 2: QUICK NAVIGATION */}
+        {/* QUICK NAVIGATION */}
         <section className={styles.quickNav}>
           <div className={styles.quickNavHeader}>
-            <h2>Quick Reference</h2>
+            <h2>Quick Navigation</h2>
             <div className={styles.quickNavLine}></div>
           </div>
           <div className={styles.quickNavGrid}>
@@ -304,17 +261,19 @@ void main() {
           </div>
         </section>
 
-        {/* SECTION 3: LEGAL CONTENT */}
+        {/* LEGAL CONTENT SECTION */}
         <section className={styles.legalContent}>
           <aside className={styles.toc}>
             <div className={styles.tocContainer}>
-              <h3>Contents</h3>
+              <h3>Sections</h3>
               <ul>
-                {tocItems.map((item, index) => (
-                  <li key={index}>
-                    <a href={item.href} className={styles.tocLink}>
-                      <span className={styles.tocNumber}>{item.number}</span>
-                      {item.label}
+                {PRIVACY_POLICY.sections.map((sec) => (
+                  <li key={sec.number}>
+                    <a href={`#sec-${sec.number}`} className={styles.tocLink}>
+                      <span className={styles.tocNumber}>
+                        {String(sec.number).padStart(2, '0')}
+                      </span>
+                      {sec.title}
                     </a>
                   </li>
                 ))}
@@ -323,138 +282,56 @@ void main() {
           </aside>
 
           <article ref={articleRef} className={styles.article}>
-            {/* Chapter 01 */}
-            <div className={styles.chapter} id="ch01">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>01</span>
-                <h2>Introduction</h2>
+            {PRIVACY_POLICY.sections.map((sec) => (
+              <div key={sec.number} className={styles.chapter} id={`sec-${sec.number}`}>
+                <div className={styles.chapterHeader}>
+                  <span className={styles.chapterNumber}>
+                    {String(sec.number).padStart(2, '0')}
+                  </span>
+                  <h2>{sec.fullTitle}</h2>
+                </div>
+                <div className={styles.chapterContent}>
+                  {sec.blocks.map((block, bIdx) => {
+                    if (block.type === 'paragraph') {
+                      return <p key={bIdx}>{block.text}</p>;
+                    }
+                    if (block.type === 'list') {
+                      return (
+                        <ul key={bIdx}>
+                          {block.items.map((item, iIdx) => (
+                            <li key={iIdx}>{item}</li>
+                          ))}
+                        </ul>
+                      );
+                    }
+                    return null;
+                  })}
+                </div>
               </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  This Privacy Policy outlines the scope of data protection at dexericai. It
-                  explains how we collect, use, and protect your personal data when you use our
-                  services.
-                </p>
-              </div>
-            </div>
-
-            {/* Chapter 02 */}
-            <div className={styles.chapter} id="ch02">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>02</span>
-                <h2>Information We Collect</h2>
-              </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  We collect registration data, usage logs, and AI prompts to provide and improve our
-                  services. This includes information you provide directly and data collected
-                  automatically as you interact with our platform.
-                </p>
-              </div>
-            </div>
-
-            {/* Chapter 03 */}
-            <div className={styles.chapter} id="ch03">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>03</span>
-                <h2>How We Use Data</h2>
-              </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  Your data is used for service optimization, security, and billing purposes. We
-                  analyze usage patterns to enhance our AI models and ensure a secure, reliable
-                  experience for all users.
-                </p>
-              </div>
-            </div>
-
-            {/* Chapter 04 */}
-            <div className={styles.chapter} id="ch04">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>04</span>
-                <h2>Data Security</h2>
-              </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  We employ encryption standards (AES-256) and adhere to SOC2 protocols to protect
-                  your personal information against unauthorized access, alteration, or destruction.
-                </p>
-              </div>
-            </div>
-
-            {/* Chapter 05 */}
-            <div className={styles.chapter} id="ch05">
-              <div className={styles.chapterHeader}>
-                <span className={styles.chapterNumber}>05</span>
-                <h2>User Rights</h2>
-              </div>
-              <div className={styles.chapterContent}>
-                <p>
-                  You have the right to access, deletion, and portability of your personal data. We
-                  are committed to empowering you with control over the information you share with us.
-                </p>
-              </div>
-            </div>
+            ))}
           </article>
         </section>
 
-        {/* SECTION 4: YOUR RIGHTS */}
-        <section className={styles.rights}>
-          <div className={styles.rightsHeader}>
-            <h2>Your Privacy Rights</h2>
-            <p>Key takeaways from our legal framework.</p>
-          </div>
-          <div className={styles.rightsGrid}>
-            {rightsCards.map((card, index) => (
-              <div key={index} className={`${styles.rightsCard} ${styles[`rights${card.color.charAt(0).toUpperCase() + card.color.slice(1)}`]}`}>
-                <div className={styles.rightsGlow}></div>
-                <span className="material-symbols-outlined">{card.icon}</span>
-                <h3>{card.title}</h3>
-                <p>{card.description}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 5: COMPLIANCE MARKS */}
-        <section className={styles.compliance}>
-          <div className={styles.complianceContainer}>
-            {complianceMarks.map((mark, index) => (
-              <div key={index} className={styles.complianceItem}>
-                <span className="material-symbols-outlined">{mark.icon}</span>
-                <span>{mark.label}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* SECTION 6: FINAL CTA */}
+        {/* CONTACT CTA */}
         <section className={styles.cta}>
           <div className={styles.ctaContainer}>
-            <span className="material-symbols-outlined">contact_support</span>
-            <h2>Privacy Questions?</h2>
+            <span className="material-symbols-outlined">mark_email_read</span>
+            <h2>Exercise Your Privacy Rights</h2>
             <p>
-              Our legal and support teams are available to clarify any terms regarding enterprise
-              deployment or custom usage rights.
+              To access, delete, or correct your personal data, email info@dexericai.com. You may also lodge a complaint with the Estonian Data Protection Inspectorate.
             </p>
             <div className={styles.ctaButtons}>
-              <Link href="/contact" className={styles.ctaPrimary}>
-                Contact Privacy Team
+              <a href="mailto:info@dexericai.com" className={styles.ctaPrimary}>
+                Contact Data Protection Team
                 <span className="material-symbols-outlined">arrow_forward</span>
-              </Link>
+              </a>
               <Link href="/terms-and-conditions" className={styles.ctaSecondary}>
-                Terms &amp; Conditions
-              </Link>
-              <Link href="/cookie-policy" className={styles.ctaSecondary}>
-                Cookie Policy
-              </Link>
-              <Link href="/contact" className={styles.ctaSecondary}>
-                Support Center
+                Terms of Service
               </Link>
             </div>
             <div className={styles.ctaMeta}>
-              <span className="material-symbols-outlined">schedule</span>
-              Average response: 24 Hours
+              <span className="material-symbols-outlined">shield</span>
+              Controller: DEXERIC OÜ (Code: 17569201) | Tallinn, Estonia
             </div>
           </div>
         </section>
