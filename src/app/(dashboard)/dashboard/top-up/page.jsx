@@ -19,12 +19,6 @@ export default function TopUpPage() {
   const currencySymbol = CURRENCIES[currency]?.symbol || '€';
 
   const [paymentMethod, setPaymentMethod] = useState('card');
-  const [cardholderName, setCardholderName] = useState(
-    user?.firstName ? `${user.firstName} ${user.lastName || ''}`.trim() : 'ALEXANDER WRIGHT'
-  );
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiry, setExpiry] = useState('');
-  const [cvc, setCvc] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -84,6 +78,12 @@ export default function TopUpPage() {
       const data = text ? JSON.parse(text) : {};
       if (!response.ok) {
         throw new Error(data.message || 'Unable to complete top-up.');
+      }
+
+      if (data.redirectUrl) {
+        setSuccessMessage('Redirecting to secure payment checkout...');
+        window.location.href = data.redirectUrl;
+        return;
       }
 
       setSuccessMessage(data.message || 'Top-up completed successfully. Your balance has been updated.');
@@ -284,59 +284,14 @@ export default function TopUpPage() {
               </div>
             </div>
 
-            <div className={styles.billingDetails}>
-              <h4>Card Details</h4>
-              <div className={styles.billingGrid}>
-                <div className={styles.billingField} style={{ gridColumn: '1 / -1' }}>
-                  <label>Cardholder Name</label>
-                  <input
-                    type="text"
-                    value={cardholderName}
-                    onChange={(e) => setCardholderName(e.target.value)}
-                    placeholder="Full name as on card"
-                  />
-                </div>
-                <div className={styles.billingField} style={{ gridColumn: '1 / -1' }}>
-                  <label>Card Number</label>
-                  <input
-                    type="text"
-                    value={cardNumber}
-                    onChange={(e) => setCardNumber(e.target.value)}
-                    placeholder="•••• •••• •••• ••••"
-                    maxLength="19"
-                  />
-                </div>
-                <div className={styles.billingField}>
-                  <label>Expiry Date</label>
-                  <input
-                    type="text"
-                    value={expiry}
-                    onChange={(e) => setExpiry(e.target.value)}
-                    placeholder="MM/YY"
-                    maxLength="5"
-                  />
-                </div>
-                <div className={styles.billingField}>
-                  <label>CVC / CVV</label>
-                  <input
-                    type="password"
-                    value={cvc}
-                    onChange={(e) => setCvc(e.target.value)}
-                    placeholder="•••"
-                    maxLength="4"
-                  />
-                </div>
+            <div className={styles.securityBadges} style={{ marginTop: '12px' }}>
+              <div>
+                <span className="material-symbols-outlined">lock</span>
+                <span>256-bit SSL Direct Processing</span>
               </div>
-
-              <div className={styles.securityBadges}>
-                <div>
-                  <span className="material-symbols-outlined">lock</span>
-                  <span>256-bit SSL Direct Processing</span>
-                </div>
-                <div>
-                  <span className="material-symbols-outlined">verified_user</span>
-                  <span>PCI DSS Compliant</span>
-                </div>
+              <div>
+                <span className="material-symbols-outlined">verified_user</span>
+                <span>PCI DSS Compliant</span>
               </div>
             </div>
           </section>
