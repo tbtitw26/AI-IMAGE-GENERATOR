@@ -21,6 +21,7 @@ export default function WalletPage() {
   const [showStatements, setShowStatements] = useState(false);
   const [transactions, setTransactions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [paymentNotice, setPaymentNotice] = useState(null);
 
   useEffect(() => {
     if (!token) return;
@@ -34,6 +35,60 @@ export default function WalletPage() {
         if (isMounted) setIsLoading(false);
       });
     refreshUser();
+
+    // Check for payment return query params
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isReturn = params.get('status') === 'return';
+      const pmt = params.get('pmt');
+      const ref = params.get('ref');
+
+      if (isReturn || pmt || ref) {
+        setPaymentNotice({ type: 'loading', message: 'Verifying payment status...' });
+        fetch(`/api/wallet/topup/verify?pmt=${encodeURIComponent(pmt || '')}&ref=${encodeURIComponent(ref || '')}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((r) => r.json())
+          .then((res) => {
+            if (!isMounted) return;
+            if (res.status === 'completed' || res.success) {
+              setPaymentNotice({
+                type: 'success',
+                message: 'Payment completed successfully! Your balance has been updated.',
+              });
+              refreshUser();
+              fetch('/api/wallet/transactions', { headers: { Authorization: `Bearer ${token}` } })
+                .then((r) => r.json())
+                .then((data) => {
+                  if (isMounted) setTransactions(data.transactions || []);
+                });
+            } else if (res.status === 'failed' || res.status === 'declined' || res.status === 'cancelled') {
+              setPaymentNotice({
+                type: 'error',
+                message: res.message || 'Payment was declined or cancelled.',
+              });
+            } else {
+              setPaymentNotice({
+                type: 'info',
+                message: 'Payment is currently being processed. Balance will update shortly.',
+              });
+            }
+          })
+          .catch(() => {
+            if (isMounted) {
+              setPaymentNotice({
+                type: 'info',
+                message: 'Top-up submitted. Please check transaction history below.',
+              });
+            }
+          });
+
+        // Clean up URL without triggering re-render
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    }
+
     return () => {
       isMounted = false;
     };
@@ -136,6 +191,54 @@ export default function WalletPage() {
   return (
     <DashboardLayout>
       <div className={styles.wallet}>
+        {paymentNotice && (
+          <div
+            style={{
+              marginBottom: '20px',
+              borderRadius: '12px',
+              padding: '16px 20px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '12px',
+              border:
+                paymentNotice.type === 'success'
+                  ? '1px solid rgba(74, 222, 128, 0.4)'
+                  : paymentNotice.type === 'error'
+                  ? '1px solid rgba(248, 113, 113, 0.4)'
+                  : '1px solid rgba(147, 197, 253, 0.4)',
+              background:
+                paymentNotice.type === 'success'
+                  ? 'rgba(20, 83, 45, 0.35)'
+                  : paymentNotice.type === 'error'
+                  ? 'rgba(127, 29, 29, 0.35)'
+                  : 'rgba(30, 58, 138, 0.35)',
+              color: '#f8fafc',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span className="material-symbols-outlined" style={{ fontSize: '24px', color: paymentNotice.type === 'success' ? '#4ade80' : paymentNotice.type === 'error' ? '#f87171' : '#93c5fd' }}>
+                {paymentNotice.type === 'success' ? 'check_circle' : paymentNotice.type === 'error' ? 'cancel' : 'hourglass_top'}
+              </span>
+              <span style={{ fontSize: '14px', fontWeight: 500 }}>{paymentNotice.message}</span>
+            </div>
+            <button
+              onClick={() => setPaymentNotice(null)}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#94a3b8',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '4px',
+              }}
+            >
+              <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>close</span>
+            </button>
+          </div>
+        )}
+
         {/* SECTION 1: BALANCE OVERVIEW */}
         <section className={styles.overview}>
           <div className={styles.overviewContent}>
