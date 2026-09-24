@@ -17,16 +17,16 @@ export const COMPANY_INFO = {
   
   // Company Details
   headquarters: {
-    address: 'Pärnu mnt 20, Kesklinna linnaosa',
-    city: 'Tallinn, 10141',
+    address: 'Telliskivi tn 57, Põhja-Tallinna linnaosa',
+    city: 'Tallinn, 10412',
     country: 'Harju maakond, Estonia',
   },
   
   // Legal Details
   legal: {
-    companyNumber: '17569201', // Registry code
-    taxId: '17569201',
-    registeredName: 'DEXERIC OÜ',
+    companyNumber: '17395304', // Registry code
+    taxId: '17395304',
+    registeredName: 'BENEFICE OÜ',
   },
   
   // Social Links

@@ -1,14 +1,14 @@
 /**
- * Official Legal Policies for DEXERIC OÜ (dexericai.com)
+ * Official Legal Policies for BENEFICE OÜ (dexericai.com)
  * Effective Date: 17 August 2026
- * Registry Code: 17569201
- * Registered Office: Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia
+ * Registry Code: 17395304
+ * Registered Office: Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia
  */
 
 export const COMPANY_LEGAL_INFO = {
-  "name": "DEXERIC OÜ",
-  "registryCode": "17569201",
-  "office": "Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia",
+  "name": "BENEFICE OÜ",
+  "registryCode": "17395304",
+  "office": "Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia",
   "website": "dexericai.com",
   "contact": "info@dexericai.com",
   "effectiveDate": "17 August 2026"
@@ -25,11 +25,11 @@ export const TERMS_OF_SERVICE = {
       "blocks": [
         {
           "type": "paragraph",
-          "text": "These Terms of Service (the “Terms”) govern access to and use of the Dexeric AI Website, the AI-powered image generation service, user accounts, credit-purchase functionality and all related features made available by DEXERIC OÜ (collectively, the “Service”)."
+          "text": "These Terms of Service (the “Terms”) govern access to and use of the Dexeric AI Website, the AI-powered image generation service, user accounts, credit-purchase functionality and all related features made available by BENEFICE OÜ (collectively, the “Service”)."
         },
         {
           "type": "paragraph",
-          "text": "DEXERIC OÜ is an Estonian private limited company with registry code 17569201 and registered office at Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia (“Dexeric”, “we”, “us” or “our”)."
+          "text": "BENEFICE OÜ is an Estonian private limited company with registry code 17395304 and registered office at Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia (“Dexeric”, “we”, “us” or “our”)."
         },
         {
           "type": "paragraph",
@@ -595,15 +595,15 @@ export const TERMS_OF_SERVICE = {
         },
         {
           "type": "paragraph",
-          "text": "Legal entity: DEXERIC OÜ"
+          "text": "Legal entity: BENEFICE OÜ"
         },
         {
           "type": "paragraph",
-          "text": "Registry code: 17569201"
+          "text": "Registry code: 17395304"
         },
         {
           "type": "paragraph",
-          "text": "Registered office: Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia"
+          "text": "Registered office: Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia"
         }
       ]
     }
@@ -678,7 +678,7 @@ export const REFUND_POLICY = {
         },
         {
           "type": "paragraph",
-          "text": "DEXERIC OÜ is not currently registered for VAT. Tax treatment may depend on the user’s location, status, applicable thresholds and the payment arrangement used at checkout. If applicable taxes are calculated or collected through a payment arrangement, the final tax-inclusive amount will be shown before payment."
+          "text": "BENEFICE OÜ is not currently registered for VAT. Tax treatment may depend on the user’s location, status, applicable thresholds and the payment arrangement used at checkout. If applicable taxes are calculated or collected through a payment arrangement, the final tax-inclusive amount will be shown before payment."
         },
         {
           "type": "paragraph",
@@ -986,11 +986,11 @@ export const PRIVACY_POLICY = {
       "blocks": [
         {
           "type": "paragraph",
-          "text": "This Privacy Policy explains how DEXERIC OÜ collects, uses, shares, stores and protects personal data when individuals visit the Website, create an Account, purchase Credits, use Dexeric AI, request support or otherwise interact with the Service."
+          "text": "This Privacy Policy explains how BENEFICE OÜ collects, uses, shares, stores and protects personal data when individuals visit the Website, create an Account, purchase Credits, use Dexeric AI, request support or otherwise interact with the Service."
         },
         {
           "type": "paragraph",
-          "text": "DEXERIC OÜ is the controller of personal data processed for the purposes described in this Policy."
+          "text": "BENEFICE OÜ is the controller of personal data processed for the purposes described in this Policy."
         },
         {
           "type": "paragraph",
@@ -998,15 +998,15 @@ export const PRIVACY_POLICY = {
         },
         {
           "type": "paragraph",
-          "text": "DEXERIC OÜ"
+          "text": "BENEFICE OÜ"
         },
         {
           "type": "paragraph",
-          "text": "Registry code: 17569201"
+          "text": "Registry code: 17395304"
         },
         {
           "type": "paragraph",
-          "text": "Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia"
+          "text": "Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia"
         },
         {
           "type": "paragraph",
@@ -1564,15 +1564,15 @@ export const PRIVACY_POLICY = {
         },
         {
           "type": "paragraph",
-          "text": "DEXERIC OÜ"
+          "text": "BENEFICE OÜ"
         },
         {
           "type": "paragraph",
-          "text": "Registry code: 17569201"
+          "text": "Registry code: 17395304"
         },
         {
           "type": "paragraph",
-          "text": "Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia"
+          "text": "Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia"
         }
       ]
     }

@@ -305,7 +305,7 @@ void main() {
             </div>
             <div className={styles.ctaMeta}>
               <span className="material-symbols-outlined">domain</span>
-              DEXERIC OÜ (Registry code: 17569201) | Tallinn, Estonia
+              BENEFICE OÜ (Registry code: 17395304) | Tallinn, Estonia
             </div>
           </div>
         </section>
