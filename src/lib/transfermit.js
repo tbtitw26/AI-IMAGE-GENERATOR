@@ -115,11 +115,11 @@ export async function createTransfermitPayment({
       ...(customer?.ip ? { ip: customer.ip } : {}),
     },
     billingAddress: {
-      addressLine1: billingAddress?.addressLine1 || billingAddress?.street || 'Pärnu mnt 20',
+      addressLine1: billingAddress?.addressLine1 || billingAddress?.street || 'Telliskivi tn 57',
       addressLine2: billingAddress?.addressLine2 || null,
       city: billingAddress?.city || 'Tallinn',
       countryCode: (billingAddress?.countryCode || billingAddress?.country || 'EE').slice(0, 2).toUpperCase(),
-      postalCode: billingAddress?.postalCode || '10141',
+      postalCode: billingAddress?.postalCode || '10412',
       state: billingAddress?.state || null,
     },
   };

@@ -202,7 +202,7 @@ void main() {
       icon: 'storefront',
       title: 'Commercial & Output Usage',
       description:
-        'DEXERIC OÜ assigns ownership rights of generated outputs to you to the fullest extent permitted by applicable law.',
+        'BENEFICE OÜ assigns ownership rights of generated outputs to you to the fullest extent permitted by applicable law.',
       color: 'primary',
     },
     {
@@ -223,7 +223,7 @@ void main() {
       icon: 'gavel',
       title: 'Governing Law',
       description:
-        'Governed by the laws of Estonia (DEXERIC OÜ, Code: 17569201), with consumer protection safeguards fully respected.',
+        'Governed by the laws of Estonia (BENEFICE OÜ, Code: 17395304), with consumer protection safeguards fully respected.',
       color: 'error',
     },
   ];
@@ -231,7 +231,7 @@ void main() {
   const complianceMarks = [
     { icon: 'policy', label: 'GDPR & EU Compliant' },
     { icon: 'lock', label: 'PCI DSS Secure' },
-    { icon: 'verified', label: 'Estonian Reg. 17569201' },
+    { icon: 'verified', label: 'Estonian Reg. 17395304' },
   ];
 
   return (
@@ -385,7 +385,7 @@ void main() {
             <span className="material-symbols-outlined">contact_support</span>
             <h2>Questions regarding our Terms?</h2>
             <p>
-              Contact DEXERIC OÜ at info@dexericai.com or Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia.
+              Contact BENEFICE OÜ at info@dexericai.com or Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia.
             </p>
             <div className={styles.ctaButtons}>
               <a href="mailto:info@dexericai.com" className={styles.ctaPrimary}>
@@ -401,7 +401,7 @@ void main() {
             </div>
             <div className={styles.ctaMeta}>
               <span className="material-symbols-outlined">schedule</span>
-              Registry code: 17569201 | Harju maakond, Estonia
+              Registry code: 17395304 | Harju maakond, Estonia
             </div>
           </div>
         </section>

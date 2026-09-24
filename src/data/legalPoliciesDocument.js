@@ -220,12 +220,12 @@ Dexeric may update this Policy to reflect changes in intellectual-property law, 
 export const LEGAL_NOTICE_POLICY = createPolicy('Legal Notice and Complaints Procedure', `
 1. Service Provider
 The Dexeric AI Website and Service are operated by:
-DEXERIC OÜ
-Registry code: 17569201
-Registered office: Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond, Estonia
+BENEFICE OÜ
+Registry code: 17395304
+Registered office: Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond, Estonia
 Website: Dexeric AI Website
 Email: info@dexericai.com
-DEXERIC OÜ is not currently registered for VAT.
+BENEFICE OÜ is not currently registered for VAT.
 2. Electronic Contact
 Customer support and legal communications are provided electronically through:
 the contact form available on the Website; and
@@ -293,7 +293,7 @@ Dexeric may update this Legal Notice and Complaints Procedure when company infor
 
 export const COOKIE_POLICY = createPolicy('Cookie Policy', `
 1. Purpose of This Policy
-This Cookie Policy explains how DEXERIC OÜ uses cookies and similar technologies on the Dexeric AI Website and in the Dexeric AI Service. It should be read together with the Privacy Policy.
+This Cookie Policy explains how BENEFICE OÜ uses cookies and similar technologies on the Dexeric AI Website and in the Dexeric AI Service. It should be read together with the Privacy Policy.
 2. What Cookies Are
 Cookies are small text files stored on a browser or device when a website is visited. Cookies can remember a session, authenticate a user, store preferences, support security, measure performance or help understand how a service is used.
 Similar technologies may include local storage, software development kit identifiers, pixels, tags and device identifiers. References to “cookies” in this Policy include similar technologies where appropriate.

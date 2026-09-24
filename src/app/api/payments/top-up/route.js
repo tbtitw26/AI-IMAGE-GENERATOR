@@ -112,9 +112,9 @@ export async function POST(req) {
           ip: clientIp,
         },
         billingAddress: {
-          addressLine1: user.streetAddress || 'Pärnu mnt 20',
+          addressLine1: user.streetAddress || 'Telliskivi tn 57',
           city: user.city || 'Tallinn',
-          postalCode: user.postalCode || '10141',
+          postalCode: user.postalCode || '10412',
           countryCode: (user.country || 'EE').slice(0, 2).toUpperCase(),
         },
       });

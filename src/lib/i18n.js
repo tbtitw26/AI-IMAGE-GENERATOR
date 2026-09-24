@@ -4,9 +4,9 @@ export const defaultLocale = 'en';
 const messages = {
   en: {
     footer: {
-      companyName: 'DEXERIC OÜ',
-      registration: 'Registry Code: 17569201',
-      address: 'Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Estonia',
+      companyName: 'BENEFICE OÜ',
+      registration: 'Registry Code: 17395304',
+      address: 'Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Estonia',
       email: 'support@dexeric.ai',
       phone: '+372 (0) 6 123 456',
     },

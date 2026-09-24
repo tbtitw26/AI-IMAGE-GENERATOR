@@ -89,9 +89,9 @@ const Footer = () => {
 
         <div className={styles.bottomBar}>
           <div className={styles.registration}>
-            <span className={styles.companyName}>DEXERIC OÜ</span>
-            <span className={styles.companyDetails}>Registry code: 17569201</span>
-            <span className={styles.companyDetails}>Pärnu mnt 20, Kesklinna linnaosa, 10141 Tallinn, Harju maakond</span>
+            <span className={styles.companyName}>BENEFICE OÜ</span>
+            <span className={styles.companyDetails}>Registry code: 17395304</span>
+            <span className={styles.companyDetails}>Telliskivi tn 57, Põhja-Tallinna linnaosa, 10412 Tallinn, Harju maakond</span>
           </div>
           <div className={styles.copyright}>
             © 2026 dexericai. All rights reserved.

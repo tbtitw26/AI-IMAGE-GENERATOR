@@ -331,7 +331,7 @@ void main() {
             </div>
             <div className={styles.ctaMeta}>
               <span className="material-symbols-outlined">shield</span>
-              Controller: DEXERIC OÜ (Code: 17569201) | Tallinn, Estonia
+              Controller: BENEFICE OÜ (Code: 17395304) | Tallinn, Estonia
             </div>
           </div>
         </section>
